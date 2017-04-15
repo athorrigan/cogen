@@ -77,9 +77,16 @@
 
             $('.sidebar-item').on('click', function(ev) {
                 var
-                    selectedId = $(ev.target).data('id'),
+                    $target = $(ev.target),
+                    $parent = $target.closest('li'),
+                    selectedId = $target.data('id'),
                     contentData
                 ;
+
+                // Remove selected class on all other list items
+                $('ul.sidebar-section').find('li').removeClass('selected');
+
+                $parent.addClass('selected');
 
                 contentData = fetchData(selectedId, data.courseData.children);
 
