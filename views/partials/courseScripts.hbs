@@ -102,6 +102,22 @@
 
                 $submenu.toggle();
             });
+
+            $('a.toggle-menu').on('click', function(ev) {
+                var
+                    $contentWrapper = $('#content-wrapper'),
+                    $sidebar = $('.sidebar')
+                ;
+
+                if ($contentWrapper.hasClass('show-menu')) {
+                    $contentWrapper.removeClass('show-menu');
+                    $sidebar.hide();
+                }
+                else {
+                    $contentWrapper.addClass('show-menu');
+                    $sidebar.show();
+                }
+            });
         });
     });
 

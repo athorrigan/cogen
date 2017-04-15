@@ -74,11 +74,6 @@ html, body, .container-fluid, .container-fluid .row {
     height: 100%;
 }
 
-.sidebar {
-    height: 100%;
-    background-color: #eee;
-}
-
 nav a.jqtree-toggler.jqtree_common {
     color: #555;
 }
@@ -95,7 +90,8 @@ nav div#tree {
     margin-top: 10px;
 }
 
-div.show-menu div.content-body {
+div.show-menu div.content-body,
+div.show-menu div.content {
     padding-left: 280px;
 }
 
