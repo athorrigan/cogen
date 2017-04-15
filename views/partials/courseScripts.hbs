@@ -27,7 +27,7 @@
         }
         else {
             currentString += '<li>' +
-                                '<a href="#" data-id="' + jsonFragment.id + '">' +
+                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-item">' +
                                     jsonFragment.name +
                                 '</a>' +
                             '</li>'
@@ -48,29 +48,53 @@
         return menuString;
     };
 
+    var fetchData = function(id, dataObjects) {
+        var fetchedNode = _.findWhere(dataObjects, {
+            id: id.toString()
+        });
+
+        var fetchedData;
+
+        if (fetchedNode) {
+            fetchedData = fetchedNode.data;
+            return fetchedData;
+        }
+
+        dataObjects.forEach(function(obj) {
+            if (obj.children) {
+                fetchedData = fetchData(id, obj.children);
+            }
+        });
+
+        return fetchedData;
+    };
+
     $(function() {
         $.getJSON('/get_course/88343999344', function(courseInfo) {
             data = courseInfo;
 
             $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
 
-//            $tree.on('tree.select', function(event) {
-//                if (event.node) {
-//                    var
-//                        node = event.node,
-//                        $titleHeading = $('<h1>'),
-//                        $title = $($.parseHTML(node.name)),
-//                        $nodeData = $($.parseHTML(node.data))
-//                    ;
-//
-//                    $content.html('');
-//                    $title.appendTo($titleHeading.appendTo($content));
-//                    $nodeData.appendTo($content);
-//
-//                    Prism.highlightAll();
-//''
-//                }
-//            });
+            $('.sidebar-item').on('click', function(ev) {
+                var
+                    selectedId = $(ev.target).data('id'),
+                    contentData
+                ;
+
+                contentData = fetchData(selectedId, data.courseData.children);
+
+                $('#content').html(contentData);
+                Prism.highlightAll();
+            });
+
+            $('.sidebar-drawer').on('click', function(ev) {
+                var
+                    $parent = $(ev.target).closest('li'),
+                    $submenu = $parent.find('ul')
+                ;
+
+                $submenu.toggle();
+            });
         });
     });
 

@@ -109,3 +109,7 @@ input.form-control:focus {
 body {
     font-family: "CiscoSans", "Arial", sans-serif;
 }
+
+div#content {
+    padding: 2em;
+}
