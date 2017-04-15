@@ -1,0 +1,111 @@
+.headspace.panel-default {
+    min-height: 50px;
+    margin-top: 25px;
+}
+
+.leading-data .panel-default {
+    min-height: 200px;
+}
+
+div.jqtree_element.jqtree_common:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+div.jqtree-element.jqtree_common {
+    color: #428bca;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+ul.dropdown-menu > li > a {
+    color: #428bca;
+    background-color: #fff;
+}
+
+ul.dropdown-menu > li:hover > a {
+    color: #2a46a1;
+}
+
+ul.jqtree-tree li.jqtree-selected > .jqtree-element,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element span.jqtree-title.jqtree_common,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover span.jqtree-title.jqtree_common,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element a.jqtree-toggler.jqtree_common,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover a.jqtree-toggler.jqtree_common {
+    text-shadow: none;
+    background: none;
+    background-color: #428bca;
+    color: #fff;
+}
+
+a.jqtree-toggler.jqtree_common {
+    color: #428bca;
+}
+
+a.jqtree-toggler.jqtree_common:hover {
+    color: #2a46a1;
+}
+
+span.jqtree-title.jqtree_common {
+    color: #428bca;
+}
+
+#nodeData {
+    display: none;
+}
+
+ul.variables > li {
+    cursor: pointer;
+}
+
+ul.variables > li:hover {
+    background-color: #eee;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+html, body, .container-fluid, .container-fluid .row {
+    height: 100%;
+}
+
+.sidebar {
+    height: 100%;
+    background-color: #eee;
+}
+
+nav a.jqtree-toggler.jqtree_common {
+    color: #555;
+}
+
+nav a.jqtree-toggler.jqtree_common:hover {
+    color: #555;
+}
+
+nav span.jqtree-title.jqtree_common {
+    color: #555;
+}
+
+nav div#tree {
+    margin-top: 10px;
+}
+
+div.show-menu div.content-body {
+    padding-left: 280px;
+}
+
+input.form-control:focus {
+    border: none;
+    outline:0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+body {
+    font-family: "CiscoSans", "Arial", sans-serif;
+}

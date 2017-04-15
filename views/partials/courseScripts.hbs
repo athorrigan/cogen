@@ -1,0 +1,77 @@
+<script>
+
+    var
+        data = {}
+    ;
+
+    var accumMenu = function(jsonFragment) {
+        var currentString = '';
+
+        if (jsonFragment.children) {
+            currentString += '<li class="sidebar-drawer">' +
+                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-toggle">' +
+                                    jsonFragment.name +
+                                '</a>'
+            ;
+
+            var substring = '<ul>';
+
+            jsonFragment.children.forEach(function(object) {
+                substring += accumMenu(object);
+            });
+
+            substring += '</ul>';
+            currentString += substring;
+
+            currentString += '</li>';
+        }
+        else {
+            currentString += '<li>' +
+                                '<a href="#" data-id="' + jsonFragment.id + '">' +
+                                    jsonFragment.name +
+                                '</a>' +
+                            '</li>'
+            ;
+        }
+
+        return currentString;
+
+    };
+
+    var generateMenuString = function(menuObjects) {
+        var menuString = '';
+
+        menuObjects.forEach(function(object) {
+            menuString += accumMenu(object)
+        });
+
+        return menuString;
+    };
+
+    $(function() {
+        $.getJSON('/get_course/88343999344', function(courseInfo) {
+            data = courseInfo;
+
+            $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
+
+//            $tree.on('tree.select', function(event) {
+//                if (event.node) {
+//                    var
+//                        node = event.node,
+//                        $titleHeading = $('<h1>'),
+//                        $title = $($.parseHTML(node.name)),
+//                        $nodeData = $($.parseHTML(node.data))
+//                    ;
+//
+//                    $content.html('');
+//                    $title.appendTo($titleHeading.appendTo($content));
+//                    $nodeData.appendTo($content);
+//
+//                    Prism.highlightAll();
+//''
+//                }
+//            });
+        });
+    });
+
+</script>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Course Generator</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="css/jqtree.css">
+    <link rel="stylesheet" href="css/aui-standard.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="headspace col-md-10 col-md-offset-1 panel panel-default">
+    &nbsp;
+</div>
+<div class="row leading-data">
+    <div class="col-md-10 col-md-offset-1 panel panel-default">
+        <div class="col-md-4">
+            <div id="tree"></div>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+            <div class="panel-body">
+                <h4>Variables</h4>
+                <ul class="variables list-group col-md-10">
+                    <li class="list-group-item col-md-6">Username</li>
+                    <li class="list-group-item col-md-6">First Name</li>
+                    <li class="list-group-item col-md-6">Last Name</li>
+                    <li class="list-group-item col-md-6">State</li>
+                    <li class="list-group-item col-md-6">City</li>
+                    <li class="list-group-item col-md-6">Email</li>
+                    <li class="list-group-item col-md-6">Zip</li>
+                    <li class="list-group-item col-md-6">Manager</li>
+                    <li class="list-group-item col-md-6">Phone</li>
+                    <li class="list-group-item col-md-6">Lab Id</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="content">
+    <form id="nodeData">
+        <div class="row">
+            <div class="form-group col-md-4 col-md-offset-1">
+                <div class="form-group__text">
+                    <input type="text" id="title" name="title" class="form-control" />
+                    <label for="title">Title:</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+            <textarea name="editor" id="editor" class="form-control">
+            </textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">&nbsp;</div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary pull-right" onclick="saveData(true)">Save</button>
+            </div>
+            <div class="col-md-2">&nbsp;</div>
+        </div>
+    </form>
+</div>
+
+
+<ul id="contextMenu" class="dropdown-menu">
+    <li class="delete">
+        <a href="#delete">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </a>
+    </li>
+    <li class="divider"></li>
+    <li class="add">
+        <a href="#add">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add Child
+        </a>
+    </li>
+</ul>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-javascript.min.js"></script>
+<script src="js/js.cookie.js"></script>
+<script src="js/ckeditor/ckeditor.js"></script>
+<script src="js/tree.jquery.js"></script>
+<script src="js/jqTreeContextMenu.js"></script>
+<script>
+
+    var
+        $tree = $('#tree'),
+        $titleField = $('#title'),
+        $nodeData = $('#nodeData'),
+        data = {},
+        currentNodeId = 0
+    ;
+
+
+    var saveData = function(edited) {
+        var
+            currentTitle = $titleField.val(),
+            currentData = CKEDITOR.instances['editor'].getData(),
+            currentNode = $tree.tree('getNodeById', currentNodeId)
+        ;
+
+        if (edited) {
+            $tree.tree(
+                'updateNode',
+                currentNode,
+                {
+                    name: currentTitle,
+                    data: currentData
+                }
+            );
+        }
+
+        data.courseData = JSON.parse($tree.tree('toJson'));
+
+        $.post('update_course', data)
+            .fail(function(er) {
+                console.log('Failed');
+                console.log(er);
+            })
+        ;
+
+    };
+
+    var addNode = function(parentNode, newNode) {
+        $tree.tree('appendNode', newNode, parentNode);
+    };
+
+    $(function() {
+        $.getJSON('get_course/88343999344', function(courseInfo) {
+            data = courseInfo;
+            console.log(data);
+
+            $tree.tree({
+                data: data.courseData.children,
+                dragAndDrop: true
+            });
+
+            var contextMenuApi = $tree.jqTreeContextMenu(
+                $('#contextMenu'),
+                {
+                    delete: function(node) {
+                        $tree.tree('removeNode', node);
+                        saveData(false);
+                    },
+                    add: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1)
+                        addNode(node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
+
+                        var $newNode = $tree.tree('getNodeById', newId);
+                        $tree.tree('selectNode', $newNode);
+                    }
+                }
+            );
+
+            var rootNode = $tree.tree(
+                'getNodeByCallback',
+                function(node) {
+                    if (node.getLevel() === 1) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            );
+
+            contextMenuApi.disable(rootNode.name, ['delete']);
+
+            $tree.on('tree.select', function(event) {
+                if (event.node) {
+                    var node = event.node;
+
+                    currentNodeId = node.id;
+                    $titleField.val(node.name);
+                    CKEDITOR.instances['editor'].setData(node.data);
+                    $nodeData.show();
+
+                }
+                else {
+                    currentNodeId = 0;
+                    $titleField.val('');
+                    CKEDITOR.instances['editor'].setData('');
+                    $nodeData.hide();
+                }
+            });
+
+            $tree.on('tree.move', function(event) {
+                // For whatever reason this needs to be fired manually
+                // before the internal tree is ready to be saved.
+                event.move_info.do_move();
+
+                saveData(false);
+            });
+        });
+
+        CKEDITOR.config.customConfig = 'config.js';
+        CKEDITOR.config.uploadUrl = '/upload_photo';
+        CKEDITOR.replace('editor');
+
+        var editor = CKEDITOR.instances['editor'];
+
+        editor.on('fileUploadResponse', function(event) {
+            var
+                url = JSON.parse(event.data.fileLoader.xhr.responseText).url,
+                imgHtml = CKEDITOR.dom.element.createFromHtml('<img src="' + url + '"/>');
+            ;
+
+            editor.insertElement(imgHtml);
+        });
+
+        $('ul.variables > li').on('click', function() {
+            editor.insertText('{{' + $(this).text() + '}}');
+        });
+    });
+
+</script>
+</body>
+</html>

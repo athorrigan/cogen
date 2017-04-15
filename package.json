@@ -1,0 +1,15 @@
+{
+  "name": "course_generator_proto",
+  "version": "1.0.0",
+  "description": "A prototype for a lab generation system",
+  "main": "server.js",
+  "author": "Cory Withers <javecantrell@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
+    "guid": "^0.0.12",
+    "multer": "^1.3.0"
+  }
+}
