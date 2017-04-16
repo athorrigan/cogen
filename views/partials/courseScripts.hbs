@@ -106,15 +106,18 @@
             $('a.toggle-menu').on('click', function(ev) {
                 var
                     $contentWrapper = $('#content-wrapper'),
-                    $sidebar = $('.sidebar')
+                    $sidebar = $('.sidebar'),
+                    $content = $('#content')
                 ;
 
                 if ($contentWrapper.hasClass('show-menu')) {
                     $contentWrapper.removeClass('show-menu');
+                    $content.addClass('col-md-10 col-md-offset-1');
                     $sidebar.hide();
                 }
                 else {
                     $contentWrapper.addClass('show-menu');
+                    $content.removeClass('col-md-10 col-md-offset-1');
                     $sidebar.show();
                 }
             });

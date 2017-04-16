@@ -109,3 +109,19 @@ body {
 div#content {
     padding: 2em;
 }
+
+div.note {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 7px solid #049fd9;
+    background-color: #dfdfdf;
+}
+div.note::before {
+    content: 'Important Note!';
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #049fd9;
+    display: block;
+}
