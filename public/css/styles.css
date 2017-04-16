@@ -198,3 +198,11 @@ table.table--bordered {
 p {
     line-height: 1.6;
 }
+
+.table tr, .table td, .table th {
+    white-space: normal;
+}
+
+.table tr:first-child, .table td:first-child, .table th:first-child {
+    width: inherit;
+}
