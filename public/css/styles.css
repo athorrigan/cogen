@@ -117,11 +117,84 @@ div.note {
     background-color: #dfdfdf;
 }
 div.note::before {
-    content: 'Important Note!';
+    content: 'Important!';
     font-size: 1.4em;
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 5px;
     color: #049fd9;
     display: block;
+}
+
+div.warning-note {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 7px solid #cf2030;
+    background-color: #dfdfdf;
+}
+div.warning-note::before {
+    content: 'Warning!';
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #cf2030;
+    display: block;
+}
+
+div.text-editor {
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-width: 300px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    clear: both;
+    overflow: hidden;
+    transition: all 0.5s ease-out;
+}
+
+div.text-editor > div.editor-title-bar {
+    padding: 5px 0;
+    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
+    text-align: center;
+    font-weight: 400;
+    background-color: #f8f8f8;
+    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
+    box-shadow: inset rgba(255, 255, 255, 0.7) 0 1px 1px;
+    border-bottom: #6a6a6a 1px solid;
+}
+
+div.text-editor > pre.editor-body {
+    min-height: 120px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #f0f0f0;
+    padding: 10px;
+    text-shadow: #000 0 1px 0;
+    font-family: "Consolas", "Courier New", "Courier", sans-serif;
+    font-size: 1.75em;
+    line-height: 1.40em;
+    font-weight: 500;
+    text-align: left;
+    overflow: hidden;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+    margin: -1px;
+}
+
+div.text-editor > pre.editor-body.bash::before {
+    content: "$ ";
+}
+
+table.table--bordered {
+    margin-bottom: 0;
+}
+
+p {
+    line-height: 1.6;
 }
