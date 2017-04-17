@@ -69,9 +69,20 @@
         return fetchedData;
     };
 
-    $(function() {
+    var setupPage = function(userVars) {
         $.getJSON('/get_course/88343999344', function(courseInfo) {
             data = courseInfo;
+
+
+            console.log(userVars);
+
+
+            var test = "<div>This is a {{{fred}}} test! </div>";
+
+            var template = Handlebars.compile('{{fred}}');
+
+            console.log(template({fred: 'test'}));
+
 
             $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
 
@@ -83,10 +94,10 @@
 
             $('.sidebar-item').on('click', function(ev) {
                 var
-                    $target = $(ev.target),
-                    $parent = $target.closest('li'),
-                    selectedId = $target.data('id'),
-                    contentData
+                        $target = $(ev.target),
+                        $parent = $target.closest('li'),
+                        selectedId = $target.data('id'),
+                        contentData
                 ;
 
                 // Remove selected class on all other list items
@@ -102,8 +113,8 @@
 
             $('.sidebar-drawer').on('click', function(ev) {
                 var
-                    $parent = $(ev.target).closest('li'),
-                    $submenu = $parent.find('ul')
+                        $parent = $(ev.target).closest('li'),
+                        $submenu = $parent.find('ul')
                 ;
 
                 $submenu.toggle();
@@ -111,9 +122,9 @@
 
             $('a.toggle-menu').on('click', function(ev) {
                 var
-                    $contentWrapper = $('#content-wrapper'),
-                    $sidebar = $('.sidebar'),
-                    $content = $('#content')
+                        $contentWrapper = $('#content-wrapper'),
+                        $sidebar = $('.sidebar'),
+                        $content = $('#content')
                 ;
 
                 if ($contentWrapper.hasClass('show-menu')) {
@@ -128,6 +139,16 @@
                 }
             });
         });
+    };
+
+    var fetchUserData = function(userId) {
+        $.getJSON('/get_user_vars/' + userId, function(userVars) {
+            setupPage(userVars);
+        });
+    };
+
+    $(function() {
+        fetchUserData('01');
     });
 
 </script>
