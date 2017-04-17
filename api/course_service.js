@@ -1,7 +1,9 @@
 'use strict';
 
 const
-    fs = require('fs')
+    fs = require('fs'),
+    Baby = require('babyparse'),
+    _ = require('underscore')
 ;
 
 module.exports = {
@@ -17,5 +19,17 @@ module.exports = {
                 return 'File saved.'
             }
         });
+    },
+    getUserVars: (studentId) => {
+        let csvData = fs.readFileSync('data/studentvars.csv').toString();
+        let jsonData = Baby.parse(csvData, {header: true}).data;
+
+        return _.findWhere(jsonData, { Number: studentId});
+    },
+    getUsers: () => {
+        let csvData = fs.readFileSync('data/studentvars.csv').toString();
+        let jsonData = Baby.parse(csvData, {header: true}).data;
+
+        return _.pluck(jsonData, 'Number');
     }
 };

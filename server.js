@@ -24,6 +24,14 @@ app.get('/get_course/:id', (req, res) => {
     res.json(courseApi.getCourse(req.params.id));
 });
 
+app.get('/get_user_vars/:id', (req, res) => {
+    res.json(courseApi.getUserVars(req.params.id));
+});
+
+app.get('/get_users', (req, res) => {
+    res.json(courseApi.getUsers());
+});
+
 app.get('/', (req, res) => {
     let course = courseApi.getCourse(req.params.id);
 
