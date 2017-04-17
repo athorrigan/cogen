@@ -206,3 +206,8 @@ p {
 .table tr:first-child, .table td:first-child, .table th:first-child {
     width: inherit;
 }
+
+div.row.student-dropdown {
+    margin-left: .8em;
+    margin-right: .8em;
+}

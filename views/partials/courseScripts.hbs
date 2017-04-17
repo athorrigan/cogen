@@ -75,6 +75,12 @@
 
             $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
 
+            // Prefill content section with our first element.
+            $('#content').html(data.courseData.children[0].data);
+
+            // Select the relevant item from the list.
+            $('.sidebar-section').find('li').first().addClass('selected');
+
             $('.sidebar-item').on('click', function(ev) {
                 var
                     $target = $(ev.target),
