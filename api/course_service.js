@@ -6,7 +6,7 @@ const
     _ = require('underscore')
 ;
 
-module.exports = {
+let course_service = {
     getCourse: (courseId) => {
         return JSON.parse(fs.readFileSync('data/course_data.json', 'utf8'));
     },
@@ -31,5 +31,28 @@ module.exports = {
         let jsonData = Baby.parse(csvData, {header: true}).data;
 
         return _.pluck(jsonData, 'Number');
+    },
+    fetchData: (id, dataObjects) => {
+        console.log(id);
+        let fetchedNode = _.findWhere(dataObjects, {
+            id: id.toString()
+        });
+
+        let fetchedData;
+
+        if (fetchedNode) {
+            fetchedData = fetchedNode.data;
+            return fetchedData;
+        }
+
+        dataObjects.forEach(function(obj) {
+            if (obj.children) {
+                fetchedData = course_service.fetchData(id, obj.children);
+            }
+        });
+
+        return fetchedData;
     }
 };
+
+module.exports = course_service;

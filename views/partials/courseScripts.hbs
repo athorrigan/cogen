@@ -69,25 +69,11 @@
         return fetchedData;
     };
 
-    var setupPage = function(userVars) {
+    $(function() {
         $.getJSON('/get_course/88343999344', function(courseInfo) {
             data = courseInfo;
 
-
-            console.log(userVars);
-
-
-            var test = "<div>This is a {{{fred}}} test! </div>";
-
-            var template = Handlebars.compile('{{fred}}');
-
-            console.log(template({fred: 'test'}));
-
-
             $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
-
-            // Prefill content section with our first element.
-            $('#content').html(data.courseData.children[0].data);
 
             // Select the relevant item from the list.
             $('.sidebar-section').find('li').first().addClass('selected');
@@ -139,16 +125,6 @@
                 }
             });
         });
-    };
-
-    var fetchUserData = function(userId) {
-        $.getJSON('/get_user_vars/' + userId, function(userVars) {
-            setupPage(userVars);
-        });
-    };
-
-    $(function() {
-        fetchUserData('01');
     });
 
 </script>
