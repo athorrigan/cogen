@@ -225,6 +225,19 @@ code[class*=language-] {
     display: block;
 }
 
+@-webkit-keyframes blink {
+    50% { opacity: 0; }
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+code[class*=language-]::after {
+    content: '|';
+    animation: blink 1.5s linear infinite;
+}
+
 pre.language-python::before {
     content: 'Python IDE       sae_lab - [~/Programming/sae/sae_lab.py]';
 }
