@@ -55,11 +55,11 @@ app.get('/courses/:id/:section?', (req, res) => {
     if (req.params.section) {
         let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
         courseTemplate = Handlebars.compile(courseData);
-        contentString = courseTemplate(req.session.user);
+        contentString = courseTemplate(userData);
     }
     else {
         courseTemplate = Handlebars.compile(course.courseData.children[0].data);
-        contentString = courseTemplate(req.session.user);
+        contentString = courseTemplate(userData);
     }
 
     res.render('courses', {
@@ -70,7 +70,12 @@ app.get('/courses/:id/:section?', (req, res) => {
 });
 
 app.get('/login/:id', (req, res) => {
-    req.session.user = courseApi.getUserVars(req.params.id);
+    let userData = courseApi.getUserVars(req.params.id);
+
+    // Fix weird Student data issue.
+    userData.Student = 'student' + userData.Number;
+
+    req.session.user = userData;
 
     res.json({
         response: 'Success'

@@ -152,7 +152,6 @@ div.text-editor {
     box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
     clear: both;
     overflow: hidden;
-    transition: all 0.5s ease-out;
 }
 
 div.text-editor > div.editor-title-bar {
@@ -180,15 +179,113 @@ div.text-editor > pre.editor-body {
     font-weight: 500;
     text-align: left;
     overflow: hidden;
-    -webkit-transition: all 0.5s ease-out;
-    -moz-transition: all 0.5s ease-out;
-    -o-transition: all 0.5s ease-out;
-    transition: all 0.5s ease-out;
     margin: -1px;
 }
 
 div.text-editor > pre.editor-body.bash::before {
     content: "$ ";
+}
+
+pre[class*=language-] {
+    padding: 0;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    clear: both;
+    overflow: hidden;
+    border: none;
+}
+
+pre[class*=language-]::before {
+    content: 'IDE sae_lab - [~/Programming/sae/sae_lab]';
+    padding: 5px 0;
+    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
+    text-align: center;
+    font-weight: 400;
+    background-color: #f8f8f8;
+    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
+    display: block;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 0.1px 3px;
+    clear: both;
+    overflow: hidden;
+    color: #333;
+}
+
+code[class*=language-] {
+    width: 100%;
+    padding: 20px;
+    display: block;
+}
+
+pre.language-python::before {
+    content: 'Python IDE       sae_lab - [~/Programming/sae/sae_lab.py]';
+}
+
+pre.language-bash {
+    padding: 0;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    clear: both;
+    overflow: hidden;
+    border: none;
+}
+
+pre.language-bash::before {
+    content: 'sae-csp-2 -- -bash 10x80';
+    padding: 5px 0;
+    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
+    text-align: center;
+    font-weight: 400;
+    background-color: #f8f8f8;
+    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
+    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
+    display: block;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    clear: both;
+    overflow: hidden;
+    color: #333;
+}
+
+code.language-bash {
+    background-color: rgba(0, 0, 0, 0.85);
+    width: 100%;
+    padding: 20px;
+    display: block;
+}
+
+pre.language-bash,
+code.language-bash {
+    color: #f0f0f0;
+    font-family: "Consolas", "Courier New", "Courier", sans-serif;
+    line-height: 1.40em;
+    font-weight: 500;
+    text-align: left;
+    overflow: hidden;
+}
+
+code.language-bash > span.token {
+    text-shadow: #555 0 1px 0;
+    padding: 10px;
+    font-family: "Consolas", "Courier New", "Courier", sans-serif;
+    line-height: 1.40em;
+    font-weight: 500;
+    text-align: left;
+    overflow: hidden;
+    margin: -3px;
 }
 
 table.table--bordered {
@@ -210,4 +307,8 @@ p {
 div.row.student-dropdown {
     margin-left: .8em;
     margin-right: .8em;
+}
+
+a.title-link {
+    font-size: .9em;
 }
