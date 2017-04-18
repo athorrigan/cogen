@@ -33,7 +33,6 @@ let course_service = {
         return _.pluck(jsonData, 'Number');
     },
     fetchData: (id, dataObjects) => {
-        console.log(id);
         let fetchedNode = _.findWhere(dataObjects, {
             id: id.toString()
         });
@@ -52,6 +51,48 @@ let course_service = {
         });
 
         return fetchedData;
+    },
+    accumMenu: (jsonFragment, courseId) => {
+        let currentString = '';
+
+        if (jsonFragment.children) {
+            currentString += '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
+                '<a href="/courses/" class="sidebar-toggle">' +
+                jsonFragment.name +
+                '</a>'
+            ;
+
+            let substring = '<ul>';
+
+            jsonFragment.children.forEach((object) => {
+                substring += accumMenu(object);
+            });
+
+            substring += '</ul>';
+            currentString += substring;
+
+            currentString += '</li>';
+        }
+        else {
+            currentString += '<li data-id="' + jsonFragment.id + '" >' +
+                '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-item">' +
+                jsonFragment.name +
+                '</a>' +
+                '</li>'
+            ;
+        }
+
+        return currentString;
+
+    },
+    generateMenuString: (menuObjects, courseId) => {
+        let menuString = '';
+
+        menuObjects.forEach((object) => {
+            menuString += course_service.accumMenu(object, courseId)
+        });
+
+        return menuString;
     }
 };
 

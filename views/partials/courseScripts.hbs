@@ -4,126 +4,109 @@
         data = {}
     ;
 
-    var accumMenu = function(jsonFragment) {
-        var currentString = '';
+//    var accumMenu = function(jsonFragment) {
+//        var currentString = '';
+//
+//        if (jsonFragment.children) {
+//            currentString += '<li class="sidebar-drawer">' +
+//                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-toggle">' +
+//                                    jsonFragment.name +
+//                                '</a>'
+//            ;
+//
+//            var substring = '<ul>';
+//
+//            jsonFragment.children.forEach(function(object) {
+//                substring += accumMenu(object);
+//            });
+//
+//            substring += '</ul>';
+//            currentString += substring;
+//
+//            currentString += '</li>';
+//        }
+//        else {
+//            currentString += '<li>' +
+//                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-item">' +
+//                                    jsonFragment.name +
+//                                '</a>' +
+//                            '</li>'
+//            ;
+//        }
+//
+//        return currentString;
+//
+//    };
+//
+//    var generateMenuString = function(menuObjects) {
+//        var menuString = '';
+//
+//        menuObjects.forEach(function(object) {
+//            menuString += accumMenu(object)
+//        });
+//
+//        return menuString;
+//    };
 
-        if (jsonFragment.children) {
-            currentString += '<li class="sidebar-drawer">' +
-                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-toggle">' +
-                                    jsonFragment.name +
-                                '</a>'
-            ;
-
-            var substring = '<ul>';
-
-            jsonFragment.children.forEach(function(object) {
-                substring += accumMenu(object);
-            });
-
-            substring += '</ul>';
-            currentString += substring;
-
-            currentString += '</li>';
-        }
-        else {
-            currentString += '<li>' +
-                                '<a href="#" data-id="' + jsonFragment.id + '" class="sidebar-item">' +
-                                    jsonFragment.name +
-                                '</a>' +
-                            '</li>'
-            ;
-        }
-
-        return currentString;
-
-    };
-
-    var generateMenuString = function(menuObjects) {
-        var menuString = '';
-
-        menuObjects.forEach(function(object) {
-            menuString += accumMenu(object)
-        });
-
-        return menuString;
-    };
-
-    var fetchData = function(id, dataObjects) {
-        var fetchedNode = _.findWhere(dataObjects, {
-            id: id.toString()
-        });
-
-        var fetchedData;
-
-        if (fetchedNode) {
-            fetchedData = fetchedNode.data;
-            return fetchedData;
-        }
-
-        dataObjects.forEach(function(obj) {
-            if (obj.children) {
-                fetchedData = fetchData(id, obj.children);
-            }
-        });
-
-        return fetchedData;
-    };
+//    var fetchData = function(id, dataObjects) {
+//        var fetchedNode = _.findWhere(dataObjects, {
+//            id: id.toString()
+//        });
+//
+//        var fetchedData;
+//
+//        if (fetchedNode) {
+//            fetchedData = fetchedNode.data;
+//            return fetchedData;
+//        }
+//
+//        dataObjects.forEach(function(obj) {
+//            if (obj.children) {
+//                fetchedData = fetchData(id, obj.children);
+//            }
+//        });
+//
+//        return fetchedData;
+//    };
 
     $(function() {
-        $.getJSON('/get_course/88343999344', function(courseInfo) {
-            data = courseInfo;
+        var urlParts = location.pathname.split('/');
 
-            $('.sidebar-section').append($(generateMenuString(courseInfo.courseData.children)));
-
+        if (urlParts[3]) {
+            $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]').addClass('selected');
+        }
+        else {
             // Select the relevant item from the list.
             $('.sidebar-section').find('li').first().addClass('selected');
 
-            $('.sidebar-item').on('click', function(ev) {
-                var
-                        $target = $(ev.target),
-                        $parent = $target.closest('li'),
-                        selectedId = $target.data('id'),
-                        contentData
-                ;
+        }
 
-                // Remove selected class on all other list items
-                $('ul.sidebar-section').find('li').removeClass('selected');
+        $('.sidebar-drawer').on('click', function(ev) {
+            var
+                    $parent = $(ev.target).closest('li'),
+                    $submenu = $parent.find('ul')
+            ;
 
-                $parent.addClass('selected');
+            $submenu.toggle();
+        });
 
-                contentData = fetchData(selectedId, data.courseData.children);
+        $('a.toggle-menu').on('click', function(ev) {
+            var
+                    $contentWrapper = $('#content-wrapper'),
+                    $sidebar = $('.sidebar'),
+                    $content = $('#content')
+            ;
 
-                $('#content').html(contentData);
-                Prism.highlightAll();
-            });
-
-            $('.sidebar-drawer').on('click', function(ev) {
-                var
-                        $parent = $(ev.target).closest('li'),
-                        $submenu = $parent.find('ul')
-                ;
-
-                $submenu.toggle();
-            });
-
-            $('a.toggle-menu').on('click', function(ev) {
-                var
-                        $contentWrapper = $('#content-wrapper'),
-                        $sidebar = $('.sidebar'),
-                        $content = $('#content')
-                ;
-
-                if ($contentWrapper.hasClass('show-menu')) {
-                    $contentWrapper.removeClass('show-menu');
-                    $content.addClass('col-md-10 col-md-offset-1');
-                    $sidebar.hide();
-                }
-                else {
-                    $contentWrapper.addClass('show-menu');
-                    $content.removeClass('col-md-10 col-md-offset-1');
-                    $sidebar.show();
-                }
-            });
+            if ($contentWrapper.hasClass('show-menu')) {
+                $contentWrapper.removeClass('show-menu');
+                $content.addClass('col-md-10 col-md-offset-1');
+                $sidebar.hide();
+            }
+            else {
+                $contentWrapper.addClass('show-menu');
+                $content.removeClass('col-md-10 col-md-offset-1');
+                $sidebar.show();
+            }
         });
     });
 
