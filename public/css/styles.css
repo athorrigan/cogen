@@ -329,3 +329,20 @@ a.title-link {
 .table tr td:first-child, .table tr th:first-child {
     border-left: 1px solid #dfdfdf;
 }
+
+.un-cramp {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+div.hero.hero--loose.hero--background-4 {
+    min-height: 600px;
+}
+
+div.hero__content {
+    margin-top: 15%;
+}
+
+div.header-bar {
+    width: 100%;
+}

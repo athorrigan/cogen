@@ -1,17 +1,25 @@
-<div class="row student-dropdown">
-    <div class="col-md-6">
-        <form>
-            <div class="form-group">
-                <div class="form-group__text select">
-                    <select id="student_select">
-                        <option value="0" selected>Select a Student</option>
-                        {{#each users}}
-                            <option value="{{this}}">Student {{this}}</option>
-                        {{/each}}
-                    </select>
+<div id="content-wrapper">
+    {{> sidebar }}
+    <div class="content-body">
+        {{> loginnav }}
+        <div id="content" class="content container-fluid">
+            <div class="hero hero--loose hero--background-4 hero--filter-dkgray">
+                <div class="container">
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 hero__content">
+                        <h1>LTRCLD-2121</h1>
+                        <h1>
+                            Virtualize, Orchestrate and <br>
+                            Automate Your Hybrid Cloud Network!
+                        </h1>
+                        <p>
+                            <strong>
+                                Select a student ID from the dropdown above to continue
+                            </strong>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

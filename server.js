@@ -85,7 +85,8 @@ app.get('/login/:id', (req, res) => {
 app.get('/', (req, res) => {
     let users = courseApi.getUsers();
     res.render('splash', {
-        users: users
+        users: users,
+        landingPage: true
     });
 });
 
