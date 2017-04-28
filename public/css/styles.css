@@ -325,3 +325,7 @@ div.row.student-dropdown {
 a.title-link {
     font-size: .9em;
 }
+
+.table tr td:first-child, .table tr th:first-child {
+    border-left: 1px solid #dfdfdf;
+}

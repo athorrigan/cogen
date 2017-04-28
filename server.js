@@ -47,26 +47,26 @@ app.get('/courses/:id/:section?', (req, res) => {
 
     if (req.session.user) {
         userData = req.session.user;
+
+        if (req.params.section) {
+            let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
+            courseTemplate = Handlebars.compile(courseData);
+            contentString = courseTemplate(userData);
+        }
+        else {
+            courseTemplate = Handlebars.compile(course.courseData.children[0].data);
+            contentString = courseTemplate(userData);
+        }
+
+        res.render('courses', {
+            sidebarData: courseApi.generateMenuString(course.courseData.children, '88343999'),
+            content: contentString,
+            coursePage: true
+        });
     }
     else {
         res.redirect('/');
     }
-    
-    if (req.params.section) {
-        let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
-        courseTemplate = Handlebars.compile(courseData);
-        contentString = courseTemplate(userData);
-    }
-    else {
-        courseTemplate = Handlebars.compile(course.courseData.children[0].data);
-        contentString = courseTemplate(userData);
-    }
-
-    res.render('courses', {
-        sidebarData: courseApi.generateMenuString(course.courseData.children, '88343999'),
-        content: contentString,
-        coursePage: true
-    });
 });
 
 app.get('/login/:id', (req, res) => {
