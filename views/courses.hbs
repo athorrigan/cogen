@@ -2,7 +2,30 @@
     {{> sidebar }}
     <div class="content-body">
         {{> nav }}
-        <div id="content" class="content">{{{content}}}</div>
+        <div id="content" class="content">
+            {{{content}}}
+            <div id="traversal">
+                <div class="btn-group btn-group-lg col-md-12" role="group">
+                    <div class="pull-left">
+                        <a id="prev-link" href="#">
+                            <button type="button" class="btn btn-default">
+                                <span class="icon-step-backward"></span>
+                                Previous Module
+                            </button>
+                        </a>
+                    </div>
+
+                    <div class="pull-right">
+                        <a id="next-link" href="#">
+                            <button type="button" class="btn btn-default">
+                                Next Module
+                                <span class="icon-step-forward"></span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {{> modals }}
 </div>

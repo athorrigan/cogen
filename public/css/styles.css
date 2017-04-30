@@ -379,5 +379,14 @@ div.toolbar > div.toolbar-item > button.copy-button {
 
 div.toolbar > div.toolbar-item > button.copy-button:hover {
     box-shadow: unset;
-    border: .1px solid #555;
+    border: .1px solid #888;
+}
+
+div#traversal {
+    margin-top: 2em;
+}
+
+div#traversal span[class*="icon-"] {
+    padding-left: .5em;
+    padding-right: .5em;
 }

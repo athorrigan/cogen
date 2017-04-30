@@ -5,14 +5,68 @@
     ;
 
     $(function() {
-        var urlParts = location.pathname.split('/');
+        var
+            urlParts = location.pathname.split('/'),
+            $prevLink = $('#prev-link'),
+            $nextLink = $('#next-link'),
+            $prevButton = $prevLink.find('button'),
+            $nextButton = $nextLink.find('button')
+        ;
 
+        // All next/previous logic will have to be re-assessed if we allow tiers.
         if (urlParts[3]) {
-            $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]').addClass('selected');
+            var
+                $selectedMenuLink = $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]'),
+                $previousMenuLink = $selectedMenuLink.prev(),
+                $nextMenuLink = $selectedMenuLink.next(),
+                prevId,
+                nextId
+            ;
+
+            if ($previousMenuLink.length > 0) {
+                prevId = $previousMenuLink.data('id');
+            }
+            else {
+                prevId = 0;
+            }
+
+            if ($nextMenuLink.length > 0) {
+                nextId = $nextMenuLink.data('id');
+            }
+            else {
+                nextId = 0;
+            }
+
+            if (prevId === 0) {
+                $prevButton.html('<span class="icon-home"></span> Home');
+                $prevLink.attr('href', '/');
+            }
+            else {
+                $prevLink.attr('href', '/courses/' + urlParts[2] + '/' + prevId);
+            }
+
+            if (nextId === 0) {
+                $nextButton.html('Home <span class="icon-home"></span>');
+                $nextLink.attr('href', '/');
+            }
+            else {
+                $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
+            }
+
+            $selectedMenuLink.addClass('selected');
+
         }
         else {
             // Select the relevant item from the list.
-            $('.sidebar-section').find('li').first().addClass('selected');
+            var
+                $firstLink = $('.sidebar-section').find('li').first(),
+                nextId = $firstLink.next().data('id')
+            ;
+
+            $firstLink.addClass('selected');
+            $prevButton.html('<span class="icon-home"></span> Home');
+            $prevLink.attr('href', '/');
+            $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
 
         }
 
