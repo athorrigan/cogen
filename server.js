@@ -61,7 +61,8 @@ app.get('/courses/:id/:section?', (req, res) => {
         res.render('courses', {
             sidebarData: courseApi.generateMenuString(course.courseData.children, '88343999'),
             content: contentString,
-            coursePage: true
+            coursePage: true,
+            userData: userData
         });
     }
     else {

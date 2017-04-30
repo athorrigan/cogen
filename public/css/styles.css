@@ -342,3 +342,42 @@ div.hero.hero--loose.hero--background-4 {
 div.hero__content {
     margin-top: 15%;
 }
+
+div.show-menu div.header-bar {
+    width: 100%;
+}
+
+div.modal-footer > button.dismiss {
+    margin-top: 1.2em;
+}
+
+div#physical_infrastructure > div.modal-dialog,
+div#virtual_infrastructure > div.modal-dialog {
+    width: 100%;
+}
+
+pre.code-toolbar > .toolbar {
+    right: 2em;
+    min-width: 4rem;
+}
+
+pre.code-toolbar > .toolbar .toolbar-item {
+    width: 4rem;
+}
+
+div.toolbar > div.toolbar-item > button.copy-button {
+    padding: 3.5px 5px;
+    width: 4rem;
+    border: 1px solid #ddd;
+    color: #333;
+    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
+    text-align: center;
+    font-weight: 400;
+    background-color: transparent;
+    box-shadow: inset 0.5px 0.3px 0.3px #4c4c4c, inset 0.5px 0.5px 0.3px #4c4c4c;
+}
+
+div.toolbar > div.toolbar-item > button.copy-button:hover {
+    box-shadow: unset;
+    border: .1px solid #555;
+}

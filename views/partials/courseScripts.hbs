@@ -25,6 +25,40 @@
             $submenu.toggle();
         });
 
+        $('pre[class*="language-"]').each(function(index, target) {
+            var toolbarString = '<div class="toolbar">' +
+                                    '<div class="toolbar-item">' +
+                                        '<button class="copy-button">Copy</button>' +
+                                    '</div>' +
+                                '</div>'
+            ;
+
+            $(toolbarString).appendTo(target);
+        });
+
+        $('.copy-button').each(function(index, button) {
+            var clippy = new Clipboard(button, {
+                target: function(trigger) {
+                    return $(trigger).closest('pre').find('code')[0]
+                }
+            });
+
+            clippy.on('success', function(ev) {
+                var button = ev.trigger;
+
+                ev.clearSelection();
+                button.textContent = 'Copied';
+
+                setTimeout(function () {
+                    button.textContent = 'Copy';
+                }, 1500);
+            });
+
+            clippy.on('failure', function(ev) {
+               alert('Clipboard error, please copy using ctrl + c instead.');
+            });
+        });
+
         $('a.toggle-menu').on('click', function(ev) {
             var
                     $contentWrapper = $('#content-wrapper'),

@@ -1,3 +1,161 @@
 <section id="modals">
-
+    <div class="modal fade" id="connection_info" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            >
+                        <span>&times;</span>
+                    </button>
+                    <h3 class="modal-title"
+                        id="connection_modal_title">
+                        Connection Info
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <p>Please follow these steps to access the lab environment:</p>
+                    <ol>
+                        <li>Use AnyConnect to reach 173.38.117.198. The Group is SAE-VPN and the credentials are
+                            {{userData.Student}} and C1sc0.17.
+                        </li>
+                        <li>Once connected to the DMZ VPN, use Microsoft&#39;s RDP client to connect to
+                            RDP. The username is is SVS-CLIQr\\{{userData.Student}}, and the password is cisco.123.</student>
+                        </li>
+                    </ol>
+                    <div class="note">The management subnet for this lab is 10.1.60.x<strong>/23</strong>. IP
+                        addresses in the 10.1.<strong>60</strong>.x/24 subnet are for Infrastructure, such as the CSPs
+                        and NSO. IP addresses in the 10.1.<strong>61</strong>.x/24 subnet are for student VNFs.
+                    </div>
+                    <h3>Infrastructure Addresses</h3>
+                    <div class="responsive-table">
+                        <table class="table table--bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Device</th>
+                            <th scope="col">IP Address</th>
+                            <th scope="col">Login Information</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{userData.CSP-Name}}</td>
+                            <td>{{userData.CSP-IP}}</td>
+                            <td>{{userData.Student}}/C1sc0.17</td>
+                        </tr>
+                        <tr>
+                            <td>SAE-N9372-3</td>
+                            <td>10.1.60.233</td>
+                            <td>SAE-User/C1sc0.17</td>
+                        </tr>
+                        <tr>
+                            <td>SAE-N9372-4</td>
+                            <td>10.1.60.234</td>
+                            <td>SAE-User/C1sc0.17</td>
+                        </tr>
+                        <tr>
+                            <td>SAE-NSO-1</td>
+                            <td>10.1.60.31</td>
+                            <td>SAE-User/C1sc0.17</td>
+                        </tr>
+                        </tbody>
+                        </table><p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <h3>VNF Addresses</h3>
+                        <div class="responsive-table">
+                            <table class="table table--bordered">
+                            <tbody>
+                            <tr>
+                                <td>Device</td>
+                                <td>IP Address</td>
+                            </tr>
+                            <tr>
+                                <td>{{userData.Student-ASAvName}}</td>
+                                <td>{{userData.Student-ASAvIP}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{userData.Student-CSRvIP}}</td>
+                                <td>{{userData.Student-CSRvIP}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{userData.Student-WebServName}}</td>
+                                <td>{{userData.Student-WebServIP}}</td>
+                            </tr>
+                            </tbody>
+                            </table></div>
+                        <p>&nbsp;</p></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default dismiss"
+                            data-dismiss="modal"
+                            >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="physical_infrastructure" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            >
+                        <span>&times;</span>
+                    </button>
+                    <h3 class="modal-title"
+                        id="connection_modal_title">
+                        Physical Infrastructure
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <img src="/images/s{{userData.Number}}-PHYtopology.png">
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default dismiss"
+                            data-dismiss="modal"
+                            >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="virtual_infrastructure" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            >
+                        <span>&times;</span>
+                    </button>
+                    <h3 class="modal-title"
+                        id="connection_modal_title">
+                        Virtual Infrastructure
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <img src="/images/s{{userData.Number}}-VNFtopology.png">
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default dismiss"
+                            data-dismiss="modal"
+                            >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
