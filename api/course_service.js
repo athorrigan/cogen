@@ -56,10 +56,11 @@ let course_service = {
         let currentString = '';
 
         if (jsonFragment.children) {
-            currentString += '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
-                '<a href="/courses/" class="sidebar-toggle">' +
-                jsonFragment.name +
-                '</a>'
+            currentString +=
+                '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
+                    '<a href="/courses/" class="sidebar-toggle">' +
+                        jsonFragment.name +
+                    '</a>'
             ;
 
             let substring = '<ul>';
@@ -74,10 +75,11 @@ let course_service = {
             currentString += '</li>';
         }
         else {
-            currentString += '<li data-id="' + jsonFragment.id + '" >' +
-                '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-item">' +
-                jsonFragment.name +
-                '</a>' +
+            currentString +=
+                '<li data-id="' + jsonFragment.id + '" >' +
+                    '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-item">' +
+                        jsonFragment.name +
+                    '</a>' +
                 '</li>'
             ;
         }
