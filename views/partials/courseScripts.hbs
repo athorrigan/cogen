@@ -19,9 +19,20 @@
         if (urlParts[3]) {
             var
                 $selectedMenuLink = $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]'),
+                $parentDrawer = $selectedMenuLink.closest('li.sidebar-drawer'),
                 $previousMenuLink = $selectedMenuLink.prev(),
                 $nextMenuLink = $selectedMenuLink.next()
             ;
+
+            // If selected item is inside of a drawer, we need to
+            // collapse the parent menu to ensure selected item is shown.
+            if ($parentDrawer.length > 0) {
+                $parentDrawer.addClass('sidebar-drawer--opened');
+            }
+
+            // Use CSS to indicate the correct menu item that is currently
+            // selected.
+            $selectedMenuLink.addClass('selected');
 
             if ($previousMenuLink.length > 0) {
                 prevId = $previousMenuLink.data('id');
@@ -53,7 +64,6 @@
                 $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
             }
 
-            $selectedMenuLink.addClass('selected');
 
         }
         else {
@@ -95,7 +105,13 @@
             else {
                 $currentItem.addClass('sidebar-drawer--opened');
             }
+        });
 
+        // Prevents clicks on the submenu from folding up the drawer
+        // before redirecting.
+        $('.sidebar-drawer ul').on('click', function(ev) {
+            ev.stopPropagation();
+            return true;
         });
 
         // Add a copy button to our code blocks so that people
