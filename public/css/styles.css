@@ -90,9 +90,14 @@ nav div#tree {
     margin-top: 10px;
 }
 
+.apollo-sidebar,
+.sidebar {
+    width: 300px;
+}
+
 div.show-menu div.content-body,
 div.show-menu div.content {
-    padding-left: 280px;
+    padding-left: 300px;
 }
 
 input.form-control:focus {

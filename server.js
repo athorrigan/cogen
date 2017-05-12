@@ -71,11 +71,18 @@ app.get('/courses/:id/:section?', (req, res) => {
             // Fetch the individual course section data (an HTML string).
             let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
 
-            // Create a template function with Handlebars based on that data.
-            courseTemplate = Handlebars.compile(courseData);
+            // If the course was successfully found.
+            if (courseData) {
+                // Create a template function with Handlebars based on that data.
+                courseTemplate = Handlebars.compile(courseData);
 
-            // Compile the the course section html along with the userData variables.
-            contentString = courseTemplate(userData);
+                // Compile the the course section html along with the userData variables.
+                contentString = courseTemplate(userData);
+            }
+            // If the course module doesn't exist, we 404 it.
+            else {
+                res.status(404).send('Not found');
+            }
         }
         // ... Otherwise we redirect to the head of the course.
         else {

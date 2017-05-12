@@ -83,12 +83,19 @@ let course_service = {
 
         // If the past search didn't find the relevant data, we
         // then search each child element for the course data.
-        dataObjects.forEach(function(obj) {
+        // We use some because we want to short circuit once we
+        // find out data rather than carrying through the entire
+        // loop.
+        dataObjects.some(function(obj) {
             // If a child object has more children and we still
             // haven't found what we're looking for, we recursively
             // sift through them as well.
             if (obj.children) {
                 fetchedData = course_service.fetchData(id, obj.children);
+                if (fetchedData) {
+                    // Array.some() short circuits when an iteration returns true.
+                    return true;
+                }
             }
         });
 
@@ -109,12 +116,28 @@ let course_service = {
         if (jsonFragment.children) {
             // If there are children, then this menu item will be a drawer
             // That will display the sub elements beneath when it is selected.
-            currentString +=
-                '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
-                    '<a href="/courses/" class="sidebar-toggle">' +
-                        jsonFragment.name +
-                    '</a>'
-            ;
+
+            // If the top level page has data, we need to link it to the relevant
+            // course page
+            if (jsonFragment.data !== '') {
+                currentString +=
+                    '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
+                        '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-toggle">' +
+                            jsonFragment.name +
+                        '</a>'
+                ;
+            }
+            // Otherwise we simply want it to operate as a drawer to show
+            // the submenu items.
+            else {
+                currentString +=
+                    '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" data-empty="true">' +
+                        '<a href="#" class="sidebar-toggle">' +
+                            jsonFragment.name +
+                        '</a>'
+                ;
+            }
+
 
             // This is following the Atlantic UI convention, which follows up the initial
             // link with an unordered list representing the child elements revealed
@@ -124,7 +147,7 @@ let course_service = {
             // Loop through all of the children of this fragment and pass them
             // recursively to this function
             jsonFragment.children.forEach((object) => {
-                substring += accumMenu(object);
+                substring += course_service.accumMenu(object, courseId);
             });
 
             substring += '</ul>';
