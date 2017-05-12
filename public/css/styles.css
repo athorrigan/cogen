@@ -398,3 +398,8 @@ div#traversal span[class*="icon-"] {
     padding-left: .5em;
     padding-right: .5em;
 }
+
+li.sidebar-drawer--opened.selected > ul > li > a {
+    box-shadow: none;
+    background-color: inherit;
+}
