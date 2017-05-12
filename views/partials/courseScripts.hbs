@@ -10,7 +10,9 @@
             $prevLink = $('#prev-link'),
             $nextLink = $('#next-link'),
             $prevButton = $prevLink.find('button'),
-            $nextButton = $nextLink.find('button')
+            $nextButton = $nextLink.find('button'),
+            prevId,
+            nextId
         ;
 
         // All next/previous logic will have to be re-assessed if we allow tiers.
@@ -18,9 +20,7 @@
             var
                 $selectedMenuLink = $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]'),
                 $previousMenuLink = $selectedMenuLink.prev(),
-                $nextMenuLink = $selectedMenuLink.next(),
-                prevId,
-                nextId
+                $nextMenuLink = $selectedMenuLink.next()
             ;
 
             if ($previousMenuLink.length > 0) {
@@ -59,9 +59,10 @@
         else {
             // Select the relevant item from the list.
             var
-                $firstLink = $('.sidebar-section').find('li').first(),
-                nextId = $firstLink.next().data('id')
+                $firstLink = $('.sidebar-section').find('li').first()
             ;
+
+            nextId = $firstLink.next().data('id');
 
             $firstLink.addClass('selected');
             $prevButton.html('<span class="icon-home"></span> Home');
@@ -70,15 +71,20 @@
 
         }
 
+        // Shows or hides the submenu when the drawer link is clicked.
         $('.sidebar-drawer').on('click', function(ev) {
             var
-                    $parent = $(ev.target).closest('li'),
-                    $submenu = $parent.find('ul')
+                $parent = $(ev.target).closest('li'),
+                $submenu = $parent.find('ul')
             ;
 
             $submenu.toggle();
         });
 
+        // Add a copy button to our code blocks so that people
+        // can copy/paste the contents. We're adding it to the
+        // Prism toolbar library to aid with placement, but Prism's
+        // Clipboard plugin was buggy, so we're actually bypassing it.
         $('pre[class*="language-"]').each(function(index, target) {
             var toolbarString = '<div class="toolbar">' +
                                     '<div class="toolbar-item">' +
@@ -90,6 +96,9 @@
             $(toolbarString).appendTo(target);
         });
 
+
+        // Our own clipboard.js implementation to copy code when
+        // a copy button is pressed.
         $('.copy-button').each(function(index, button) {
             var clippy = new Clipboard(button, {
                 target: function(trigger) {
@@ -100,14 +109,21 @@
             clippy.on('success', function(ev) {
                 var button = ev.trigger;
 
+                // After the code block has been copied, we clear
+                // the text selection that clipboard automatically performs
+                // when it copies.
                 ev.clearSelection();
+
+                // And we temporarily change the button text to "Copied"
                 button.textContent = 'Copied';
 
+                // Then after 1.5s we switch it back to Copy.
                 setTimeout(function () {
                     button.textContent = 'Copy';
                 }, 1500);
             });
 
+            // Error catching in case the copy functionality isn't working right.
             clippy.on('failure', function(ev) {
                alert('Clipboard error, please copy using ctrl + c instead.');
             });
@@ -115,16 +131,20 @@
 
         $('a.toggle-menu').on('click', function(ev) {
             var
-                    $contentWrapper = $('#content-wrapper'),
-                    $sidebar = $('.sidebar'),
-                    $content = $('#content')
+                $contentWrapper = $('#content-wrapper'),
+                $sidebar = $('.sidebar'),
+                $content = $('#content')
             ;
 
+            // If the show-menu class is present already
+            // when we toggle the menu, we will collapse
+            // the sidebar...
             if ($contentWrapper.hasClass('show-menu')) {
                 $contentWrapper.removeClass('show-menu');
                 $content.addClass('col-md-10 col-md-offset-1');
                 $sidebar.hide();
             }
+            // ...Otherwise we will show the sidebar
             else {
                 $contentWrapper.addClass('show-menu');
                 $content.removeClass('col-md-10 col-md-offset-1');

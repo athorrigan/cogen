@@ -2,10 +2,12 @@
 
 $(function() {
 
+    // When a user clicks on a drawer, this will reveal the
+    // child submenu.
     $('.sidebar-drawer').on('click', function(ev) {
         var
-                $parent = $(ev.target).closest('li'),
-                $submenu = $parent.find('ul')
+            $parent = $(ev.target).closest('li'),
+            $submenu = $parent.find('ul')
         ;
 
         $submenu.toggle();
@@ -13,16 +15,20 @@ $(function() {
 
     $('a.toggle-menu').on('click', function(ev) {
         var
-                $contentWrapper = $('#content-wrapper'),
-                $sidebar = $('.sidebar'),
-                $content = $('#content')
+            $contentWrapper = $('#content-wrapper'),
+            $sidebar = $('.sidebar'),
+            $content = $('#content')
         ;
 
+        // If the show-menu class is present already
+        // when we toggle the menu, we will collapse
+        // the sidebar...
         if ($contentWrapper.hasClass('show-menu')) {
             $contentWrapper.removeClass('show-menu');
             $content.addClass('col-md-10 col-md-offset-1');
             $sidebar.hide();
         }
+        // ...Otherwise we will show the sidebar
         else {
             $contentWrapper.addClass('show-menu');
             $sidebar.removeClass('hidden');
