@@ -74,11 +74,28 @@
         // Shows or hides the submenu when the drawer link is clicked.
         $('.sidebar-drawer').on('click', function(ev) {
             var
-                $parent = $(ev.target).closest('li'),
-                $submenu = $parent.find('ul')
+                $currentItem = $(this),
+                // If the top level link has no data, then this is
+                // collapsible. If it does, then we'll just initiate
+                // the link to the appropriate page.
+                collapsible = $currentItem.data('empty')
             ;
 
-            $submenu.toggle();
+            // If the link is not collapsible, we just return true
+            // to enable the link to operate as normal.
+            if (!collapsible) {
+                return true;
+            }
+
+            // The CSS will handle the exposure of submenu items and the styling
+            // of the arrow indicators.
+            if ($currentItem.hasClass('sidebar-drawer--opened')) {
+                $currentItem.removeClass('sidebar-drawer--opened');
+            }
+            else {
+                $currentItem.addClass('sidebar-drawer--opened');
+            }
+
         });
 
         // Add a copy button to our code blocks so that people
