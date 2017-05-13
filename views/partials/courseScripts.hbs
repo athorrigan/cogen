@@ -34,20 +34,92 @@
             // selected.
             $selectedMenuLink.addClass('selected');
 
+            // If there is a previous link...
             if ($previousMenuLink.length > 0) {
-                prevId = $previousMenuLink.data('id');
+                // If the previous link is a sidebar-drawer...
+                if ($previousMenuLink.hasClass('sidebar-drawer')) {
+                    // We want the previous link to be set to the last child of that set.
+                    prevId = $previousMenuLink.find('ul > li:last').data('id');
+                }
+                // ...otherwise we set the previous link ID to be that of the next
+                // sibling link.
+                else {
+                    prevId = $previousMenuLink.data('id');
+                }
             }
+            // Otherwise we set previous link to 0, which tells the code to
+            // make a home button.
             else {
                 prevId = 0;
             }
 
+            // If there is a next link...
             if ($nextMenuLink.length > 0) {
-                nextId = $nextMenuLink.data('id');
+                // If the next link is a sidebar-drawer with no top level element
+                // then the data-empty attribute will be set to true.
+                if ($nextMenuLink.data('empty')) {
+                    // When this is the case, we want the next link to be
+                    // set to the first child of that set.
+                    nextId = $nextMenuLink.find('ul > li:first').data('id');
+                }
+                // ...otherwise we set the next link ID to be that of the next
+                // sibling link.
+                else {
+                    nextId = $nextMenuLink.data('id');
+                }
+
             }
+            // Otherwise we set next to be 0, which tells the code to make
+            // a home button.
             else {
                 nextId = 0;
             }
 
+            // If we're in a submenu and the first child is selected...
+            if ($parentDrawer.length > 0 && $parentDrawer.data('empty') && $parentDrawer.find('ul li:first').hasClass('selected')) {
+                var $lastSibling = $parentDrawer.prev();
+
+                // Check out the parent's last sibling. If it has the sidebar-drawer
+                // class, it's also a drawer...
+                if ($lastSibling.hasClass('sidebar-drawer')) {
+                    // And then we want the ID of its last child to be our prevId
+                    prevId = $lastSibling.find('ul li:last').data('id');
+                }
+                // If it's not a drawer, then we want to make its id our prevID
+                else {
+                    prevId = $lastSibling.data('id');
+                }
+            }
+            // Unless the parentDrawer has top level data (marked by not having the empty
+            // data attribute. In which case we just make the previous link the top level element.
+            else if ($parentDrawer.length > 0 && $parentDrawer.find('ul li:first').hasClass('selected')) {
+                prevId = $parentDrawer.data('id');
+            }
+
+            // If we're in a submenu and the last child is selected...
+            if ($parentDrawer.length > 0 && $parentDrawer.find('ul li:last').hasClass('selected')) {
+                var $nextSibling = $parentDrawer.next();
+
+                // Check out the parent's first sibling. If it has the sidebar-drawer
+                // class, it's also a drawer...
+                if ($nextSibling.hasClass('sidebar-drawer')) {
+                    // And then we want the ID of its first child to be our nextId
+                    nextId = $nextSibling.find('ul li:first').data('id');
+                }
+                // If it's not a drawer, then we want to make its id our nextId
+                else {
+                    nextId = $nextSibling.data('id');
+                }
+            }
+
+            // If selected link *is* the parent drawer...
+            if ($selectedMenuLink.hasClass('sidebar-drawer') && !$selectedMenuLink.data('empty')) {
+                // then we need to make our next link the first child.
+                nextId = $selectedMenuLink.find('ul li:first').data('id');
+            }
+
+            // If previous link is marked with zero, we create a home button
+            // that returns us to the splash screen.
             if (prevId === 0) {
                 $prevButton.html('<span class="icon-home"></span> Home');
                 $prevLink.attr('href', '/');
@@ -56,6 +128,8 @@
                 $prevLink.attr('href', '/courses/' + urlParts[2] + '/' + prevId);
             }
 
+            // If next link is marked with zero, we create a home button
+            // that returns us to the splash screen.
             if (nextId === 0) {
                 $nextButton.html('Home <span class="icon-home"></span>');
                 $nextLink.attr('href', '/');
