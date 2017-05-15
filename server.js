@@ -139,6 +139,57 @@ app.get('/login/:id', (req, res) => {
     });
 });
 
+// Link to compile and serve the pdf of the course
+app.get('/pdf', (req, res) => {
+    const
+       // External library for converting html to pdf
+       htmlPdf = require('html-pdf'),
+       // The configuration object for our pdf file. Right now
+       // we're just setting the format.
+       pdfConfig = {
+           format: 'Letter',
+           border: {
+               top: '0.5in',
+               right: '0.5in',
+               left: '0.5in',
+               bottom: '0.5in'
+           }
+       }
+    ;
+
+    let
+        course = courseApi.getCourse(req.params.id),
+        userData
+    ;
+
+    // If the session already has a user object, then we have signed
+    // in and can get the user variables from the session...
+    if (req.session.user) {
+        // Pull the relevant data from the session.
+        userData = req.session.user;
+    }
+    // ... If not, we redirect the user to the front page so they can
+    // sign in.
+    else {
+        res.redirect('/');
+    }
+
+    let htmlString = courseApi.generatePdfString(course.courseData.children, userData);
+
+    // Store the output file in the uploads directory.
+    htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/generated.pdf', function(err, res) {
+        if (err) {
+            return console.log(err);
+        }
+        else {
+            console.log(res);
+        }
+    });
+
+    // Serve the generated file to the user.
+    res.download('public/uploads/generated.pdf');
+});
+
 // This is the landing/splash page.
 app.get('/', (req, res) => {
     // Get a list of the users (array of strings).

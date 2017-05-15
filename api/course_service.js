@@ -189,6 +189,60 @@ let course_service = {
         });
 
         return menuString;
+    },
+    /**
+     * Generates an HTML string that will be converted into a PDF.
+     *
+     * @param {Object[]} sections An array of course sections.
+     * @param {Object} userData variables for an individual user.
+     * @returns {string} A string representing the HTML for the course.
+     */
+    generatePdfString: (sections, userData) => {
+        const
+            Handlebars = require('handlebars')
+        ;
+
+        let courseTemplate;
+
+        // Create the core HTML structure. Note that we use __dirname to get
+        // an absolute path to our CSS file for inclusion. I think there are
+        // size limits to the CSS file as well, since originally I tried
+        // to include bootstrap as well as our local code and that choked.
+        let htmlString = `
+           <html>
+           <head>
+           <title>LTRCLD-2121: Automate Your Hybrid Cloud Network</title>
+           <link rel="stylesheet" href="file://${__dirname}/../public/css/pdfcss.css">
+           </head>
+           <body>
+        `;
+
+        // Iterate through the course data
+        sections.forEach(function(section) {
+            // For each section, add the title
+            htmlString += '<h1>' + section.name + '</h1><br>';
+            
+            // Then the course data.
+            if (section.data !== '') {
+                // Create a Handlebars template from this section's HTML.
+                courseTemplate = Handlebars.compile(section.data);
+
+                // Append the compiled HTML string.
+                htmlString += courseTemplate(userData);
+            }
+
+            if (section.children) {
+                htmlString += course_service.generatePdfString(section.children, userData);
+            }
+        });
+
+        // Close the HTML body for the entire course.
+        htmlString += `
+            </body>
+            </html>
+        `;
+
+        return htmlString;
     }
 };
 
