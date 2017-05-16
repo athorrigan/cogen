@@ -157,9 +157,9 @@ div.text-editor {
     margin-top: 20px;
     margin-bottom: 20px;
     min-width: 300px;
-    width: 80%;
+    width: 90%;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 27px;
     clear: both;
     overflow: hidden;
 }
@@ -203,11 +203,11 @@ pre[class*=language-] {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 27px;
     clear: both;
     overflow: hidden;
     border: none;
-    width: 80%;
+    width: 100%;
 }
 
 pre[class*=language-]::before {
@@ -260,7 +260,7 @@ pre.language-bash {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 27px;
     clear: both;
     overflow: hidden;
     border: none;
