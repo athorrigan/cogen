@@ -45,34 +45,30 @@ div.text-editor {
     margin-top: 20px;
     margin-bottom: 20px;
     min-width: 300px;
-    width: 80%;
+    width: 100%;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
     clear: both;
     overflow: hidden;
 }
 
 div.text-editor > div.editor-title-bar {
-    padding: 5px 0;
+    padding: 5px 5px;
     font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
     text-align: center;
     font-weight: 400;
-    background-color: #f8f8f8;
-    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
-    box-shadow: inset rgba(255, 255, 255, 0.7) 0 1px 1px;
+    background-color: #f2f2f2;
     border-bottom: #6a6a6a 1px solid;
+    color: #58585b;
 }
 
 div.text-editor > pre.editor-body {
     min-height: 120px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: #000;
     color: #f0f0f0;
     padding: 10px 25px;
     text-shadow: #000 0 1px 0;
     font-family: "Consolas", "Courier New", "Courier", sans-serif;
-    font-size: 1em;
+    font-size: 12px;
     line-height: 1.40em;
     font-weight: 500;
     text-align: left;
@@ -80,9 +76,6 @@ div.text-editor > pre.editor-body {
     margin: -1px;
 }
 
-div.text-editor > pre.editor-body.bash::before {
-    content: "$ ";
-}
 
 pre[class*=language-] {
     padding: 0;
@@ -91,117 +84,98 @@ pre[class*=language-] {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
     clear: both;
     overflow: hidden;
     border: none;
-    width: 80%;
-}
-
-pre[class*=language-]::before {
-    content: 'IDE sae_lab - [~/Programming/sae/sae_lab]';
-    padding: 5px 0;
-    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
-    text-align: center;
-    font-weight: 400;
-    background-color: #f8f8f8;
-    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
-    display: block;
-    border-radius: 10px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 0.1px 3px;
-    clear: both;
-    overflow: hidden;
-    color: #333;
+    width: 100%;
 }
 
 code[class*=language-] {
     width: 100%;
     padding: 20px;
     display: block;
-}
-
-@-webkit-keyframes blink {
-    50% { opacity: 0; }
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-code[class*=language-]::after {
-    content: '|';
-    animation: blink 1.5s linear infinite;
-}
-
-pre.language-python::before {
-    content: 'Python IDE       sae_lab - [~/Programming/sae/sae_lab.py]';
-}
-
-pre.language-bash {
-    padding: 0;
-    display: block;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
-    clear: both;
-    overflow: hidden;
-    border: none;
-}
-
-pre.language-bash::before {
-    content: 'sae-csp-2 -- -bash 10x80';
-    padding: 5px 0;
-    font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
-    text-align: center;
-    font-weight: 400;
-    background-color: #f8f8f8;
-    background-image: -webkit-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: -moz-linear-gradient(top, #e8e8e8, #bcbbbc);
-    background-image: linear-gradient(top, #e8e8e8, #bcbbbc);
-    display: block;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 15px 70px;
-    clear: both;
-    overflow: hidden;
-    color: #333;
-}
-
-code.language-bash {
-    background-color: rgba(0, 0, 0, 0.85);
-    width: 100%;
-    padding: 20px;
-    display: block;
-}
-
-pre.language-bash,
-code.language-bash {
-    color: #f0f0f0;
+    background-color: #39393b;
+    color: #fff;
     font-family: "Consolas", "Courier New", "Courier", sans-serif;
     line-height: 1.40em;
     font-weight: 500;
     text-align: left;
-    overflow: hidden;
 }
 
-code.language-bash > span.token {
-    text-shadow: #555 0 1px 0;
-    padding: 10px;
-    font-family: "Consolas", "Courier New", "Courier", sans-serif;
-    line-height: 1.40em;
-    font-weight: 500;
-    text-align: left;
-    overflow: hidden;
-    margin: -3px;
-}
 
 table.table--bordered {
+    border: 1px solid #dfdfdf;
     margin-bottom: 0;
+    width: 100%;
+    border-spacing: 0;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+.table>thead>tr>th {
+    vertical-align: bottom;
+}
+
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table>caption+thead>tr:first-child>td,
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>td,
+.table>thead:first-child>tr:first-child>th {
+    border-top: 0;
+}
+
+.table--bordered td {
+    border-right: 1px solid #dfdfdf;
+}
+
+.table--bordered td {
+    border-right: 1px solid #f2f2f2;
+}
+
+table > thead > tr {
+    background-color: #58585b;
+    color: #f2f2f2;
+}
+
+.table th {
+    position: relative;
+    text-align: left;
+}
+
+.table--bordered td:last-child {
+    border-right: 0 none;
+}
+
+.table--bordered th:last-child {
+    border-right: 0 none;
+}
+
+.table tr, .table td, .table th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5.25px 10.5px;
+    vertical-align: middle;
+}
+
+.table > tbody > tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.table > tbody > tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
 p {
@@ -228,6 +202,8 @@ a.title-link {
 .table tr td:first-child, .table tr th:first-child {
     border-left: 1px solid #dfdfdf;
 }
+
+
 
 .un-cramp {
     margin-top: 1em;
@@ -296,5 +272,14 @@ li.sidebar-drawer--opened.selected > ul > li > a {
 }
 
 h2 {
-    color: #41a8ff;
+    color: #049fd9;
+}
+
+h1 {
+    background-color: #58585b;
+    color: #fff;
+    padding: 20px 5px;
+    margin: 20px 0;
+    text-align: center;
+    width: 100%;
 }

@@ -150,8 +150,8 @@ app.get('/pdf', (req, res) => {
            format: 'Letter',
            border: {
                top: '0.5in',
-               right: '0.5in',
-               left: '0.5in',
+               right: '0.25in',
+               left: '0.25in',
                bottom: '0.5in'
            }
        }

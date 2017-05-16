@@ -114,6 +114,9 @@ body {
 div#content {
     padding: 2em;
     overflow-x: hidden;
+    width: 100%;
+    margin: 0 5%;
+    padding-right: 10%;
 }
 
 div.note {
