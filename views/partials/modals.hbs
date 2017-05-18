@@ -15,20 +15,39 @@
                         Connection Info
                     </h3>
                 </div>
-                <div class="modal-body">
+                <p class="modal-body">
                     <p>Please follow these steps to access the lab environment:</p>
-                    <ol>
-                        <li>Use AnyConnect to reach 173.38.117.198. The Group is SAE-VPN and the credentials are
-                            {{userData.Student}} and C1sc0.17.
-                        </li>
-                        <li>Once connected to the DMZ VPN, use Microsoft&#39;s RDP client to connect to
-                            RDP. The username is is SVS-CLIQr\\{{userData.Student}}, and the password is cisco.123.</student>
-                        </li>
-                    </ol>
-                    <div class="note">The management subnet for this lab is 10.1.60.x<strong>/23</strong>. IP
+                    <p>1. Sign into AnyConnect to reach 173.38.117.198. The Group is SAE-VPN
+                        and the credentials are {{userData.Student}}/C!sco.123. If necessary, select
+                        Connect Anyway to bypass any warnings.
+                    </p>
+                    <div class="note">
+                        In order for the connection to establish, the checkbox Block
+                        connections to untrusted servers needs to be UNchecked. This
+                        setting can be found by clicking on the small gray gear icon in
+                        the bottom-left corner of the AnyConnect window.
+                    </div>
+                    <p>2. Once connected to the DMZ VPN, use latest version of Microsoft's RDP client to connect to
+                        {{userData.RDP}}. The username is is SVS-CLIQr\\{{userData.Student}} (<em>Domain Required</em>),
+                        and the password is cisco.123.
+                    </p>
+                    <div class="important-note">
+                        These hosts are running Windows 10, which has known issues with
+                        3rd party RDP applications. Please use the official Microsoft RDP.
+                        Apple users can downloaded the latest version from the
+                        <a href="https://itunes.apple.com/us/app/microsoft-remote-desktop/id715768417?mt=12" target="_blank">Apple Mac App Store</a>.
+                    </div>
+                    <div class="note">
+                        As indicated by the domain, these jumphosts are used for other Cisco Live labs provided by SVS.
+                        If there are any windows open, please feel free to close them.
+                    </div>
+                    <p>&nbsp;</p>
+                    <h2>IP Addressing</h2>
+                    <p>The management subnet for this lab is 10.1.60.x<strong>/23</strong>. IP
                         addresses in the 10.1.<strong>60</strong>.x/24 subnet are for Infrastructure, such as the CSPs
                         and NSO. IP addresses in the 10.1.<strong>61</strong>.x/24 subnet are for student VNFs.
-                    </div>
+                    </p>
+                    <p>&nbsp;</p>
                     <h3>Infrastructure Addresses</h3>
                     <div class="responsive-table">
                         <table class="table table--bordered">
@@ -36,32 +55,47 @@
                         <tr>
                             <th scope="col">Device</th>
                             <th scope="col">IP Address</th>
-                            <th scope="col">Login Information</th>
+                            <th scope="col">Credentials</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>{{userData.CSP-Name}}</td>
-                            <td>{{userData.CSP-IP}}</td>
-                            <td>{{userData.Student}}/C1sc0.17</td>
+                            <td>{{userData.CSP1-Name}}</td>
+                            <td>{{userData.CSP1-IP}}</td>
+                            <td>student/C!sco.123</td>
+                        </tr>
+                        <tr>
+                            <td>{{userData.CSP2-Name}}</td>
+                            <td>{{userData.CSP2-IP}}</td>
+                            <td>student/C!sco.123</td>
+                        </tr>
+                        <tr>
+                            <td>{{userData.CSP3-Name}}</td>
+                            <td>{{userData.CSP3-IP}}</td>
+                            <td>student/C!sco.123</td>
+                        </tr>
+                        <tr>
+                            <td>{{userData.CSP4-Name}}</td>
+                            <td>{{userData.CSP4-IP}}</td>
+                            <td>student/C!sco.123</td>
                         </tr>
                         <tr>
                             <td>SAE-N9372-3</td>
                             <td>10.1.60.233</td>
-                            <td>SAE-User/C1sc0.17</td>
+                            <td>{{userData.Nexus-User}}/C!sco.123</td>
                         </tr>
                         <tr>
                             <td>SAE-N9372-4</td>
                             <td>10.1.60.234</td>
-                            <td>SAE-User/C1sc0.17</td>
+                            <td>{{userData.Nexus-User}}/C!sco.123</td>
                         </tr>
                         <tr>
                             <td>SAE-NSO-1</td>
                             <td>10.1.60.31</td>
-                            <td>SAE-User/C1sc0.17</td>
+                            <td>student/C1sc0.17</td>
                         </tr>
                         </tbody>
-                        </table><p>&nbsp;</p>
+                        </table>
                         <p>&nbsp;</p>
                         <h3>VNF Addresses</h3>
                         <div class="responsive-table">
@@ -70,18 +104,27 @@
                             <tr>
                                 <td>Device</td>
                                 <td>IP Address</td>
+                                <td>Credentials</td>
                             </tr>
                             <tr>
-                                <td>{{userData.Student-ASAvName}}</td>
-                                <td>{{userData.Student-ASAvIP}}</td>
+                                <td>{{userData.Client-Name}}</td>
+                                <td>{{userData.Client-mgmtIP}}</td>
+                                <td>root/cisco.123</td>
                             </tr>
                             <tr>
-                                <td>{{userData.Student-CSRvIP}}</td>
-                                <td>{{userData.Student-CSRvIP}}</td>
+                                <td>{{userData.Server-Name}}</td>
+                                <td>{{userData.Server-mgmtIP}}</td>
+                                <td>root/cisco.123</td>
                             </tr>
                             <tr>
-                                <td>{{userData.Student-WebServName}}</td>
-                                <td>{{userData.Student-WebServIP}}</td>
+                                <td>{{userData.StudentCSR-Name}}</td>
+                                <td>{{userData.StudentCSR-mgmtIP}}</td>
+                                <td>admin/cisco.123</td>
+                            </tr>
+                            <tr>
+                                <td>{{userData.StudentASA-Name}}</td>
+                                <td>{{userData.StudentASA-mgmtIP}}</td>
+                                <td>admin/cisco.123</td>
                             </tr>
                             </tbody>
                             </table></div>
