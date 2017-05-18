@@ -122,10 +122,26 @@ div#content {
 div.note {
     margin: 20px 0;
     padding: 15px 30px 15px 15px;
-    border-left: 7px solid #049fd9;
+    border-left: 7px solid #14a792;
     background-color: #dfdfdf;
 }
 div.note::before {
+    content: 'Note!';
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #14a792;
+    display: block;
+}
+
+div.important-note {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 7px solid #049fd9;
+    background-color: #dfdfdf;
+}
+div.important-note::before {
     content: 'Important!';
     font-size: 1.4em;
     font-weight: bold;
