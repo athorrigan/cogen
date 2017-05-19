@@ -153,7 +153,8 @@ app.get('/pdf', (req, res) => {
                right: '0.25in',
                left: '0.25in',
                bottom: '0.5in'
-           }
+           },
+           base: 'http://localhost:8024/uploads'
        }
     ;
 

@@ -96,9 +96,8 @@ pre {
     background-color: #39393b;
     color: #fff;
     padding: 3pt;
+    font-size: .8em;
 }
-
-
 
 pre[class*=language-] {
     padding: 0;
@@ -294,5 +293,9 @@ h1 {
     padding: 20px 5px;
     margin: 20px 0;
     text-align: center;
+    width: 100%;
+}
+
+img {
     width: 100%;
 }
