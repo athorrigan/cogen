@@ -92,6 +92,13 @@ div.text-editor > pre.editor-body {
     margin: -1px;
 }
 
+pre {
+    background-color: #39393b;
+    color: #fff;
+    padding: 3pt;
+}
+
+
 
 pre[class*=language-] {
     padding: 0;
@@ -117,8 +124,6 @@ code[class*=language-] {
     font-weight: 500;
     text-align: left;
 }
-
-
 table.table--bordered {
     border: 1px solid #dfdfdf;
     margin-bottom: 0;

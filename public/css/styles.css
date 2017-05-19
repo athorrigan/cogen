@@ -212,6 +212,11 @@ div.text-editor > pre.editor-body.bash::before {
     content: "$ ";
 }
 
+pre {
+    background-color: #39393b;
+    color: #fff;
+}
+
 pre[class*=language-] {
     padding: 0;
     display: block;
