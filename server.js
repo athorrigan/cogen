@@ -177,17 +177,15 @@ app.get('/pdf', (req, res) => {
     let htmlString = courseApi.generatePdfString(course.courseData.children, userData);
 
     // Store the output file in the uploads directory.
-    htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/ltrcld-2121.pdf', function(err, res) {
+    htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/ltrcld-2121.pdf', function(err, handler) {
         if (err) {
             return console.log(err);
         }
         else {
-            console.log(res);
+            // Serve the generated file to the user.
+            res.download('public/uploads/ltrcld-2121.pdf');
         }
     });
-
-    // Serve the generated file to the user.
-    res.download('public/uploads/ltrcld-2121.pdf');
 });
 
 // This is the landing/splash page.
