@@ -16,38 +16,6 @@
                     </h3>
                 </div>
                 <p class="modal-body">
-                    <p>Please follow these steps to access the lab environment:</p>
-                    <p>1. Sign into AnyConnect to reach 173.38.117.198. The Group is SAE-VPN
-                        and the credentials are {{userData.Student}}/C!sco.123. If necessary, select
-                        Connect Anyway to bypass any warnings.
-                    </p>
-                    <div class="note">
-                        In order for the connection to establish, the checkbox Block
-                        connections to untrusted servers needs to be UNchecked. This
-                        setting can be found by clicking on the small gray gear icon in
-                        the bottom-left corner of the AnyConnect window.
-                    </div>
-                    <p>2. Once connected to the DMZ VPN, use latest version of Microsoft's RDP client to connect to
-                        {{userData.RDP}}. The username is is SVS-CLIQr\\{{userData.Student}} (<em>Domain Required</em>),
-                        and the password is cisco.123.
-                    </p>
-                    <div class="important-note">
-                        These hosts are running Windows 10, which has known issues with
-                        3rd party RDP applications. Please use the official Microsoft RDP.
-                        Apple users can downloaded the latest version from the
-                        <a href="https://itunes.apple.com/us/app/microsoft-remote-desktop/id715768417?mt=12" target="_blank">Apple Mac App Store</a>.
-                    </div>
-                    <div class="note">
-                        As indicated by the domain, these jumphosts are used for other Cisco Live labs provided by SVS.
-                        If there are any windows open, please feel free to close them.
-                    </div>
-                    <p>&nbsp;</p>
-                    <h2>IP Addressing</h2>
-                    <p>The management subnet for this lab is 10.1.60.x<strong>/23</strong>. IP
-                        addresses in the 10.1.<strong>60</strong>.x/24 subnet are for Infrastructure, such as the CSPs
-                        and NSO. IP addresses in the 10.1.<strong>61</strong>.x/24 subnet are for student VNFs.
-                    </p>
-                    <p>&nbsp;</p>
                     <h3>Infrastructure Addresses</h3>
                     <div class="responsive-table">
                         <table class="table table--bordered">
