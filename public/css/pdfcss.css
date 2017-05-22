@@ -299,3 +299,7 @@ h1 {
 img {
     width: 100%;
 }
+
+section {
+    page-break-after: always;
+}

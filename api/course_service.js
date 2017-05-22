@@ -219,6 +219,9 @@ let course_service = {
 
         // Iterate through the course data
         sections.forEach(function(section) {
+            // Add a section tag to delimit sections
+            htmlString += '<section>';
+
             // For each section, add the title
             htmlString += '<h1>' + section.name + '</h1><br>';
             
@@ -234,6 +237,9 @@ let course_service = {
             if (section.children) {
                 htmlString += course_service.generatePdfString(section.children, userData);
             }
+
+            // Close each section
+            htmlString += '</section>';
         });
 
         // Close the HTML body for the entire course.
