@@ -309,3 +309,12 @@ table td,
 table th {
     font-size: 10pt;
 }
+
+table,
+.warning-note,
+.note,
+.important-note,
+pre,
+img {
+    page-break-inside: avoid;
+}
