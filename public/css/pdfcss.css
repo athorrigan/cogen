@@ -85,7 +85,7 @@ div.text-editor > pre.editor-body {
     padding: 10px 25px;
     text-shadow: #000 0 1px 0;
     font-family: "Consolas", "Courier New", "Courier", sans-serif;
-    font-size: .8em;
+    font-size: .7em;
     line-height: 1.40em;
     font-weight: 500;
     text-align: left;
@@ -303,4 +303,9 @@ img {
 
 section {
     page-break-after: always;
+}
+
+table td,
+table th {
+    font-size: 10pt;
 }
