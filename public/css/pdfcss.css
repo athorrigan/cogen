@@ -5,6 +5,7 @@ html, body, .container-fluid, .container-fluid .row {
 
 body {
     font-family: "Arial", sans-serif;
+    font-size: 10pt;
 }
 
 div.note {
@@ -84,7 +85,7 @@ div.text-editor > pre.editor-body {
     padding: 10px 25px;
     text-shadow: #000 0 1px 0;
     font-family: "Consolas", "Courier New", "Courier", sans-serif;
-    font-size: 12px;
+    font-size: .8em;
     line-height: 1.40em;
     font-weight: 500;
     text-align: left;
@@ -96,7 +97,7 @@ pre {
     background-color: #39393b;
     color: #fff;
     padding: 3pt;
-    font-size: .8em;
+    font-size: .6em;
 }
 
 pre[class*=language-] {
