@@ -106,12 +106,12 @@
                     nextId = 0;
                 }
                 // Check out the parent's first sibling. If it has the sidebar-drawer
-                // class, it's also a drawer...
-                else if ($nextSibling.hasClass('sidebar-drawer')) {
+                // class, it's also a drawer, if it is empty, it will say so...
+                else if ($nextSibling.hasClass('sidebar-drawer') && $nextSibling.data('empty')) {
                     // And then we want the ID of its first child to be our nextId
                     nextId = $nextSibling.find('ul li:first').data('id');
                 }
-                // If it's not a drawer, then we want to make its id our nextId
+                // If it's not an empty drawer, then we want to make its id our nextId
                 else {
                     nextId = $nextSibling.data('id');
                 }
@@ -151,18 +151,25 @@
                 $firstLink = $('.sidebar-section').find('li').first()
             ;
 
-            nextId = $firstLink.next().data('id');
-
             $firstLink.addClass('selected');
 
+            // If the first link has a sidebar-drawer class, then it has children
+            // and needs to display them.
             if ($firstLink.hasClass('sidebar-drawer')) {
                 $firstLink.addClass('sidebar-drawer--opened');
+                // If there are children, we also need for the next link
+                // to lead to the first child.
+                nextId = $firstLink.find('ul li:first').data('id');
+            }
+            // If there are no children, we set the next link to the next
+            // list item.
+            else {
+                nextId = $firstLink.next().data('id');
             }
 
             $prevButton.html('<span class="icon-home"></span> Home');
             $prevLink.attr('href', '/');
             $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
-
         }
 
         // Shows or hides the submenu when the drawer link is clicked.
