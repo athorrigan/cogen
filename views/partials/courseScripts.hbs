@@ -15,7 +15,7 @@
             nextId
         ;
 
-        // All next/previous logic will have to be re-assessed if we allow tiers.
+        // Make sure our URL has a section ID
         if (urlParts[3]) {
             var
                 $selectedMenuLink = $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]'),
@@ -154,6 +154,11 @@
             nextId = $firstLink.next().data('id');
 
             $firstLink.addClass('selected');
+
+            if ($firstLink.hasClass('sidebar-drawer')) {
+                $firstLink.addClass('sidebar-drawer--opened');
+            }
+
             $prevButton.html('<span class="icon-home"></span> Home');
             $prevLink.attr('href', '/');
             $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
