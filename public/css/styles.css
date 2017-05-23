@@ -245,7 +245,7 @@ pre[class*=language-]::before {
     border-radius: 10px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: rgba(0, 0, 0, 0.8) 0 0.1px 3px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0 0.1px 0;
     clear: both;
     overflow: hidden;
     color: #333;
