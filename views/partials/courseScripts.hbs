@@ -100,9 +100,14 @@
             if ($parentDrawer.length > 0 && $parentDrawer.find('ul li:last').hasClass('selected')) {
                 var $nextSibling = $parentDrawer.next();
 
+                // If there is no next sibling, then we just return 0
+                // to generate a Home button.
+                if ($nextSibling.length === 0) {
+                    nextId = 0;
+                }
                 // Check out the parent's first sibling. If it has the sidebar-drawer
                 // class, it's also a drawer...
-                if ($nextSibling.hasClass('sidebar-drawer')) {
+                else if ($nextSibling.hasClass('sidebar-drawer')) {
                     // And then we want the ID of its first child to be our nextId
                     nextId = $nextSibling.find('ul li:first').data('id');
                 }
