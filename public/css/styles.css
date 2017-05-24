@@ -436,3 +436,7 @@ li.sidebar-drawer--opened.selected > ul > li > a {
     box-shadow: none;
     background-color: inherit;
 }
+
+.sublist {
+    margin-left: 3em;
+}
