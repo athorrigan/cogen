@@ -274,7 +274,8 @@ pre.language-python::before {
     content: 'Python IDE       sae_lab - [~/Programming/sae/sae_lab.py]';
 }
 
-pre.language-bash {
+pre.language-bash,
+pre.language-vim {
     padding: 0;
     display: block;
     margin: auto;
@@ -287,7 +288,8 @@ pre.language-bash {
     border: none;
 }
 
-pre.language-bash::before {
+pre.language-bash::before,
+pre.language-vim::before {
     content: 'sae-csp-2 -- -bash 10x80';
     padding: 5px 0;
     font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
@@ -305,7 +307,12 @@ pre.language-bash::before {
     color: #333;
 }
 
-code.language-bash {
+pre.language-vim::before {
+    content: 'console 10x80';
+}
+
+code.language-bash,
+code.language-vim {
     background-color: rgba(0, 0, 0, 0.85);
     width: 100%;
     padding: 20px;
@@ -313,7 +320,9 @@ code.language-bash {
 }
 
 pre.language-bash,
-code.language-bash {
+code.language-bash,
+pre.language-vim,
+code.language-vim {
     color: #f0f0f0;
     font-family: "Consolas", "Courier New", "Courier", sans-serif;
     line-height: 1.40em;
