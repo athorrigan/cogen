@@ -440,3 +440,17 @@ li.sidebar-drawer--opened.selected > ul > li > a {
 .sublist {
     margin-left: 3em;
 }
+
+.responsive-table.svs {
+    background-url('/images/SVS_Logo.png');
+    background-color: rgba(255, 255, 255, 0.9);
+    background-blend-mode: soft-light;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 100%;
+}
+
+.responsive-table.svs tr:nth-child(odd),
+.responsive-table.svs tr:nth-child(even) {
+    background-color: transparent;
+}
