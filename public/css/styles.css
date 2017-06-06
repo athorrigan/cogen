@@ -454,3 +454,7 @@ li.sidebar-drawer--opened.selected > ul > li > a {
 .responsive-table.svs tr:nth-child(even) {
     background-color: transparent;
 }
+
+.modal-image {
+    text-align: center;
+}
