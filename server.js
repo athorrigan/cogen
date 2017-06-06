@@ -23,7 +23,7 @@ let app = express();
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
 // returns a function is called to initialize middleware.
-app.use(bodyParser());
+app.use(bodyParser({limit: '100mb'}));
 
 // Setup the handlebars middleware.
 app.engine('hbs', hbs({
