@@ -42,10 +42,10 @@ app.use(session({
     cookieName: 'session',
     // Pretty arbitrary, used for encryption and such
     secret: 'supercalifragilisticexpialidocious',
-    // Session will last for an hour by default
-    duration: 1000 * 60 * 60,
-    // Anytime activity is detected, the duration will be extended by a half hour.
-    activeDuration: 1000 * 60 * 30
+    // Session will last for 2 hours by default
+    duration: 1000 * 60 * 120,
+    // Any time activity is detected, the duration will be extended by 2 hours.
+    activeDuration: 1000 * 60 * 120
 }));
 
 // Set our default template engine to be handlebars.
