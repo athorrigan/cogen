@@ -215,6 +215,7 @@ div.text-editor > pre.editor-body.bash::before {
 pre {
     background-color: #39393b;
     color: #fff;
+    overflow-y: scroll;
 }
 
 pre[class*=language-] {
