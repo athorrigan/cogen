@@ -218,6 +218,10 @@ pre {
     overflow-y: auto;
 }
 
+pre > strong {
+    color: steelblue;
+}
+
 pre[class*=language-] {
     padding: 0;
     display: block;
