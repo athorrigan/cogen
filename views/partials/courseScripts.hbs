@@ -12,8 +12,15 @@
             $prevButton = $prevLink.find('button'),
             $nextButton = $nextLink.find('button'),
             prevId,
-            nextId
+            nextId,
+            $contentWrapper = $('#content-wrapper'),
+            $content = $('#content')
         ;
+
+        if (localStorage.getItem('showSidebar') === 'true') {
+            $contentWrapper.addClass('show-menu');
+            $content.removeClass('col-md-10 col-md-offset-1');
+        }
 
         // TODO: Analyze this code, filter off some to subfunctions
         // And lower the complexity level as much as possible. This is
@@ -314,12 +321,20 @@
                 $contentWrapper.removeClass('show-menu');
                 $content.addClass('col-md-10 col-md-offset-1');
                 $sidebar.hide();
+
+                // Set a local variable indicating that the side-menu
+                // should be collapsed.
+                localStorage.setItem('showSidebar', false);
             }
             // ...Otherwise we will show the sidebar
             else {
                 $contentWrapper.addClass('show-menu');
                 $content.removeClass('col-md-10 col-md-offset-1');
                 $sidebar.show();
+
+                // Set a local variable indicating that the side-menu
+                // should be shown.
+                localStorage.setItem('showSidebar', true);
             }
         });
     });

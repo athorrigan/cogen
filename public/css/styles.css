@@ -92,6 +92,11 @@ nav div#tree {
 
 .apollo-sidebar,
 .sidebar {
+    width: 0;
+}
+
+div.show-menu .apollo-sidebar,
+div.show-menu .sidebar {
     width: 300px;
 }
 
