@@ -1,8 +1,8 @@
-<div id="content-wrapper">
+<div id="content-wrapper" {{#if sidebarShown}}class="show-menu"{{/if}}>
     {{> sidebar }}
     <div class="content-body">
         {{> nav }}
-        <div id="content" class="content col-md-10 col-md-offset-1">
+        <div id="content" class="content{{#unless sidebarShown}} col-md-10 col-md-offset-1{{/unless}}">
             {{{content}}}
             <div id="traversal">
                 <div class="btn-group btn-group-lg col-md-12" role="group">

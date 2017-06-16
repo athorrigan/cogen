@@ -12,18 +12,8 @@
             $prevButton = $prevLink.find('button'),
             $nextButton = $nextLink.find('button'),
             prevId,
-            nextId,
-            $contentWrapper = $('#content-wrapper'),
-            $content = $('#content'),
-            showSidebar = localStorage.getItem('showSidebar')
+            nextId
         ;
-
-        // If showSidebar hasn't been set yet or if it's set to true
-        // we show the sidebar.
-        if (!showSidebar || showSidebar === 'true') {
-            $contentWrapper.addClass('show-menu');
-            $content.removeClass('col-md-10 col-md-offset-1');
-        }
 
         // TODO: Analyze this code, filter off some to subfunctions
         // And lower the complexity level as much as possible. This is
@@ -314,7 +304,9 @@
             var
                 $contentWrapper = $('#content-wrapper'),
                 $sidebar = $('.sidebar'),
-                $content = $('#content')
+                $content = $('#content'),
+                $menuLinks = $('.sidebar li a.sidebar-item'),
+                $buttonLinks = $('#traversal a')
             ;
 
             // If the show-menu class is present already
@@ -325,9 +317,8 @@
                 $content.addClass('col-md-10 col-md-offset-1');
                 $sidebar.hide();
 
-                // Set a local variable indicating that the side-menu
-                // should be collapsed.
-                localStorage.setItem('showSidebar', false);
+                // Let the server know to hide the sidebar.
+                $.get('/sidebar/false');
             }
             // ...Otherwise we will show the sidebar
             else {
@@ -335,9 +326,8 @@
                 $content.removeClass('col-md-10 col-md-offset-1');
                 $sidebar.show();
 
-                // Set a local variable indicating that the side-menu
-                // should be shown.
-                localStorage.setItem('showSidebar', true);
+                // Let the server know to show the sidebar.
+                $.get('/sidebar/true');
             }
         });
     });

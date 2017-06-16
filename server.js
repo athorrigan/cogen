@@ -55,7 +55,7 @@ app.set('view engine', 'hbs');
 /** Routes **/
 
 // Individual course section pages.
-app.get('/courses/:id/:section?', (req, res) => {
+app.get('/courses/:id/:section?/:sidebarShown?', (req, res) => {
     let course = courseApi.getCourse(req.params.id);
     let userData,contentString,courseTemplate;
 
@@ -119,7 +119,10 @@ app.get('/courses/:id/:section?', (req, res) => {
             coursePage: true,
 
             // Passes in the userData to the template to fill in where relevant.
-            userData: userData
+            userData: userData,
+
+            // Determine whether we should show sidebar or not.
+            sidebarShown: req.session.showSidebar
         });
     }
     // ... If not, we redirect the user to the front page so they can
@@ -142,10 +145,23 @@ app.get('/login/:id', (req, res) => {
     // Set the session's user object to carry these variables.
     req.session.user = userData;
 
+    // Default the user session to showing the menu bars
+    req.session.showSidebar = true;
+
     // Let the calling code know that the session has been set up.
     res.json({
         response: 'Success'
     });
+});
+
+// Ajax endpoint to turn the sidebar on and off for subsequent page loads.
+app.get('/sidebar/:showSidebar', (req, res) => {
+    req.session.showSidebar = (req.params.showSidebar === 'true');
+
+    // Let the calling code know the sidebar status was recorded
+    res.json({
+        response: 'Success'
+    })
 });
 
 // Link to compile and serve the pdf of the course
