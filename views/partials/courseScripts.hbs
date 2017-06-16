@@ -14,10 +14,13 @@
             prevId,
             nextId,
             $contentWrapper = $('#content-wrapper'),
-            $content = $('#content')
+            $content = $('#content'),
+            showSidebar = localStorage.getItem('showSidebar')
         ;
 
-        if (localStorage.getItem('showSidebar') === 'true') {
+        // If showSidebar hasn't been set yet or if it's set to true
+        // we show the sidebar.
+        if (!showSidebar || showSidebar === 'true') {
             $contentWrapper.addClass('show-menu');
             $content.removeClass('col-md-10 col-md-offset-1');
         }
