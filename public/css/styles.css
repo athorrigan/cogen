@@ -548,3 +548,8 @@ div#content.content p.output-label {
     margin-bottom: 0;
     font-weight: bold;
 }
+
+div#content.content p.output-label img {
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+}
