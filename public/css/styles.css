@@ -429,7 +429,7 @@ div.toolbar > div.toolbar-item > button.copy-button:hover {
 }
 
 div#traversal {
-    margin-top: 2em;
+    margin-top: 8rem;
 }
 
 div#traversal span[class*="icon-"] {
@@ -462,4 +462,84 @@ li.sidebar-drawer--opened.selected > ul > li > a {
 
 .modal-image {
     text-align: center;
+}
+
+.ciscolive-icon {
+    display: block;
+    font-size: 2.1875rem;
+    line-height: 1;
+    background: url('/images/cisco-live-grey.png') no-repeat center;
+    background-size: 100px 35px;
+    width: 100px;
+    height: 35px;
+    margin-bottom: 5px;
+}
+
+/** Rules for content area spacing **/
+div#content.content h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    margin-top: .3rem;
+    font-weight: 600;
+}
+
+div#content.content h2 {
+    font-size: 1.75rem;
+    margin-bottom: .3rem;
+    margin-top: 2rem;
+    font-weight: 500;
+}
+
+div#content.content h3 {
+    font-size: 1.4rem;
+    margin-bottom: .3rem;
+    margin-top: 2rem;
+    font-weight: 500;
+}
+
+div#content.content h4 {
+    font-size: 1.3rem;
+    margin-bottom: .3rem;
+    margin-top: 1.5rem;
+    font-weight: 500;
+}
+
+div#content.content h5 {
+    font-size: 1.1rem;
+    margin-bottom: .3rem;
+    margin-top: 1.5rem;
+    font-weight: 500;
+}
+
+div#content.content img {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+div#content.content div.note,
+div#content.content div.important-note,
+div#content.content div.warning-note {
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+div#content.content p {
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+}
+
+div#content.content div.responsive-table {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+div#content.content pre {
+    margin-top: .1rem;
+    margin-bottom: 1.5rem;
+}
+
+div#content.content p.output-label {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    font-weight: bold;
 }
