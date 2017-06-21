@@ -55,7 +55,7 @@ app.set('view engine', 'hbs');
 /** Routes **/
 
 // Individual course section pages.
-app.get('/courses/:id/:section?/:sidebarShown?', (req, res) => {
+app.get('/courses/:id/:section?/:sidebarShown?', (req, res, next) => {
     let course = courseApi.getCourse(req.params.id);
     let userData,contentString,courseTemplate;
 
@@ -81,7 +81,7 @@ app.get('/courses/:id/:section?/:sidebarShown?', (req, res) => {
             }
             // If the course module doesn't exist, we 404 it.
             else {
-                res.status(404).send('Not found');
+                return next();
             }
         }
         // ... Otherwise we redirect to the head of the course.
@@ -107,7 +107,7 @@ app.get('/courses/:id/:section?/:sidebarShown?', (req, res) => {
         // We load the views/courses.hbs template (which will inject itself into
         // {{{section}}} block of the views/index.hbs template, which will then
         // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
-        res.render('courses', {
+        return res.render('courses', {
             // Passes an html string into the template that represents the sidebar menu
             // The course number parameter is static right now. Someday it might not be.
             sidebarData: courseApi.generateMenuString(course.courseData.children, '88343999'),
@@ -128,7 +128,7 @@ app.get('/courses/:id/:section?/:sidebarShown?', (req, res) => {
     // ... If not, we redirect the user to the front page so they can
     // sign in.
     else {
-        res.redirect('/');
+        return next();
     }
 });
 
@@ -149,7 +149,7 @@ app.get('/login/:id', (req, res) => {
     req.session.showSidebar = true;
 
     // Let the calling code know that the session has been set up.
-    res.json({
+    return res.json({
         response: 'Success'
     });
 });
@@ -159,7 +159,7 @@ app.get('/sidebar/:showSidebar', (req, res) => {
     req.session.showSidebar = (req.params.showSidebar === 'true');
 
     // Let the calling code know the sidebar status was recorded
-    res.json({
+    return res.json({
         response: 'Success'
     })
 });
@@ -197,7 +197,7 @@ app.get('/pdf', (req, res) => {
     // ... If not, we redirect the user to the front page so they can
     // sign in.
     else {
-        res.redirect('/');
+        return next();
     }
 
     let htmlString = courseApi.generatePdfString(course.courseData.children, userData);
@@ -209,7 +209,7 @@ app.get('/pdf', (req, res) => {
         }
         else {
             // Serve the generated file to the user.
-            res.download('public/uploads/ltrcld-2121.pdf');
+            return res.download('public/uploads/ltrcld-2121.pdf');
         }
     });
 });
@@ -220,7 +220,7 @@ app.get('/', (req, res) => {
     let users = courseApi.getUsers();
 
     // Render the splash page with the users populating a dropdown.
-    res.render('splash', {
+    return res.render('splash', {
         users: users,
         landingPage: true
     });
@@ -229,6 +229,25 @@ app.get('/', (req, res) => {
 // Setup the static middleware to serve static content from the
 // public directory.
 app.use(express.static('public'));
+
+// Set up an error handler to prevent server halts.
+app.use((err, req, res, next) => {
+    return res.status(500);
+    if (res.headersSent) {
+        return next(err);
+    }
+    return res.json(
+        {
+            error: err,
+            status: 'Failure'
+        }
+    );
+});
+
+// Handle 404s.
+app.use(function (req, res, next) {
+    return res.status(404).send('Sorry cannot find that! <a href="/">Return to home</a>.');
+});
 
 
 // Initialize our server to listen on port 8024.
