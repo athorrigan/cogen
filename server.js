@@ -55,7 +55,7 @@ app.set('view engine', 'hbs');
 /** Routes **/
 
 // Individual course section pages.
-app.get('/courses/:title/:section?/:sidebarShown?', (req, res, next) => {
+app.get('/courses/:title/:section?', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
     let userData,contentString,courseTemplate;
 
