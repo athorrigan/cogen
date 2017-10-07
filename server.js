@@ -55,8 +55,8 @@ app.set('view engine', 'hbs');
 /** Routes **/
 
 // Individual course section pages.
-app.get('/courses/:id/:section?/:sidebarShown?', (req, res, next) => {
-    let course = courseApi.getCourse(req.params.id);
+app.get('/courses/:title/:section?/:sidebarShown?', (req, res, next) => {
+    let course = courseApi.getCourse(req.params.title);
     let userData,contentString,courseTemplate;
 
     // If the session already has a user object, then we have signed
@@ -109,7 +109,7 @@ app.get('/courses/:id/:section?/:sidebarShown?', (req, res, next) => {
         // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
         return res.render('courses', {
             // Passes an html string into the template that represents the sidebar menu
-            sidebarData: courseApi.generateMenuString(course.courseData.children, req.params.id),
+            sidebarData: courseApi.generateMenuString(course.courseData.children, req.params.title),
 
             // String representation of the content to be loaded for this section
             content: contentString,
@@ -178,7 +178,7 @@ app.get('/pdf', (req, res) => {
                left: '0.25in',
                bottom: '0.5in'
            },
-           base: 'http://localhost:8024/uploads'
+           base: 'http://localhost:8040/uploads'
        }
     ;
 
