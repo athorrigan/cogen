@@ -109,8 +109,7 @@ app.get('/courses/:id/:section?/:sidebarShown?', (req, res, next) => {
         // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
         return res.render('courses', {
             // Passes an html string into the template that represents the sidebar menu
-            // The course number parameter is static right now. Someday it might not be.
-            sidebarData: courseApi.generateMenuString(course.courseData.children, '88343999'),
+            sidebarData: courseApi.generateMenuString(course.courseData.children, req.params.id),
 
             // String representation of the content to be loaded for this section
             content: contentString,
@@ -250,8 +249,8 @@ app.use(function (req, res, next) {
 });
 
 
-// Initialize our server to listen on port 8024.
-let server = app.listen(8024, function() {
+// Initialize our server to listen on port 8040.
+let server = app.listen(8040, function() {
     const host = server.address().address;
     const port = server.address().port;
 
