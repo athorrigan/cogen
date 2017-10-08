@@ -160,6 +160,26 @@ app.get('/courses/:title/:section', (req, res, next) => {
     }
 });
 
+// Load the editing page for the given course
+app.get('/edit-course/:title', (req, res) => {
+    // Get course data
+    let course = courseApi.getCourse(req.params.title);
+
+    // Render the splash page with the users populating a dropdown.
+    return res.render('editCourse', {
+        title: course.splashTitle,
+        instructions: course.splashInstructions,
+        courseName: course.courseName,
+        courseBrief: course.courseBrief,
+        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
+    });
+});
+
+// Used for an Ajax response for the editor.
+app.get('/get-course/:title', (req, res) => {
+    res.json(courseApi.getCourse(req.params.title));
+});
+
 // When the user selects a student to login as, they pop this endpoint
 // which sets up the user session before letting the front page
 // know that it's safe to redirect.
