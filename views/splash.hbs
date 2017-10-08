@@ -28,7 +28,8 @@
             var currentStudentId = $(ev.target).val();
 
             $.get('/login/' + currentStudentId, function(data) {
-                window.location.replace('/courses/88343999344')
+                // Loads the first section of the course.
+                window.location.replace('/courses/{{courseTitle}}/__start')
             });
         });
     }, false);

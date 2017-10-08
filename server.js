@@ -69,7 +69,8 @@ app.get('/courses/:title', (req, res, next) => {
         title: course.splashTitle,
         instructions: course.splashInstructions,
         courseName: course.courseName,
-        courseBrief: course.courseBrief
+        courseBrief: course.courseBrief,
+        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
     });
 });
 
@@ -143,7 +144,13 @@ app.get('/courses/:title/:section', (req, res, next) => {
             sidebarShown: req.session.showSidebar,
 
             // Title to be shown in title bar
-            courseBrief: course.courseBrief
+            courseBrief: course.courseBrief,
+
+            // Name of the course
+            courseName: course.courseName,
+
+            // Used for a URL, so we modify it first.
+            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
         });
     }
     // ... If not, we redirect the user to the front page so they can
