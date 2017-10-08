@@ -68,7 +68,8 @@ app.get('/courses/:title', (req, res, next) => {
         landingPage: true,
         title: course.splashTitle,
         instructions: course.splashInstructions,
-        courseName: course.courseName
+        courseName: course.courseName,
+        courseBrief: course.courseBrief
     });
 });
 
@@ -139,7 +140,10 @@ app.get('/courses/:title/:section', (req, res, next) => {
             userData: userData,
 
             // Determine whether we should show sidebar or not.
-            sidebarShown: req.session.showSidebar
+            sidebarShown: req.session.showSidebar,
+
+            // Title to be shown in title bar
+            courseBrief: course.courseBrief
         });
     }
     // ... If not, we redirect the user to the front page so they can
