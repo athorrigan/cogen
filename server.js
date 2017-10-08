@@ -180,6 +180,12 @@ app.get('/get-course/:title', (req, res) => {
     res.json(courseApi.getCourse(req.params.title));
 });
 
+// Update a specific course
+app.post('/update-course', (req, res) => {
+    courseApi.saveCourse(req.body);
+    res.send('Success');
+});
+
 // When the user selects a student to login as, they pop this endpoint
 // which sets up the user session before letting the front page
 // know that it's safe to redirect.

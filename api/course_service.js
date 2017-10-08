@@ -24,7 +24,7 @@ let course_service = {
     getCourse: (courseId) => {
         // Read a the file in from the hard drive for now, and then
         // parse the JSON into a native JS object.
-        return JSON.parse(fs.readFileSync('data/' + courseId.replace('-','_') + '.json', 'utf8'));
+        return JSON.parse(fs.readFileSync('data/' + courseId.replace(/-/g,'_') + '.json', 'utf8'));
 
     },
     /**
@@ -250,6 +250,26 @@ let course_service = {
         `;
 
         return htmlString;
+    },
+    /**
+     * Saves course data to the appropriate file.
+     *
+     * @param {Object} courseData The entire contents of the course JSON.
+     * @returns {string} The status of the file save operation.
+     */
+    saveCourse: (courseData) => {
+        let courseTitle = courseData.courseTitle;
+
+        console.log('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json');
+
+        fs.writeFile('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
+            if (err) {
+                return 'Failed to write file.';
+            }
+            else {
+                return 'File saved.'
+            }
+        });
     }
 };
 

@@ -137,7 +137,7 @@
 
         data.courseData.children = JSON.parse($tree.tree('toJson'));
 
-        $.post('update_course', data)
+        $.post('/update-course', data)
                 .fail(function(er) {
                     console.log('Failed');
                     console.log(er);
