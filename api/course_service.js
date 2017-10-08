@@ -22,8 +22,6 @@ let course_service = {
      * @returns {Object} JS Object representing course data.
      */
     getCourse: (courseId) => {
-        console.log(courseId);
-
         // Read a the file in from the hard drive for now, and then
         // parse the JSON into a native JS object.
         return JSON.parse(fs.readFileSync('data/' + courseId.replace('-','_') + '.json', 'utf8'));

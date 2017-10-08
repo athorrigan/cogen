@@ -54,8 +54,26 @@ app.set('view engine', 'hbs');
 
 /** Routes **/
 
+// Course specific splash pages
+app.get('/courses/:title', (req, res, next) => {
+    // Get course data
+    let course = courseApi.getCourse(req.params.title);
+
+    // Get a list of the users (array of strings).
+    let users = courseApi.getUsers();
+
+    // Render the splash page with the users populating a dropdown.
+    return res.render('splash', {
+        users: users,
+        landingPage: true,
+        title: course.splashTitle,
+        instructions: course.splashInstructions,
+        courseName: course.courseName
+    });
+});
+
 // Individual course section pages.
-app.get('/courses/:title/:section?', (req, res, next) => {
+app.get('/courses/:title/:section', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
     let userData,contentString,courseTemplate;
 
@@ -67,7 +85,7 @@ app.get('/courses/:title/:section?', (req, res, next) => {
 
         // If the section parameter is included then we're on an individual
         // section page...
-        if (req.params.section) {
+        if (req.params.section !== '__start') {
             // Fetch the individual course section data (an HTML string).
             let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
 
