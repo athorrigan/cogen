@@ -133,8 +133,6 @@
             );
         }
 
-        console.log(data);
-
         data.courseData.children = JSON.parse($tree.tree('toJson'));
 
         $.post('/update-course', data)
