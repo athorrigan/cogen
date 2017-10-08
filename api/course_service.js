@@ -63,14 +63,14 @@ let course_service = {
     /**
      * Fetches data related to an individual course based on its ID.
      *
-     * @param {string} id String representation of a course's ID.
+     * @param {string} path String representation of a course's path.
      * @param {Object[]} dataObjects An array of JavaScript objects containing info for all courses.
      * @returns {Object} A subset of the passed in Object representing data for an individual course.
      */
-    fetchData: (id, dataObjects) => {
+    fetchData: (path, dataObjects) => {
         // Search the passed in course data for data specific to this course.
         let fetchedNode = _.findWhere(dataObjects, {
-            id: id.toString()
+            path: path
         });
 
         let fetchedData;
@@ -92,7 +92,7 @@ let course_service = {
             // haven't found what we're looking for, we recursively
             // sift through them as well.
             if (obj.children) {
-                fetchedData = course_service.fetchData(id, obj.children);
+                fetchedData = course_service.fetchData(path, obj.children);
                 if (fetchedData) {
                     // Array.some() short circuits when an iteration returns true.
                     return true;
@@ -122,8 +122,8 @@ let course_service = {
             // course page
             if (jsonFragment.data !== '') {
                 currentString +=
-                    '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" >' +
-                        '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-toggle">' +
+                    '<li class="sidebar-drawer" data-id="' + jsonFragment.path + '" >' +
+                        '<a href="/courses/' + courseId + '/' + jsonFragment.path + '" class="sidebar-toggle">' +
                             jsonFragment.name +
                         '</a>'
                 ;
@@ -132,7 +132,7 @@ let course_service = {
             // the submenu items.
             else {
                 currentString +=
-                    '<li class="sidebar-drawer" data-id="' + jsonFragment.id + '" data-empty="true">' +
+                    '<li class="sidebar-drawer" data-id="' + jsonFragment.path + '" data-empty="true">' +
                         '<a href="#" class="sidebar-toggle">' +
                             jsonFragment.name +
                         '</a>'
@@ -163,8 +163,8 @@ let course_service = {
         // ... otherwise we just output a link for the individual element.
         else {
             currentString +=
-                '<li data-id="' + jsonFragment.id + '" >' +
-                    '<a href="/courses/' + courseId + '/' + jsonFragment.id + '" class="sidebar-item">' +
+                '<li data-id="' + jsonFragment.path + '" >' +
+                    '<a href="/courses/' + courseId + '/' + jsonFragment.path + '" class="sidebar-item">' +
                         jsonFragment.name +
                     '</a>' +
                 '</li>'
