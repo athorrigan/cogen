@@ -13,12 +13,21 @@ const
     Handlebars = require('handlebars'),
     // This maintains sessions for users.
     session = require('client-sessions'),
+    // Library to facilitate image uploads
+    multer = require('multer'),
+    // Also need file system library for image uploads
+    fs = require('fs'),
+    // Random id for image names
+    guid = require('guid'),
+    // Finally need the path library for uploads
+    path = require('path'),
     // Our API for handling course data.
     courseApi = require('./api/course_service.js')
 ;
 
-
 let app = express();
+
+let upload = multer({ dest: 'public/uploads/' });
 
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
@@ -184,6 +193,42 @@ app.get('/get-course/:title', (req, res) => {
 app.post('/update-course', (req, res) => {
     courseApi.saveCourse(req.body);
     res.send('Success');
+});
+
+app.post('/upload_photo', upload.single('upload'), (req, res) => {
+    let
+        fileName = guid.create() + path.extname(req.file.originalname),
+        target_path = 'public/uploads/' + fileName,
+        tmp_path = req.file.path,
+        src = fs.createReadStream(tmp_path),
+        dest = fs.createWriteStream(target_path)
+    ;
+
+    src.pipe(dest);
+
+    src.on('end', function() {
+        let response = {
+            uploaded: 1,
+            fileName: fileName,
+            url: '/uploads/' + fileName
+        };
+
+        res.json(response);
+    });
+
+    src.on('error', function(err) {
+        let response = {
+            uploaded: 0,
+            error: {
+                message: 'The file could not be saved'
+            }
+        };
+
+        res.send(response);
+    });
+
+    fs.unlinkSync(tmp_path);
+
 });
 
 // When the user selects a student to login as, they pop this endpoint
