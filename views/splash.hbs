@@ -27,7 +27,7 @@
         $('#student_select').on('change', function(ev) {
             var currentStudentId = $(ev.target).val();
 
-            $.get('/login/' + currentStudentId, function(data) {
+            $.get('/training-login/{{courseTitle}}/' + currentStudentId, function(data) {
                 // Loads the first section of the course.
                 window.location.replace('/courses/{{courseTitle}}/__start')
             });

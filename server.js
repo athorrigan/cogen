@@ -234,9 +234,9 @@ app.post('/upload_photo', upload.single('upload'), (req, res) => {
 // When the user selects a student to login as, they pop this endpoint
 // which sets up the user session before letting the front page
 // know that it's safe to redirect.
-app.get('/login/:id', (req, res) => {
+app.get('/training-login/:title/:id', (req, res) => {
     // Get the variables applicable to the selected student.
-    let userData = courseApi.getUserVars(req.params.id);
+    let userData = courseApi.getUserVars(req.params.title, req.params.id);
 
     // Fix weird Student data issue.
     userData.Student = 'student' + userData.Number;

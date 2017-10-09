@@ -21,10 +21,10 @@ let course_service = {
      * @param {string} courseId Identification string for the course.
      * @returns {Object} JS Object representing course data.
      */
-    getCourse: (courseId) => {
+    getCourse: (courseTitle) => {
         // Read a the file in from the hard drive for now, and then
         // parse the JSON into a native JS object.
-        return JSON.parse(fs.readFileSync('data/' + courseId.replace(/-/g,'_') + '.json', 'utf8'));
+        return JSON.parse(fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '.json', 'utf8'));
 
     },
     /**
@@ -34,9 +34,9 @@ let course_service = {
      * @param {string} studentId The user id that the variables are linked to.
      * @returns {Object} An object containing variables for this user.
      */
-    getUserVars: (studentId) => {
+    getUserVars: (courseTitle, studentId) => {
         // Read in the CSV file
-        let csvData = fs.readFileSync('data/studentvars.csv').toString();
+        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
         // Convert the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
 
@@ -259,7 +259,7 @@ let course_service = {
      */
     saveCourse: (courseData) => {
         let courseTitle = courseData.courseTitle;
-        
+
         fs.writeFile('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
             if (err) {
                 return 'Failed to write file.';
