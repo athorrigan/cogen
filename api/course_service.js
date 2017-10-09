@@ -259,9 +259,7 @@ let course_service = {
      */
     saveCourse: (courseData) => {
         let courseTitle = courseData.courseTitle;
-
-        console.log('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json');
-
+        
         fs.writeFile('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
             if (err) {
                 return 'Failed to write file.';
