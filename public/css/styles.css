@@ -558,3 +558,12 @@ div#content.content p.output-label img {
     margin-top: .3rem;
     margin-bottom: 1rem;
 }
+
+div.panel-body > h4 {
+    margin-bottom: .3em;
+    font-weight: 400;
+}
+
+form#nodeData button.btn.btn-primary.pull-right {
+    margin-top: 1em;
+}

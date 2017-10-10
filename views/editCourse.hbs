@@ -7,22 +7,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css"/>
     <link rel="stylesheet" href="/css/jqtree.css">
-    <link rel="stylesheet" href="/css/aui-standard.min.css">
     <link rel="stylesheet" href="/css/editor-styles.css">
 </head>
 <body>
 
-<div class="headspace col-md-10 col-md-offset-1 panel panel-default">
+<div class="headspace col-md-12 panel panel-default">
     &nbsp;
 </div>
 <div class="row leading-data">
-    <div class="col-md-10 col-md-offset-1 panel panel-default">
+    <div class="col-md-12 panel panel-default">
         <div class="col-md-4">
             <div id="tree"></div>
         </div>
-        <div class="col-md-4 col-md-offset-1">
+        <div class="col-md-8">
             <div class="panel-body">
-                <h4>Variables</h4>
+                <h4>Variables:</h4>
                 <ul class="variables list-group col-md-10">
                     <li class="list-group-item col-md-6">Username</li>
                     <li class="list-group-item col-md-6">First Name</li>
@@ -156,14 +155,37 @@
         $tree.tree('addNodeAfter', newNode, siblingNode);
     };
 
+    var collapseTree = function(tree) {
+        tree.iterate(function(node, level) {
+            if (node.hasChildren()) {
+                $tree.tree("closeNode", node, true);
+            }
+            return true;
+        });
+    };
+
+    var expandTree = function(tree) {
+        tree.iterate(function(node, level) {
+            if (node.hasChildren()) {
+                $tree.tree("openNode", node, true);
+            }
+            return true;
+        });
+    };
+
     $(function() {
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
             $tree.tree({
                 data: data.courseData.children,
-                dragAndDrop: true
+                dragAndDrop: true,
+                autoOpen: false
             });
+
+            // Collapse tree since the autoOpen parameter is currently broken and the tree is always expanded
+            // by default.
+            collapseTree($tree.tree('getTree'));
 
             var contextMenuApi = $tree.jqTreeContextMenu(
                     $('#contextMenu'),
