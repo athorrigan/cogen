@@ -31,6 +31,7 @@ let course_service = {
      * This fetches the individual variables linked to a specific user for
      * this lab.
      *
+     * @param {string} courseTitle The title of the course linked to the data.
      * @param {string} studentId The user id that the variables are linked to.
      * @returns {Object} An object containing variables for this user.
      */
@@ -43,6 +44,21 @@ let course_service = {
         // Pull out and return a subset of the JSON that represents
         // variables linked to this user.
         return _.findWhere(jsonData, { Number: studentId});
+    },
+    /**
+     *
+     * @param courseTitle The title of the course linked to the data.
+     * @returns {string[]} A list of variable names.
+     */
+    getVariableNames: (courseTitle) => {
+        // Read in the CSV file
+        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+
+        // Transform the CSV data into JSON
+        let jsonData = Baby.parse(csvData, {header: true}).data;
+
+        // Use lodash to return just the keys of the first object.
+        return _.keys(jsonData[0]);
     },
     /**
      * Get a list of users that we currently have data for

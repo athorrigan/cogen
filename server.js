@@ -174,13 +174,17 @@ app.get('/edit-course/:title', (req, res) => {
     // Get course data
     let course = courseApi.getCourse(req.params.title);
 
+    // Need to get a list of injectable variables
+    let courseVariables = courseApi.getVariableNames(req.params.title);
+
     // Render the splash page with the users populating a dropdown.
     return res.render('editCourse', {
         title: course.splashTitle,
         instructions: course.splashInstructions,
         courseName: course.courseName,
         courseBrief: course.courseBrief,
-        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
+        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+        courseVars: courseVariables
     });
 });
 
