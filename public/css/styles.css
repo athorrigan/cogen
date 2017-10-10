@@ -603,3 +603,15 @@ body.edit-page div.modal-dialog span.element-copied {
     font-weight: bold;
     color: #337ab7;
 }
+
+body.edit-page div.section-label {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-left: 2em;
+    margin-top: 1em;
+}
+
+body.edit-page div.course-data div.panel {
+    border-bottom: 1px solid #dfdfdf
+}
