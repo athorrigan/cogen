@@ -11,9 +11,29 @@
 </head>
 <body class="edit-page">
 
-<div class="headspace col-md-12 panel panel-default">
-    &nbsp;
-</div>
+<header class="header">
+    <div class="header-bar container">
+        <a href="http://ciscolive.com" class="header-bar__logo">
+            <span class="icon-cisco"></span>
+        </a>
+        <div class="header-bar__main">
+            <div class="header-heading">
+                <h1 class="page-title">
+                    {{courseName}}: {{courseBrief}}
+                </h1>
+            </div>
+        </div>
+            <a class="btn btn--icon"
+               title="Course Variables"
+               data-toggle="modal"
+               data-target="#course_variables"
+            >
+                <span class="icon-info"></span>
+            </a>
+        </div>
+    </div>
+</header>
+
 <div class="row leading-data">
     <div class="col-md-12 panel panel-default">
         <div class="col-md-3">
@@ -274,11 +294,73 @@
             editor.insertElement(imgHtml);
         });
 
-        $('ul.variables > li').on('click', function() {
-            editor.insertText('{{' + $(this).text() + '}}');
+        // Allow for the copying of the variable name when a user clicks on the appropriate variable in the popup.
+        var clipboard = new Clipboard('ul.variables > li.list-group-item', {
+            text: function(trigger) {
+                return '\{\{' + trigger.innerHTML + '\}\}';
+            }
+        });
+
+        clipboard.on('success', function(e) {
+            var
+                triggeredItem = e.trigger,
+                originalText = triggeredItem.innerHTML
+            ;
+
+            triggeredItem.innerHTML = originalText + ' <span class="element-copied">:: copied ::</span>';
+
+            // Need to use a closure to capture the original variables so that we can set them back in a timeout. 
+            function restoreText () {
+                return function() {
+                    triggeredItem.innerHTML = originalText;
+                };
+            }
+
+            setTimeout(restoreText(), 1000);
         });
     });
 
 </script>
+<section id="modals">
+    <div class="modal fade" id="course_variables" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span>&times;</span>
+                    </button>
+                    <h3 class="modal-title">
+                        Course Variables
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-image">
+                        <div class="col-md-12">
+                            <div class="panel-body">
+                                <ul class="variables list-group col-md-12">
+                                    {{#each courseVars}}
+                                        <li class="list-group-item col-md-6">{{this}}</li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default dismiss"
+                            data-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

@@ -574,3 +574,32 @@ body.edit-page .panel-default {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+
+body.edit-page div.header-bar.container {
+    width: 80%;
+}
+
+body.edit-page span.icon-cisco {
+    font-size: 5rem;
+}
+
+body.edit-page h1.page-title {
+    font-size: 2.5rem;
+}
+
+body.edit-page div.header-heading {
+    top: 20%;
+}
+
+body.edit-page .btn.btn--icon > span[class^="icon-"] {
+    font-size: 2.2rem;
+}
+
+body.edit-page div.modal-dialog button.close span {
+    font-size: 5rem;
+}
+
+body.edit-page div.modal-dialog span.element-copied {
+    font-weight: bold;
+    color: #337ab7;
+}
