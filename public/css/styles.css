@@ -567,3 +567,10 @@ div.panel-body > h4 {
 form#nodeData button.btn.btn-primary.pull-right {
     margin-top: 1em;
 }
+
+body.edit-page .panel-default {
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
