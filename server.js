@@ -82,7 +82,7 @@ app.get('/courses/:title', (req, res, next) => {
         title: course.splashTitle,
         instructions: course.splashInstructions,
         courseName: course.courseName,
-        courseBrief: course.courseBrief,
+        courseSlug: course.courseSlug,
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
     });
 });
@@ -157,7 +157,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
             sidebarShown: req.session.showSidebar,
 
             // Title to be shown in title bar
-            courseBrief: course.courseBrief,
+            courseSlug: course.courseSlug,
 
             // Name of the course
             courseName: course.courseName,
@@ -186,7 +186,7 @@ app.get('/edit-course/:title', (req, res) => {
         title: course.splashTitle,
         instructions: course.splashInstructions,
         courseName: course.courseName,
-        courseBrief: course.courseBrief,
+        courseSlug: course.courseSlug,
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
         courseVars: courseVariables.sort()
     });

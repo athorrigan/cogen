@@ -98,7 +98,7 @@
         <div class="header-bar__main">
             <div class="header-heading">
                 <h1 class="page-title">
-                    {{courseName}}: {{courseBrief}}
+                    {{courseName}}: {{courseSlug}}
                 </h1>
             </div>
         </div>
@@ -129,33 +129,41 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <div class="form-group__text">
-                                <input type="text" id="what" name="what" class="form-control" />
-                                <label for="title">Title:</label>
+                                <input type="text" id="courseTitle" name="courseTitle" class="form-control" />
+                                <label for="courseTitle">Title:</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-5">
                             <div class="form-group__text">
-                                <input type="text" id="what" name="what" class="form-control" />
-                                <label for="title">Title:</label>
+                                <input type="text" id="courseSlug" name="courseSlug" class="form-control" />
+                                <label for="courseSlug">Slug:</label>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <div class="form-group__text">
-                                <input type="text" id="what" name="what" class="form-control" />
-                                <label for="title">Title:</label>
+                                <input type="text" id="courseName" name="courseName" class="form-control" />
+                                <label for="courseName">Name:</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-5">
                             <div class="form-group__text">
-                                <input type="text" id="what" name="what" class="form-control" />
-                                <label for="title">Title:</label>
+                                <input type="text" id="splashInstructions" name="splashInstructions" class="form-control" />
+                                <label for="splashInstructions">Instructions:</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-10 full-title">
+                            <div class="form-group__text">
+                                <input type="text" id="fullTitle" name="fullTitle" class="form-control" />
+                                <label for="fullTitle">Full Title:</label>
                             </div>
                         </div>
                     </div>
                     <div class="row save-button">
-                        <div class="col-md-6">&nbsp;</div>
+                        <div class="col-md-7 save-buffer">&nbsp;</div>
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-primary pull-right" onclick="saveData(true)">Save</button>
                             </div>
