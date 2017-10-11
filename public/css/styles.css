@@ -612,6 +612,14 @@ body.edit-page div.section-label {
     margin-top: 1em;
 }
 
-body.edit-page div.course-data div.panel {
+body.edit-page div.course-data {
     border-bottom: 1px solid #dfdfdf
+}
+
+body.edit-page div.row.save-button {
+    margin-top: 1em;
+}
+
+body.edit-page div.form-group.instructions {
+    box-shadow: none;
 }
