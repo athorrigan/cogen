@@ -200,7 +200,6 @@ app.post('/update-course', (req, res) => {
 });
 
 app.post('/upload_photo', upload.single('upload'), (req, res) => {
-    console.log(req.file.originalname);
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         target_path = 'public/uploads/' + fileName,
@@ -236,12 +235,38 @@ app.post('/upload_photo', upload.single('upload'), (req, res) => {
 
 });
 
-app.post('/upload-file', upload.single('upload'), (req, res) => {
-    console.log('file uploaded');
-    console.log(req.files.length);
-    console.log('what?');
+app.post('/upload-file/:title', upload.single('qqfile'), (req, res) => {
+    let
+        fileName = guid.create() + path.extname(req.file.originalname),
+        targetPath = 'data/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
+        tmp_path = req.file.path,
+        src = fs.createReadStream(tmp_path),
+        dest = fs.createWriteStream(targetPath)
+    ;
 
-    res.send('Success');
+    src.pipe(dest);
+
+    src.on('end', function() {
+        let response = {
+            uploaded: 1,
+            fileName: fileName,
+            url: '/uploads/' + fileName,
+            success: true
+        };
+
+        res.json(response);
+    });
+
+    src.on('error', function(err) {
+        let response = {
+            uploaded: 0,
+            error: 'The file could not be saved'
+        };
+
+        res.send(response);
+    });
+
+    fs.unlinkSync(tmp_path);
 });
 
 // When the user selects a student to login as, they pop this endpoint
