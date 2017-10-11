@@ -623,3 +623,30 @@ body.edit-page div.row.save-button {
 body.edit-page div.form-group.instructions {
     box-shadow: none;
 }
+
+.bootstrap-filestyle.input-group label {
+    color: #fff;
+    height: 34px;
+}
+    .bootstrap-filestyle.input-group label:hover {
+        color: #fff;
+    }
+    .form-group .bootstrap-filestyle label:first-of-type[for]:hover {
+        color: #fff;
+    }
+
+.bootstrap-filestyle input.form-control {
+    padding-left: 1em;
+}
+
+body.edit-page form#courseVariables div.form-group {
+    box-shadow: none;
+}
+
+body.edit-page .variable-upload {
+    border-left: 2px solid #ddd;
+}
+
+body.edit-page div.section-labels {
+    margin-bottom: 1em;
+}

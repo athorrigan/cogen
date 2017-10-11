@@ -184,7 +184,7 @@ app.get('/edit-course/:title', (req, res) => {
         courseName: course.courseName,
         courseBrief: course.courseBrief,
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
-        courseVars: courseVariables
+        courseVars: courseVariables.sort()
     });
 });
 
@@ -200,6 +200,7 @@ app.post('/update-course', (req, res) => {
 });
 
 app.post('/upload_photo', upload.single('upload'), (req, res) => {
+    console.log(req.file.originalname);
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         target_path = 'public/uploads/' + fileName,
@@ -233,6 +234,14 @@ app.post('/upload_photo', upload.single('upload'), (req, res) => {
 
     fs.unlinkSync(tmp_path);
 
+});
+
+app.post('/upload-file', upload.single('upload'), (req, res) => {
+    console.log('file uploaded');
+    console.log(req.files.length);
+    console.log('what?');
+
+    res.send('Success');
 });
 
 // When the user selects a student to login as, they pop this endpoint

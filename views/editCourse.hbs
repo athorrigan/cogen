@@ -35,8 +35,13 @@
 </header>
 
 <div class="row course-data">
-    <div class="section-label col-md-12">
-        Course Details:
+    <div class="row section-labels">
+        <div class="section-label col-md-8">
+            Course Details:
+        </div>
+        <div class="section-label col-md-3">
+            Course Variables:
+        </div>
     </div>
     <div class="col-md-8 panel panel-default">
         <div class="col-md-12">
@@ -81,16 +86,13 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 panel panel-default">
+    <div class="variable-upload col-md-4 panel panel-default">
         <div class="col-md-12">
             <div class="content">
                 <form id="courseVariables">
                     <div class="row">
                         <div class="form-group col-md-9">
-                            <div class="">
-                                <label class="control-label">A file upload button without icon</label>
-                                <input type="file" class="filestyle" data-icon="false">
-                            </div>
+                            <input id="csvFile" type="file" class="filestyle" data-btnClass="btn-primary">
                         </div>
                         <div class="form-group col-md-9 instructions">
                             <div class="form-group__text">
@@ -101,7 +103,7 @@
                     <div class="row save-button">
                         <div class="col-md-6">&nbsp;</div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-primary pull-right" onclick="saveData(true)">Save</button>
+                            <button type="button" class="btn btn-primary pull-right" onclick="saveFile()">Save</button>
                         </div>
                         <div class="col-md-6">&nbsp;</div>
                     </div>
@@ -189,39 +191,39 @@
 <script>
 
     var
-            $tree = $('#tree'),
-            $titleField = $('#title'),
-            $nodeData = $('#nodeData'),
-            data = {},
-            currentNodeId = 0
+        $tree = $('#tree'),
+        $titleField = $('#title'),
+        $nodeData = $('#nodeData'),
+        data = {},
+        currentNodeId = 0
     ;
 
 
     var saveData = function(edited) {
         var
-                currentTitle = $titleField.val(),
-                currentData = CKEDITOR.instances['editor'].getData(),
-                currentNode = $tree.tree('getNodeById', currentNodeId)
+            currentTitle = $titleField.val(),
+            currentData = CKEDITOR.instances['editor'].getData(),
+            currentNode = $tree.tree('getNodeById', currentNodeId)
         ;
 
         if (edited) {
             $tree.tree(
-                    'updateNode',
-                    currentNode,
-                    {
-                        name: currentTitle,
-                        data: currentData
-                    }
+                'updateNode',
+                currentNode,
+                {
+                    name: currentTitle,
+                    data: currentData
+                }
             );
         }
 
         data.courseData.children = JSON.parse($tree.tree('toJson'));
 
         $.post('/update-course', data)
-                .fail(function(er) {
-                    console.log('Failed');
-                    console.log(er);
-                })
+            .fail(function(er) {
+                console.log('Failed');
+                console.log(er);
+            })
         ;
 
     };
@@ -258,10 +260,6 @@
 
     $(function() {
 
-        var userData = "{{courseVars}}";
-        console.log(userData);
-
-
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
@@ -276,58 +274,58 @@
             collapseTree($tree.tree('getTree'));
 
             var contextMenuApi = $tree.jqTreeContextMenu(
-                    $('#contextMenu'),
-                    {
-                        delete: function(node) {
-                            $tree.tree('removeNode', node);
-                            saveData(false);
-                        },
-                        addBefore: function(node) {
-                            var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                            addNodeBefore(node, {
-                                id: newId,
-                                name: '[title]',
-                                data: ''
-                            });
+                $('#contextMenu'),
+                {
+                    delete: function(node) {
+                        $tree.tree('removeNode', node);
+                        saveData(false);
+                    },
+                    addBefore: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1);
+                        addNodeBefore(node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
 
-                            var $newNode = $tree.tree('getNodeById', newId);
-                            $tree.tree('selectNode', $newNode);
-                        },
-                        addAfter: function(node) {
-                            var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                            addNodeAfter(node, {
-                                id: newId,
-                                name: '[title]',
-                                data: ''
-                            });
+                        var $newNode = $tree.tree('getNodeById', newId);
+                        $tree.tree('selectNode', $newNode);
+                    },
+                    addAfter: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1);
+                        addNodeAfter(node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
 
-                            var $newNode = $tree.tree('getNodeById', newId);
-                            $tree.tree('selectNode', $newNode);
-                        },
-                        addChild: function(node) {
-                            var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                            addNode(node, {
-                                id: newId,
-                                name: '[title]',
-                                data: ''
-                            });
+                        var $newNode = $tree.tree('getNodeById', newId);
+                        $tree.tree('selectNode', $newNode);
+                    },
+                    addChild: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1);
+                        addNode(node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
 
-                            var $newNode = $tree.tree('getNodeById', newId);
-                            $tree.tree('selectNode', $newNode);
-                        }
+                        var $newNode = $tree.tree('getNodeById', newId);
+                        $tree.tree('selectNode', $newNode);
                     }
+                }
             );
 
             var rootNode = $tree.tree(
-                    'getNodeByCallback',
-                    function(node) {
-                        if (node.getLevel() === 1) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                'getNodeByCallback',
+                function(node) {
+                    if (node.getLevel() === 1) {
+                        return true;
                     }
+                    else {
+                        return false;
+                    }
+                }
             );
 
             contextMenuApi.disable(rootNode.name, ['delete']);
