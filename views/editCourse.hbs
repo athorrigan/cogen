@@ -497,6 +497,22 @@
                 }
             }
         });
+
+        // Select the first node in our tree (and open the proper edit field in doing so.
+        $tree.on('tree.init', function() {
+            var
+                $firstItem = $('.jqtree-tree li').first(),
+                firstNode = $tree.tree('getNodeByHtmlElement', $firstItem[0])
+            ;
+
+            function selectFirstNode() {
+                return function () {
+                    $tree.tree('selectNode', firstNode);
+                };
+            }
+
+            setTimeout(selectFirstNode(), 400);
+        });
     });
 
 </script>

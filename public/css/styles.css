@@ -658,3 +658,7 @@ body.edit-page div.full-title {
 body.edit-page div.save-buffer {
     width: 61%;
 }
+
+body.edit-page .dropdown-nav a, .dropdown-menu a {
+    font-size: 1rem;
+}
