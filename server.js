@@ -21,6 +21,10 @@ const
     guid = require('guid'),
     // Finally need the path library for uploads
     path = require('path'),
+    // CSV parsing library
+    Baby = require('babyparse'),
+    // Functional programming library
+    _ = require('underscore'),
     // Our API for handling course data.
     courseApi = require('./api/course_service.js')
 ;
@@ -246,11 +250,19 @@ app.post('/upload-file/:title', upload.single('qqfile'), (req, res) => {
 
     src.pipe(dest);
 
+    // Read in the CSV file.
+    let csvData = fs.readFileSync(tmp_path).toString();
+    // Transform the CSV data into JSON
+    let jsonData = Baby.parse(csvData, {header: true}).data;
+    // Get the variables from the headers.
+    let jsonVars = _.keys(jsonData[0]);
+
     src.on('end', function() {
         let response = {
             uploaded: 1,
             fileName: fileName,
             url: '/uploads/' + fileName,
+            vars: jsonVars,
             success: true
         };
 

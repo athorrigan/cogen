@@ -624,21 +624,6 @@ body.edit-page div.form-group.instructions {
     box-shadow: none;
 }
 
-.bootstrap-filestyle.input-group label {
-    color: #fff;
-    height: 34px;
-}
-    .bootstrap-filestyle.input-group label:hover {
-        color: #fff;
-    }
-    .form-group .bootstrap-filestyle label:first-of-type[for]:hover {
-        color: #fff;
-    }
-
-.bootstrap-filestyle input.form-control {
-    padding-left: 1em;
-}
-
 body.edit-page form#courseVariables div.form-group {
     box-shadow: none;
 }
@@ -649,4 +634,19 @@ body.edit-page .variable-upload {
 
 body.edit-page div.section-labels {
     margin-bottom: 1em;
+}
+
+body.edit-page div.qq-upload-button {
+    background-color: #428bca;
+    border-color: #2e6da4;
+}
+    body.edit-page div.qq-upload-button:hover {
+        background-color: #2e6da4;
+        border-color: #2e6da4;
+    }
+
+body.edit-page #uploadUpdate {
+    font-weight: bold;
+    margin-left: 2em;
+    color: #14a792;
 }
