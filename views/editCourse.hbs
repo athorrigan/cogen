@@ -98,7 +98,7 @@
         <div class="header-bar__main">
             <div class="header-heading">
                 <h1 class="page-title">
-                    {{courseName}}: {{courseSlug}}
+                    <span id="courseNameDisplay">{{courseName}}</span>: <span id="courseSlugDisplay">{{courseSlug}}</span>
                 </h1>
             </div>
         </div>
@@ -133,7 +133,7 @@
                                 <label for="courseTitle">Title:</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-5">
+                        <div class="form-group col-md-6">
                             <div class="form-group__text">
                                 <input type="text" id="courseSlug" name="courseSlug" class="form-control" />
                                 <label for="courseSlug">Slug:</label>
@@ -147,7 +147,7 @@
                                 <label for="courseName">Name:</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-5">
+                        <div class="form-group col-md-6">
                             <div class="form-group__text">
                                 <input type="text" id="splashInstructions" name="splashInstructions" class="form-control" />
                                 <label for="splashInstructions">Instructions:</label>
@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-10 full-title">
+                        <div class="form-group full-title">
                             <div class="form-group__text">
                                 <input type="text" id="fullTitle" name="fullTitle" class="form-control" />
                                 <label for="fullTitle">Full Title:</label>
@@ -165,7 +165,7 @@
                     <div class="row save-button">
                         <div class="col-md-7 save-buffer">&nbsp;</div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary pull-right" onclick="saveData(true)">Save</button>
+                                <button type="button" class="btn btn-primary pull-right" onclick="saveCourseData()">Save</button>
                             </div>
                         <div class="col-md-6">&nbsp;</div>
                     </div>
@@ -306,6 +306,26 @@
 
     };
 
+    var saveCourseData = function() {
+        data.courseTitle = $('#courseTitle').val();
+        data.courseSlug = $('#courseSlug').val();
+        data.courseName = $('#courseName').val();
+        data.splashInstructions = $('#splashInstructions').val();
+        data.splashTitle = $('#fullTitle').val();
+
+        $.post('/update-course', data)
+            .done(function() {
+                $('#courseNameDisplay').text(data.courseName);
+                $('#courseSlugDisplay').text(data.courseSlug);
+                console.log($(title).text());
+            })
+            .fail(function(er) {
+                console.log('Failed');
+                console.log(er);
+            })
+        ;
+    };
+
     var addNode = function(parentNode, newNode) {
         $tree.tree('appendNode', newNode, parentNode);
     };
@@ -340,6 +360,13 @@
 
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
+
+            // Set the values of the course detail fields.
+            $('#courseTitle').val(data.courseTitle);
+            $('#courseSlug').val(data.courseSlug);
+            $('#courseName').val(data.courseName);
+            $('#splashInstructions').val(data.splashInstructions);
+            $('#fullTitle').val(data.splashTitle);
 
             $tree.tree({
                 data: data.courseData.children,

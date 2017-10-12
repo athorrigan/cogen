@@ -200,7 +200,9 @@ app.get('/get-course/:title', (req, res) => {
 // Update a specific course
 app.post('/update-course', (req, res) => {
     courseApi.saveCourse(req.body);
-    res.send('Success');
+    res.json({
+        success: true
+    });
 });
 
 app.post('/upload_photo', upload.single('upload'), (req, res) => {
