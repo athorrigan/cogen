@@ -514,13 +514,19 @@
             },
             callbacks: {
                 onComplete: function(id, name, responseJSON, xhr) {
+                    var variableElementString = '';
+
                     $('#uploadUpdate').html('Variables updated.');
 
                     setTimeout(function() {
                         $('#uploadUpdate').html('');
-                    }, 3000)
+                    }, 3000);
 
-                    console.log(responseJSON.vars);
+                    responseJSON.vars.sort().forEach(function(row) {
+                        variableElementString += '<li class="list-group-item col-md-6">' + row + '</li> ';
+                    });
+
+                    $('ul.variables').html(variableElementString);
                 }
             }
         });
