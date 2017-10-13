@@ -663,3 +663,17 @@ body.edit-page div.save-buffer {
 body.edit-page .dropdown-nav a, .dropdown-menu a {
     font-size: 1rem;
 }
+
+body.edit-page div.section-variables {
+    box-shadow: none;
+}
+
+body.edit-page .form-group input[disabled] {
+    background-color: transparent;
+    font-size: 1.2em;
+    color: #bbb;
+}
+
+body.edit-page label.form-check-label {
+    line-height:3em;
+}

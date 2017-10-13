@@ -211,6 +211,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group col-md-6 col-md-offset-1 section-variables">
+                            <div class="row">
+                                <div class="form-group__text col-md-8">
+                                    <input type="text" id="path" name="path" class="form-control" disabled />
+                                    <label for="path">Path:</label>
+                                </div>
+                                <div class="col-md-4 inline-checkbox">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" id="autopath" value="" checked> <span id="autopath-label">Automatic</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-10 col-md-offset-1">
                             <textarea name="editor" id="editor" class="form-control">
                             </textarea>
@@ -268,18 +283,23 @@
 <script src="/js/jqTreeContextMenu.js"></script>
 <script>
 
+    // TODO: This needs better documentation.
+
     var
         $tree = $('#tree'),
         $titleField = $('#title'),
+        $pathField = $('#path'),
         $nodeData = $('#nodeData'),
+        $autopathField = $('#autopath'),
         data = {},
-        currentNodeId = 0
+        currentNodeId = 0,
+        autopath = $autopathField.prop('checked')
     ;
-
 
     var saveData = function(edited) {
         var
             currentTitle = $titleField.val(),
+            currentPath = $pathField.val(),
             currentData = CKEDITOR.instances['editor'].getData(),
             currentNode = $tree.tree('getNodeById', currentNodeId)
         ;
@@ -290,6 +310,7 @@
                 currentNode,
                 {
                     name: currentTitle,
+                    path: currentPath,
                     data: currentData
                 }
             );
@@ -357,6 +378,24 @@
     };
 
     $(function() {
+
+        $autopathField.change(function() {
+            if(this.checked) {
+                $pathField.prop('disabled', true);
+                autopath = true;
+                $pathField.val($titleField.val().toLowerCase().replace(/[^A-za-z0-9_ ]|\^/g, '').replace(/\s+|_/g, '-'));
+            }
+            else {
+                $pathField.prop('disabled', false);
+                autopath = false;
+            }
+        });
+
+        $titleField.keyup(function() {
+            if (autopath === true) {
+                $pathField.val($titleField.val().toLowerCase().replace(/[^A-za-z0-9_ ]|\^/g, '').replace(/\s+|_/g, '-'));
+            }
+        });
 
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
@@ -441,6 +480,7 @@
 
                     currentNodeId = node.id;
                     $titleField.val(node.name);
+                    $pathField.val(node.path);
                     CKEDITOR.instances['editor'].setData(node.data);
                     $nodeData.show();
 
