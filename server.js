@@ -29,6 +29,12 @@ const
     courseApi = require('./api/course_service.js')
 ;
 
+let port = 8040;
+
+if (process.env.NODE_ENV === 'production') {
+    port = 80;
+}
+
 let app = express();
 
 let upload = multer({ dest: 'public/uploads/' });
@@ -402,7 +408,7 @@ app.use(function (req, res, next) {
 
 
 // Initialize our server to listen on port 8040.
-let server = app.listen(8040, function() {
+let server = app.listen(port, function() {
     const host = server.address().address;
     const port = server.address().port;
 
