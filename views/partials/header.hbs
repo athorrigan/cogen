@@ -2,7 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{courseTitle}}</title>
+    <title>
+        {{#unless editPage}}
+            {{rawCourseTitle}}
+        {{else}}
+            Editing - {{rawCourseTitle}}
+        {{/unless}}
+    </title>
 
     {{> links }}
 </head>

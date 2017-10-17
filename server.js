@@ -89,7 +89,9 @@ app.get('/courses/:title', (req, res, next) => {
         instructions: course.splashInstructions,
         courseName: course.courseName,
         courseSlug: course.courseSlug,
-        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
+        courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+        // Raw version for the title
+        rawCourseTitle: course.courseTitle
     });
 });
 
@@ -169,7 +171,10 @@ app.get('/courses/:title/:section', (req, res, next) => {
             courseName: course.courseName,
 
             // Used for a URL, so we modify it first.
-            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-')
+            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+
+            // And the raw version for the title
+            rawCourseTitle: course.courseTitle
         });
     }
     // ... If not, we redirect the user to the front page so they can
@@ -194,7 +199,10 @@ app.get('/edit-course/:title', (req, res) => {
         courseName: course.courseName,
         courseSlug: course.courseSlug,
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
-        courseVars: courseVariables.sort()
+        // And the raw version for the title
+        rawCourseTitle: course.courseTitle,
+        courseVars: courseVariables.sort(),
+        editPage: true
     });
 });
 
