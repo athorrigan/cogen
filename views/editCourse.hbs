@@ -165,7 +165,7 @@
                     <div class="row save-button">
                         <div class="col-md-7 save-buffer">&nbsp;</div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary pull-right" onclick="saveCourseData()">Save</button>
+                                <button type="button" class="btn btn-primary pull-right" onclick="saveCourseData(event)">Save</button>
                             </div>
                         <div class="col-md-6">&nbsp;</div>
                     </div>
@@ -234,7 +234,7 @@
                     <div class="row">
                         <div class="col-md-9">&nbsp;</div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary pull-right" onclick="saveData(true)">Save</button>
+                                <button type="button" class="btn btn-primary pull-right" onclick="saveData(event, true)">Save</button>
                             </div>
                         <div class="col-md-2">&nbsp;</div>
                     </div>
@@ -296,7 +296,10 @@
         autopath = $autopathField.prop('checked')
     ;
 
-    var saveData = function(edited) {
+    var saveData = function(e, edited) {
+        // Prevent the default form submission.
+        e.preventDefault();
+
         var
             currentTitle = $titleField.val(),
             currentPath = $pathField.val(),
@@ -327,7 +330,10 @@
 
     };
 
-    var saveCourseData = function() {
+    var saveCourseData = function(e) {
+        // Prevent the default form submission
+        e.preventDefault();
+
         data.courseTitle = $('#courseTitle').val();
         data.courseSlug = $('#courseSlug').val();
         data.courseName = $('#courseName').val();
@@ -338,7 +344,6 @@
             .done(function() {
                 $('#courseNameDisplay').text(data.courseName);
                 $('#courseSlugDisplay').text(data.courseSlug);
-                console.log($(title).text());
             })
             .fail(function(er) {
                 console.log('Failed');
