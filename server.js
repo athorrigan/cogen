@@ -79,7 +79,7 @@ app.get('/courses/:title', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
 
     // Get a list of the users (array of strings).
-    let users = courseApi.getUsers();
+    let users = courseApi.getUsers(req.params.title);
 
     // Render the splash page with the users populating a dropdown.
     return res.render('splash', {
@@ -305,7 +305,7 @@ app.get('/training-login/:title/:id', (req, res) => {
     let userData = courseApi.getUserVars(req.params.title, req.params.id);
 
     // Fix weird Student data issue.
-    userData.Student = 'student' + userData.Number;
+    userData.Student = 'student' + userData.number;
 
     // Set the session's user object to carry these variables.
     req.session.user = userData;
@@ -382,7 +382,8 @@ app.get('/pdf', (req, res) => {
 // This is the landing/splash page.
 app.get('/', (req, res) => {
     // Get a list of the users (array of strings).
-    let users = courseApi.getUsers();
+    // let users = courseApi.getUsers();
+    // TODO: Need a new landing page. (will be auth).
 
     // Render the splash page with the users populating a dropdown.
     return res.render('splash', {

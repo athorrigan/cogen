@@ -43,7 +43,7 @@ let course_service = {
 
         // Pull out and return a subset of the JSON that represents
         // variables linked to this user.
-        return _.findWhere(jsonData, { Number: studentId});
+        return _.findWhere(jsonData, { number: studentId});
     },
     /**
      *
@@ -65,16 +65,16 @@ let course_service = {
      *
      * @returns {string[]} A list of student numbers.
      */
-    getUsers: () => {
+    getUsers: (courseTitle) => {
         // Read in the CSV file.
-        let csvData = fs.readFileSync('data/studentvars.csv').toString();
+        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
         // Transform the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
 
         // Underscore's pluck() method returns an array of all of the values
         // from each JSON node that represent a specific field. In this case
-        // it pull the 'Number' field from each student in the data set.
-        return _.pluck(jsonData, 'Number');
+        // it pull the 'number' field from each student in the data set.
+        return _.pluck(jsonData, 'number');
     },
     /**
      * Fetches data related to an individual course based on its ID.
