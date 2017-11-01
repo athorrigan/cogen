@@ -147,7 +147,7 @@
             // that returns us to the splash screen.
             if (prevId === 0) {
                 $prevButton.html('<span class="icon-home"></span> Home');
-                $prevLink.attr('href', '/');
+                $prevLink.attr('href', '/courses/' + urlParts[2]);
             }
             else {
                 $prevLink.attr('href', '/courses/' + urlParts[2] + '/' + prevId);
@@ -157,7 +157,7 @@
             // that returns us to the splash screen.
             if (nextId === 0) {
                 $nextButton.html('Home <span class="icon-home"></span>');
-                $nextLink.attr('href', '/');
+                $nextLink.attr('href', '/courses/' + urlParts[2]);
             }
             else {
                 $nextLink.attr('href', '/courses/' + urlParts[2] + '/' + nextId);
@@ -225,7 +225,7 @@
 
             // Replace prev button with a home button.
             $prevButton.html('<span class="icon-home"></span> Home');
-            $prevLink.attr('href', '/');
+            $prevLink.attr('href', '/courses/' + urlParts[2]);
         }
 
         // Shows or hides the submenu when the drawer link is clicked.
