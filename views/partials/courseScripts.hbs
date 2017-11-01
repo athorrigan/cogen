@@ -30,7 +30,7 @@
         });
 
         // Make sure our URL has a section ID
-        if (urlParts[3]) {
+        if (urlParts[3] && urlParts[3] !== '__start') {
             var
                 $selectedMenuLink = $('.sidebar-section').find('li[data-id="' + urlParts[3] + '"]'),
                 $parentDrawer = $selectedMenuLink.closest('li.sidebar-drawer'),
