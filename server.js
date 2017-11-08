@@ -17,6 +17,10 @@ const
     RedisStore = require('connect-redis')(session),
     // Redis client
     redis = require('redis'),
+    // Passport - used for user authentication.
+    passport = require('passport'),
+    // Passport local is a passport plugin that allows us to set a local strategy for user auth(as opposed to say oauth).
+    LocalStrategy = require('passport-local').Strategy,
     // Library to facilitate image uploads
     multer = require('multer'),
     // Also need file system library for image uploads
@@ -69,6 +73,7 @@ const redisClient = redis.createClient();
 
 // Setup the session middleware
 app.use(session({
+    // We're using Redis to store our sessions, a cookie will still be used to identify the Redis key.
     store: new RedisStore({
         url: 'localhost',
         port: 6379,
@@ -76,13 +81,63 @@ app.use(session({
     }),
     // Pretty arbitrary, used for encryption and such
     secret: 'supercalifragilisticexpialidocious',
+    // Resave will force a session write, even if the session wasn't modified by a request, we don't want this.
     resave: false,
+    // saveUnitialized causes a new session to be saved even if it hasn't been modified yet. This can cause quite a few
+    // issues, so we disallow it.
     saveUninitialized: false
 }));
 
 // Set our default template engine to be handlebars.
 app.set('view engine', 'hbs');
 
+/** Set up passport -- move this into an auth section in later versions **/
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+    done(null, user.username);
+});
+
+passport.deserializeUser((username, done) => {
+    courseApi.findUser(username, done);
+});
+
+passport.use('login', new LocalStrategy(
+    {
+        passReqToCallback: false
+    },
+    (username, password, done) => {
+        courseApi.findUser(username, (err, user) => {
+            if (err) {
+                return done(err);
+            }
+
+            if (!user) {
+                console.log('User not found.');
+                return done(null, false);
+            }
+
+            if (password !== user.password) {
+                return done(null, false);
+            }
+
+            return done(null, user);
+        });
+    }
+));
+
+// Middleware used to guard a route.
+let isAuthenticated = () => {
+    return (req, res, next) => {
+        if(req.isAuthenticated()) {
+            return next();
+        }
+        else {
+            res.redirect('/');
+        }
+    };
+};
 
 /** Routes **/
 
@@ -92,7 +147,7 @@ app.get('/courses/:title', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
 
     // Get a list of the users (array of strings).
-    let users = courseApi.getUsers(req.params.title);
+    let users = courseApi.getStudents(req.params.title);
 
     // Render the splash page with the users populating a dropdown.
     return res.render('splash', {
@@ -111,7 +166,7 @@ app.get('/courses/:title', (req, res, next) => {
 // Individual course section pages.
 app.get('/courses/:title/:section', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
-    let userData,contentString,courseTemplate;
+    let userData, contentString, courseTemplate;
 
     // If the session already has a user object, then we have signed
     // in and can get the user variables from the session...
@@ -198,7 +253,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
 });
 
 // Load the editing page for the given course
-app.get('/edit-course/:title', (req, res) => {
+app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     // Get course data
     let course = courseApi.getCourse(req.params.title);
 
@@ -332,6 +387,23 @@ app.get('/training-login/:title/:id', (req, res) => {
     });
 });
 
+// Endpoint for logins utilizing the passport system.
+app.post('/login', passport.authenticate('login', {
+    successRedirect: '/profile/test-user',
+    failureRedirect: '/'
+}));
+
+// Log user out
+app.get('/signout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
+
+// User home page. Will eventually list courses the user can edit.
+app.get('/profile/:user', (req, res) => {
+    res.send('User profile stub.');
+});
+
 // Ajax endpoint to turn the sidebar on and off for subsequent page loads.
 app.get('/sidebar/:showSidebar', (req, res) => {
     req.session.showSidebar = (req.params.showSidebar === 'true');
@@ -394,15 +466,8 @@ app.get('/pdf', (req, res) => {
 
 // This is the landing/splash page.
 app.get('/', (req, res) => {
-    // Get a list of the users (array of strings).
-    // let users = courseApi.getUsers();
-    // TODO: Need a new landing page. (will be auth).
-
-    // Render the splash page with the users populating a dropdown.
-    return res.render('splash', {
-        users: users,
-        landingPage: true
-    });
+    // Renders home page for SVS site.
+    return res.render('home', {});
 });
 
 // Setup the static middleware to serve static content from the

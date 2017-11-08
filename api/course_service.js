@@ -47,7 +47,7 @@ let course_service = {
     },
     /**
      *
-     * @param courseTitle The title of the course linked to the data.
+     * @param {string} courseTitle The title of the course linked to the data.
      * @returns {string[]} A list of variable names.
      */
     getVariableNames: (courseTitle) => {
@@ -65,7 +65,7 @@ let course_service = {
      *
      * @returns {string[]} A list of student numbers.
      */
-    getUsers: (courseTitle) => {
+    getStudents: (courseTitle) => {
         // Read in the CSV file.
         let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
         // Transform the CSV data into JSON
@@ -75,6 +75,25 @@ let course_service = {
         // from each JSON node that represent a specific field. In this case
         // it pull the 'number' field from each student in the data set.
         return _.pluck(jsonData, 'number');
+    },
+    /**
+     * Checks if credentials are valid and returns a user object if the credentials are valid
+     *
+     * @param {string} username The username of the user.
+     * @param {string} password The password of the user.
+     * @returns {Object|boolean} Either the user object or false.
+     */
+    findUser: (username, cb) => {
+        // This will eventually pull from a db and support multiple users.
+        let user = JSON.parse(fs.readFileSync('data/user.json', 'utf8'));
+
+        // In the end product, make sure all passwords are encrypted. This works for now, but it's not ideal.
+        if (username === user.username) {
+            return cb(null, user);
+        }
+        else {
+            return cb(null);
+        }
     },
     /**
      * Fetches data related to an individual course based on its ID.
