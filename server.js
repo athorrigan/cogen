@@ -47,7 +47,10 @@ let upload = multer({ dest: 'public/uploads/' });
 // CommonJS middleware uses a pattern where a function that
 // returns a function is called to initialize middleware.
 app.use(bodyParser.json({limit: '100mb'}));
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({
+    limit: '100mb',
+    extended: false
+}));
 
 // Setup the handlebars middleware.
 app.engine('hbs', hbs({
