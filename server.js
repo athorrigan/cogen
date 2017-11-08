@@ -12,7 +12,11 @@ const
     // to parse template strings and substitute student data.
     Handlebars = require('handlebars'),
     // This maintains sessions for users.
-    session = require('client-sessions'),
+    session = require('express-session'),
+    // Redis session store
+    RedisStore = require('connect-redis')(session),
+    // Redis client
+    redis = require('redis'),
     // Library to facilitate image uploads
     multer = require('multer'),
     // Also need file system library for image uploads
@@ -42,7 +46,8 @@ let upload = multer({ dest: 'public/uploads/' });
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
 // returns a function is called to initialize middleware.
-app.use(bodyParser({limit: '100mb'}));
+app.use(bodyParser.json({limit: '100mb'}));
+app.use(bodyParser.urlencoded({ extended: false}));
 
 // Setup the handlebars middleware.
 app.engine('hbs', hbs({
@@ -56,15 +61,20 @@ app.engine('hbs', hbs({
     layoutsDir: __dirname + '/views/layouts/'
 }));
 
+// Create a redis client to be used with the session store
+const redisClient = redis.createClient();
+
 // Setup the session middleware
 app.use(session({
-    cookieName: 'session',
+    store: new RedisStore({
+        url: 'localhost',
+        port: 6379,
+        client: redisClient
+    }),
     // Pretty arbitrary, used for encryption and such
     secret: 'supercalifragilisticexpialidocious',
-    // Session will last for 2 hours by default
-    duration: 1000 * 60 * 120,
-    // Any time activity is detected, the duration will be extended by 2 hours.
-    activeDuration: 1000 * 60 * 120
+    resave: false,
+    saveUninitialized: false
 }));
 
 // Set our default template engine to be handlebars.
