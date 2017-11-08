@@ -467,7 +467,9 @@ app.get('/pdf', (req, res) => {
 // This is the landing/splash page.
 app.get('/', (req, res) => {
     // Renders home page for SVS site.
-    return res.render('home', {});
+    return res.render('home', {
+        authenticated: req.isAuthenticated()
+    });
 });
 
 // Setup the static middleware to serve static content from the

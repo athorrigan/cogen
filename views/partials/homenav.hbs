@@ -17,25 +17,33 @@
             <div class="row student-dropdown">
                 <div class="col-md-12">
                     <div class="userLogon">
-                        <form id="userData" method="post" action="/login">
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <div class="form-group__text">
-                                        <input type="text" id="username" name="username" class="form-control" />
-                                        <label for="username">Username:</label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <div class="form-group__text">
-                                        <input type="password" id="password" name="password" class="form-control" />
-                                        <label for="password">Password:</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 save-button">
-                                    <button type="submit" class="btn btn--primary">Login</button>
-                                </div>
+                        {{#if authenticated}}
+                            <div class="col-md-3">
+                                <a href="/signout">
+                                    <button type="button" class="btn btn--primary">Logout</button>
+                                </a>
                             </div>
-                        </form>
+                        {{else}}
+                            <form id="userData" method="post" action="/login">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group__text">
+                                            <input type="text" id="username" name="username" class="form-control" />
+                                            <label for="username">Username:</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group__text">
+                                            <input type="password" id="password" name="password" class="form-control" />
+                                            <label for="password">Password:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 save-button">
+                                        <button type="submit" class="btn btn--primary">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+                        {{/if}}
                     </div>
                 </div>
             </div>
