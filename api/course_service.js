@@ -46,6 +46,25 @@ let course_service = {
         return _.findWhere(jsonData, { number: studentId});
     },
     /**
+     * This sets default student variable values for a template when no session has been started.
+     *
+     * @param {string} courseTitle The title of the course linked to the data.
+     * @returns {Object} An object containing default vars for students for this course.
+     */
+    getStudentDefaults: (courseTitle) => {
+        // Read in the CSV file
+        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+
+        // Convert the CSV data into JSON
+        let jsonData = Baby.parse(csvData, {header: true}).data;
+
+        let modifiedData = _.mapObject(jsonData[0], (val, key) => {
+            return '{{' + key + '}}';
+        });
+
+        return modifiedData;
+    },
+    /**
      *
      * @param {string} courseTitle The title of the course linked to the data.
      * @returns {string[]} A list of variable names.
