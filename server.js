@@ -341,6 +341,12 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
     let csvData = fs.readFileSync(tmp_path).toString();
     // Transform the CSV data into JSON
     let jsonData = Baby.parse(csvData, {header: true}).data;
+
+    // Update our current student variables if they're set.
+    if (req.session.studentVars) {
+        req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});
+    }
+
     // Get the variables from the headers.
     let jsonVars = _.keys(jsonData[0]);
 
