@@ -177,6 +177,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
         // If the section parameter is included then we're on an individual
         // section page...
         if (req.params.section !== '__start') {
+            console.log(course.courseData.children);
             // Fetch the individual course section data (an HTML string).
             let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
 
@@ -280,14 +281,14 @@ app.get('/get-course/:title', (req, res) => {
 });
 
 // Update a specific course
-app.post('/update-course', (req, res) => {
+app.post('/update-course', isAuthenticated(), (req, res) => {
     courseApi.saveCourse(req.body);
     res.json({
         success: true
     });
 });
 
-app.post('/upload_photo', upload.single('upload'), (req, res) => {
+app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, res) => {
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         target_path = 'public/uploads/' + fileName,
@@ -400,7 +401,7 @@ app.get('/signout', (req, res) => {
 });
 
 // User home page. Will eventually list courses the user can edit.
-app.get('/profile/:user', (req, res) => {
+app.get('/profile/:user', isAuthenticated(), (req, res) => {
     res.send('User profile stub.');
 });
 

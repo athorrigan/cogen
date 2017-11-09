@@ -8,6 +8,7 @@
   "dependencies": {
     "babyparse": "^0.4.6",
     "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
     "connect-redis": "^3.3.2",
     "express": "^4.15.2",
     "express-fileupload": "^0.3.0",
