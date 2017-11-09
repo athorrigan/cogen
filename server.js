@@ -53,7 +53,7 @@ let upload = multer({ dest: 'public/uploads/' });
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({
     limit: '100mb',
-    extended: false
+    extended: true
 }));
 
 // Setup the handlebars middleware.
@@ -177,7 +177,6 @@ app.get('/courses/:title/:section', (req, res, next) => {
         // If the section parameter is included then we're on an individual
         // section page...
         if (req.params.section !== '__start') {
-            console.log(course.courseData.children);
             // Fetch the individual course section data (an HTML string).
             let courseData = courseApi.fetchData(req.params.section, course.courseData.children);
 
