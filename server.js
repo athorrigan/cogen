@@ -174,9 +174,11 @@ app.get('/courses/:title/:section', (req, res, next) => {
 
     // If the session already has a user object, then we have signed
     // in and can get the user variables from the session...
-    if (req.session.user) {
+    if (req.session.studentVars) {
         // Pull the relevant data from the session.
-        userData = req.session.user;
+        userData = req.session.studentVars;
+
+        console.log(userData);
 
         // If the section parameter is included then we're on an individual
         // section page...
@@ -380,7 +382,7 @@ app.get('/training-login/:title/:id', (req, res) => {
     userData.Student = 'student' + userData.number;
 
     // Set the session's user object to carry these variables.
-    req.session.user = userData;
+    req.session.studentVars = userData;
 
     // Default the user session to showing the menu bars
     req.session.showSidebar = true;
@@ -400,7 +402,16 @@ app.post('/login', passport.authenticate('login', {
 
 // Log user out
 app.get('/signout', (req, res) => {
+    // Logout of passport
     req.logout();
+    // Remove our session.
+    redisClient.del('sess:' + req.session.id);
+    res.redirect('/');
+});
+
+// Clear session here
+app.get('/end-session', (req, res) => {
+    redisClient.del('sess:' + req.session.id);
     res.redirect('/');
 });
 
@@ -445,9 +456,9 @@ app.get('/pdf', (req, res) => {
 
     // If the session already has a user object, then we have signed
     // in and can get the user variables from the session...
-    if (req.session.user) {
+    if (req.session.studentVars) {
         // Pull the relevant data from the session.
-        userData = req.session.user;
+        userData = req.session.studentVars;
     }
     // ... If not, we redirect the user to the front page so they can
     // sign in.
