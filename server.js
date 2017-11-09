@@ -170,10 +170,18 @@ app.get('/courses/:title', (req, res, next) => {
 // Individual course section pages.
 app.get('/courses/:title/:section', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
-    let userData, contentString, courseTemplate;
+    let userData, contentString, courseTemplate, showSidebar;
 
     // Assign defaults if the session student variables haven't been set prior to hitting this page.
     userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
+
+    // Determine whether sidebar should be shown, defaults to true.
+    if (typeof req.session.showSidebar === 'undefined') {
+        showSidebar = true;
+    }
+    else {
+        showSidebar = req.session.showSidebar;
+    }
 
     // If the section parameter is included then we're on an individual
     // section page...
@@ -231,7 +239,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
         userData: userData,
 
         // Determine whether we should show sidebar or not.
-        sidebarShown: req.session.showSidebar,
+        sidebarShown: showSidebar,
 
         // Title to be shown in title bar
         courseSlug: course.courseSlug,
