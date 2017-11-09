@@ -33,6 +33,8 @@ const
     Baby = require('babyparse'),
     // Functional programming library
     _ = require('underscore'),
+    // Connect-Flash allows us to use session stores to pass messages between pages.
+    flash = require('connect-flash'),
     // Our API for handling course data.
     courseApi = require('./api/course_service.js')
 ;
@@ -88,6 +90,8 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use(flash());
+
 // Set our default template engine to be handlebars.
 app.set('view engine', 'hbs');
 
@@ -105,9 +109,9 @@ passport.deserializeUser((username, done) => {
 
 passport.use('login', new LocalStrategy(
     {
-        passReqToCallback: false
+        passReqToCallback: true
     },
-    (username, password, done) => {
+    (req, username, password, done) => {
         courseApi.findUser(username, (err, user) => {
             if (err) {
                 return done(err);
@@ -115,11 +119,11 @@ passport.use('login', new LocalStrategy(
 
             if (!user) {
                 console.log('User not found.');
-                return done(null, false);
+                return done(null, false, req.flash('message', 'User not found.'));
             }
 
             if (password !== user.password) {
-                return done(null, false);
+                return done(null, false, req.flash('message', 'Invalid password.'));
             }
 
             return done(null, user);
@@ -323,7 +327,7 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
 
 });
 
-app.post('/upload-file/:title', upload.single('qqfile'), (req, res) => {
+app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (req, res) => {
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         targetPath = 'data/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
@@ -390,7 +394,8 @@ app.get('/training-login/:title/:id', (req, res) => {
 // Endpoint for logins utilizing the passport system.
 app.post('/login', passport.authenticate('login', {
     successRedirect: '/profile/test-user',
-    failureRedirect: '/'
+    failureRedirect: '/',
+    failureFlash: true
 }));
 
 // Log user out
@@ -468,7 +473,8 @@ app.get('/pdf', (req, res) => {
 app.get('/', (req, res) => {
     // Renders home page for SVS site.
     return res.render('home', {
-        authenticated: req.isAuthenticated()
+        authenticated: req.isAuthenticated(),
+        message: req.flash('message')
     });
 });
 

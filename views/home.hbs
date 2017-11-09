@@ -3,6 +3,11 @@
     <div class="content-body">
         {{> homenav }}
         <div id="content" class="content container-fluid">
+            {{#if message}}
+                <div class="alert alert--danger">
+                    <strong>{{message}}</strong>
+                </div>
+            {{/if}}
             <div class="hero hero--loose hero--background-4 hero--filter-smoke">
                 <div class="container">
                     <div class="col-md-12 hero__content">
