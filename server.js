@@ -329,7 +329,7 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
 app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (req, res) => {
     let
         fileName = guid.create() + path.extname(req.file.originalname),
-        targetPath = 'data/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
+        targetPath = 'data/courses/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
         tmp_path = req.file.path,
         src = fs.createReadStream(tmp_path),
         dest = fs.createWriteStream(targetPath)
@@ -420,7 +420,11 @@ app.get('/end-session', (req, res) => {
 
 // User home page. Will eventually list courses the user can edit.
 app.get('/profile/:user', isAuthenticated(), (req, res) => {
-    res.render('profile', {});
+    let courses = courseApi.getCourses();
+
+    res.render('profile', {
+        courses: courses
+    });
 });
 
 // Ajax endpoint to turn the sidebar on and off for subsequent page loads.

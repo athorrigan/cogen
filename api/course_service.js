@@ -5,6 +5,8 @@ const
     fs = require('fs'),
     // CSV parsing library
     Baby = require('babyparse'),
+    // Library for globbing multiple files matching a pattern.
+    glob = require('glob-fs'),
     // Functional programming library
     _ = require('underscore')
 ;
@@ -24,8 +26,38 @@ let course_service = {
     getCourse: (courseTitle) => {
         // Read a the file in from the hard drive for now, and then
         // parse the JSON into a native JS object.
-        return JSON.parse(fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '.json', 'utf8'));
+        return JSON.parse(fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '.json', 'utf8'));
 
+    },
+    /**
+     * Fetches basic course data for each course.
+     *
+     * @returns {Object[]} An array of Objects, each containing some information about the course.
+     */
+    getCourses: () => {
+        // Need to initialize the glob instance every run or else we capture the file list within a closure.
+        let globInstance = glob({gitignore: false});
+
+        let
+            files = globInstance.readdirSync('data/courses/*json', {}),
+            courseList = []
+        ;
+
+        files.forEach((fileName) => {
+            let
+                tempCourse = JSON.parse(fs.readFileSync(fileName, 'utf8')),
+                course = {}
+            ;
+
+            course.courseTitle = tempCourse.courseTitle;
+            course.courseName = tempCourse.courseName;
+            course.courseBrief = tempCourse.courseBrief;
+            course.courseSlug = tempCourse.courseSlug;
+            course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(' ','-');
+            courseList.push(course);
+        });
+
+        return courseList;
     },
     /**
      * This fetches the individual variables linked to a specific user for
@@ -37,7 +69,7 @@ let course_service = {
      */
     getUserVars: (courseTitle, studentId) => {
         // Read in the CSV file
-        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
         // Convert the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
 
@@ -53,7 +85,7 @@ let course_service = {
      */
     getStudentDefaults: (courseTitle) => {
         // Read in the CSV file
-        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
 
         // Convert the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
@@ -71,7 +103,7 @@ let course_service = {
      */
     getVariableNames: (courseTitle) => {
         // Read in the CSV file
-        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
 
         // Transform the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
@@ -86,7 +118,7 @@ let course_service = {
      */
     getStudents: (courseTitle) => {
         // Read in the CSV file.
-        let csvData = fs.readFileSync('data/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
         // Transform the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
 
@@ -104,7 +136,7 @@ let course_service = {
      */
     findUser: (username, cb) => {
         // This will eventually pull from a db and support multiple users.
-        let user = JSON.parse(fs.readFileSync('data/user.json', 'utf8'));
+        let user = JSON.parse(fs.readFileSync('data/users/user.json', 'utf8'));
 
         // In the end product, make sure all passwords are encrypted. This works for now, but it's not ideal.
         if (username === user.username) {
@@ -314,7 +346,7 @@ let course_service = {
     saveCourse: (courseData) => {
         let courseTitle = courseData.courseTitle;
 
-        fs.writeFile('data/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
+        fs.writeFile('data/courses/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
             if (err) {
                 return 'Failed to write file.';
             }
