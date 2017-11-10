@@ -489,16 +489,10 @@ app.use(express.static('public'));
 
 // Set up an error handler to prevent server halts.
 app.use((err, req, res, next) => {
-    return res.status(500);
     if (res.headersSent) {
         return next(err);
     }
-    return res.json(
-        {
-            error: err,
-            status: 'Failure'
-        }
-    );
+    return res.status(500).send('<strong>Something went wrong.</strong>');
 });
 
 // Handle 404s.
