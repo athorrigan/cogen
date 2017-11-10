@@ -53,6 +53,7 @@ let course_service = {
             course.courseName = tempCourse.courseName;
             course.courseBrief = tempCourse.courseBrief;
             course.courseSlug = tempCourse.courseSlug;
+            course.splashTitle = tempCourse.splashTitle;
             course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(' ','-');
             courseList.push(course);
         });
