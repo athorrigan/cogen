@@ -398,7 +398,7 @@ app.get('/training-login/:title/:id', (req, res) => {
 
 // Endpoint for logins utilizing the passport system.
 app.post('/login', passport.authenticate('login', {
-    successRedirect: '/profile/test-user',
+    successRedirect: '/profile/admin',
     failureRedirect: '/',
     failureFlash: true
 }));
@@ -420,7 +420,7 @@ app.get('/end-session', (req, res) => {
 
 // User home page. Will eventually list courses the user can edit.
 app.get('/profile/:user', isAuthenticated(), (req, res) => {
-    res.send('User profile stub.');
+    res.render('profile', {});
 });
 
 // Ajax endpoint to turn the sidebar on and off for subsequent page loads.
