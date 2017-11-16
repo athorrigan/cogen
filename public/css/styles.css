@@ -677,3 +677,12 @@ body.edit-page .form-group input[disabled] {
 body.edit-page label.form-check-label {
     line-height:3em;
 }
+
+div.leading-data > ul.nav-tabs > li:first-child {
+    margin-left: 50px;
+}
+
+div.leading-data > ul.nav-tabs > li > a {
+    width: 100px;
+    font-size: 1.4em;
+}

@@ -206,12 +206,24 @@
 </div>
 
 <div class="row leading-data">
-    <div class="section-label col-md-12">
-        Course Structure:
-    </div>
+    <ul class="nav nav-tabs" id="navTab" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" id="course-tab" data-toggle="tab" href="#course" role="tab" aria-controls="course" aria-selected="true">Course</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="buttons-tab" data-toggle="tab" href="#buttons" role="tab" aria-controls="buttons" aria-selected="false">Buttons</a>
+        </li>
+    </ul>
     <div class="col-md-12 panel panel-default">
         <div class="col-md-3">
-            <div id="tree"></div>
+            <div class="tab-content" id="navTabContent">
+                <div class="tab-pane active" id="course" role="tabpanel" aria-labelledby="course-tab">
+                    <div id="tree"></div>
+                </div>
+                <div class="tab-pane" id="buttons" role="tabpanel" aria-labelledby="buttons-tab">
+                    Second Tab.
+                </div>
+            </div>
         </div>
         <div class="col-md-9">
             <div class="content">
