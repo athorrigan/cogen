@@ -261,7 +261,7 @@
                         <div class="row">
                             <div class="col-md-9">&nbsp;</div>
                                 <div class="col-md-2">
-                                    <button type="button" class="btn btn-primary pull-right" onclick="saveData(event, true)">Save</button>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="saveStructure(event, true)">Save</button>
                                 </div>
                             <div class="col-md-2">&nbsp;</div>
                         </div>
@@ -383,13 +383,14 @@
         $buttonDescription = $('#buttonDescription'),
         $buttonIcon = $('#buttonIcon'),
         $nodeData = $('#nodeData'),
+        $buttonNodeData = $('#buttonNodeData'),
         $autopathField = $('#autopath'),
         data = {},
         currentNodeId = 0,
         autopath = $autopathField.prop('checked')
     ;
 
-    var saveData = function(e, edited) {
+    var saveStructure = function(e, edited) {
         var
             currentTitle = $titleField.val(),
             currentPath = $pathField.val(),
@@ -561,7 +562,7 @@
                 {
                     delete: function(node) {
                         $courseTree.tree('removeNode', node);
-                        saveData(false);
+                        saveStructure(false);
                     },
                     addBefore: function(node) {
                         var newId = Math.floor((Math.random() * 1000000000000) + 1);
@@ -671,14 +672,14 @@
                     $buttonDescription.val(node.description);
                     $buttonIcon.val(node.icon);
                     CKEDITOR.instances['buttonEditor'].setData(node.data);
-                    $nodeData.show();
+                    $buttonNodeData.show();
 
                 }
                 else {
                     currentNodeId = 0;
                     $buttonTitleField.val('');
                     CKEDITOR.instances['buttonEditor'].setData('');
-                    $nodeData.hide();
+                    $buttonNodeData.hide();
                 }
             });
 
@@ -714,7 +715,7 @@
                 // before the internal tree is ready to be saved.
                 event.move_info.do_move();
 
-                saveData(false);
+                saveStructure(false);
             });
         });
 
