@@ -421,6 +421,40 @@
 
     };
 
+    var saveButtonData = function(e, edited) {
+//        var
+//                currentTitle = $titleField.val(),
+//                currentPath = $pathField.val(),
+//                currentData = CKEDITOR.instances['editor'].getData(),
+//                currentNode = $courseTree.tree('getNodeById', currentNodeId)
+//        ;
+//
+//        if (edited) {
+//            // Prevent the default form submission.
+//            e.preventDefault();
+//
+//            $courseTree.tree(
+//                    'updateNode',
+//                    currentNode,
+//                    {
+//                        name: currentTitle,
+//                        path: currentPath,
+//                        data: currentData
+//                    }
+//            );
+//        }
+//
+//        data.courseData.children = JSON.parse($courseTree.tree('toJson'));
+//
+//        $.post('/update-course', data)
+//                .fail(function(er) {
+//                    console.log('Failed');
+//                    console.log(er);
+//                })
+//        ;
+        console.log('button data saved.');
+    };
+
     var saveCourseData = function(e) {
         // Prevent the default form submission
         e.preventDefault();
@@ -564,7 +598,7 @@
                 }
             );
 
-            // Eventually should probably rerun this segment everytime
+            // Eventually should probably rerun this segment every time
             // there is a move or deletion.
             var rootNode = $courseTree.tree(
                 'getNodeByCallback',
@@ -585,7 +619,7 @@
                 {
                     delete: function(node) {
                         $buttonTree.tree('removeNode', node);
-                        saveData(false);
+                        saveButtonData(false);
                     },
                     addBefore: function(node) {
                         var newId = Math.floor((Math.random() * 1000000000000) + 1);
