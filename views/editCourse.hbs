@@ -340,6 +340,28 @@
     </li>
 </ul>
 
+<ul id="buttonContextMenu" class="dropdown-menu">
+    <li class="delete">
+        <a href="#delete">
+            <span class="icon-remove"></span>
+            Delete
+        </a>
+    </li>
+    <li class="divider"></li>
+    <li class="add-before">
+        <a href="#addBefore">
+            <span class="icon-plus"></span>
+            Add Sibling Before
+        </a>
+    </li>
+    <li class="add-after">
+        <a href="#addAfter">
+            <span class="icon-plus"></span>
+            Add Sibling After
+        </a>
+    </li>
+</ul>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -354,7 +376,7 @@
     // TODO: This needs better documentation.
 
     var
-        $tree = $('#tree'),
+        $courseTree = $('#tree'),
         $buttonTree = $('#buttonTree'),
         $titleField = $('#title'),
         $pathField = $('#path'),
@@ -366,18 +388,18 @@
     ;
 
     var saveData = function(e, edited) {
-        // Prevent the default form submission.
-        e.preventDefault();
-
         var
             currentTitle = $titleField.val(),
             currentPath = $pathField.val(),
             currentData = CKEDITOR.instances['editor'].getData(),
-            currentNode = $tree.tree('getNodeById', currentNodeId)
+            currentNode = $courseTree.tree('getNodeById', currentNodeId)
         ;
 
         if (edited) {
-            $tree.tree(
+            // Prevent the default form submission.
+            e.preventDefault();
+
+            $courseTree.tree(
                 'updateNode',
                 currentNode,
                 {
@@ -388,7 +410,7 @@
             );
         }
 
-        data.courseData.children = JSON.parse($tree.tree('toJson'));
+        data.courseData.children = JSON.parse($courseTree.tree('toJson'));
 
         $.post('/update-course', data)
             .fail(function(er) {
@@ -421,22 +443,22 @@
         ;
     };
 
-    var addNode = function(parentNode, newNode) {
+    var addNode = function($tree, parentNode, newNode) {
         $tree.tree('appendNode', newNode, parentNode);
     };
 
-    var addNodeBefore = function(siblingNode, newNode) {
+    var addNodeBefore = function($tree, siblingNode, newNode) {
         $tree.tree('addNodeBefore', newNode, siblingNode);
     };
 
-    var addNodeAfter = function(siblingNode, newNode) {
+    var addNodeAfter = function($tree, siblingNode, newNode) {
         $tree.tree('addNodeAfter', newNode, siblingNode);
     };
 
     var collapseTree = function(tree) {
         tree.iterate(function(node, level) {
             if (node.hasChildren()) {
-                $tree.tree("closeNode", node, true);
+                $courseTree.tree("closeNode", node, true);
             }
             return true;
         });
@@ -445,7 +467,7 @@
     var expandTree = function(tree) {
         tree.iterate(function(node, level) {
             if (node.hasChildren()) {
-                $tree.tree("openNode", node, true);
+                $courseTree.tree("openNode", node, true);
             }
             return true;
         });
@@ -483,7 +505,7 @@
             $('#splashInstructions').val(data.splashInstructions);
             $('#fullTitle').val(data.splashTitle);
 
-            $tree.tree({
+            $courseTree.tree({
                 data: data.courseData.children,
                 dragAndDrop: true,
                 autoOpen: false
@@ -497,52 +519,100 @@
 
             // Collapse tree since the autoOpen parameter is currently broken and the tree is always expanded
             // by default.
-            collapseTree($tree.tree('getTree'));
+            collapseTree($courseTree.tree('getTree'));
 
-            var contextMenuApi = $tree.jqTreeContextMenu(
+            var contextMenuApi = $courseTree.jqTreeContextMenu(
                 $('#contextMenu'),
                 {
                     delete: function(node) {
-                        $tree.tree('removeNode', node);
+                        $courseTree.tree('removeNode', node);
                         saveData(false);
                     },
                     addBefore: function(node) {
                         var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                        addNodeBefore(node, {
+                        addNodeBefore($courseTree, node, {
                             id: newId,
                             name: '[title]',
                             data: ''
                         });
 
-                        var $newNode = $tree.tree('getNodeById', newId);
-                        $tree.tree('selectNode', $newNode);
+                        var $newNode = $courseTree.tree('getNodeById', newId);
+                        $courseTree.tree('selectNode', $newNode);
                     },
                     addAfter: function(node) {
                         var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                        addNodeAfter(node, {
+                        addNodeAfter($courseTree, node, {
                             id: newId,
                             name: '[title]',
                             data: ''
                         });
 
-                        var $newNode = $tree.tree('getNodeById', newId);
-                        $tree.tree('selectNode', $newNode);
+                        var $newNode = $courseTree.tree('getNodeById', newId);
+                        $courseTree.tree('selectNode', $newNode);
                     },
                     addChild: function(node) {
                         var newId = Math.floor((Math.random() * 1000000000000) + 1);
-                        addNode(node, {
+                        addNode($courseTree, node, {
                             id: newId,
                             name: '[title]',
                             data: ''
                         });
 
-                        var $newNode = $tree.tree('getNodeById', newId);
-                        $tree.tree('selectNode', $newNode);
+                        var $newNode = $courseTree.tree('getNodeById', newId);
+                        $courseTree.tree('selectNode', $newNode);
                     }
                 }
             );
 
-            var rootNode = $tree.tree(
+            // Eventually should probably rerun this segment everytime
+            // there is a move or deletion.
+            var rootNode = $courseTree.tree(
+                'getNodeByCallback',
+                function(node) {
+                    // Refactor this to truly detect the first node
+                    // Probably by list item selector and comparison.
+                    if (node.getLevel() === 1) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            );
+
+            var buttonContextMenu = $buttonTree.jqTreeContextMenu(
+                $('#buttonContextMenu'),
+                {
+                    delete: function(node) {
+                        $buttonTree.tree('removeNode', node);
+                        saveData(false);
+                    },
+                    addBefore: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1);
+                        addNodeBefore($buttonTree, node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
+
+                        var $newNode = $buttonTree.tree('getNodeById', newId);
+                        $buttonTree.tree('selectNode', $newNode);
+                    },
+                    addAfter: function(node) {
+                        var newId = Math.floor((Math.random() * 1000000000000) + 1);
+                        addNodeAfter($buttonTree, node, {
+                            id: newId,
+                            name: '[title]',
+                            data: ''
+                        });
+
+                        var $newNode = $buttonTree.tree('getNodeById', newId);
+                        $buttonTree.tree('selectNode', $newNode);
+                    }
+                }
+            );
+
+            var buttonRoot = $buttonTree.tree(
                 'getNodeByCallback',
                 function(node) {
                     if (node.getLevel() === 1) {
@@ -555,8 +625,9 @@
             );
 
             contextMenuApi.disable(rootNode.name, ['delete']);
+            buttonContextMenu.disable(buttonRoot.name, ['delete']);
 
-            $tree.on('tree.select', function(event) {
+            $courseTree.on('tree.select', function(event) {
                 if (event.node) {
                     var node = event.node;
 
@@ -575,7 +646,7 @@
                 }
             });
 
-            $tree.on('tree.move', function(event) {
+            $courseTree.on('tree.move', function(event) {
                 // For whatever reason this needs to be fired manually
                 // before the internal tree is ready to be saved.
                 event.move_info.do_move();
@@ -654,15 +725,15 @@
         });
 
         // Select the first node in our tree (and open the proper edit field in doing so.
-        $tree.on('tree.init', function() {
+        $courseTree.on('tree.init', function() {
             var
                 $firstItem = $('.jqtree-tree li').first(),
-                firstNode = $tree.tree('getNodeByHtmlElement', $firstItem[0])
+                firstNode = $courseTree.tree('getNodeByHtmlElement', $firstItem[0])
             ;
 
             function selectFirstNode() {
                 return function () {
-                    $tree.tree('selectNode', firstNode);
+                    $courseTree.tree('selectNode', firstNode);
                 };
             }
 
