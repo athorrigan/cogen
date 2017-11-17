@@ -267,8 +267,8 @@
                         </div>
                     </form>
                 </div>
-                <div id="buttonData">
-                    <form id="buttonData">
+                <div id="buttonData" class="hidden">
+                    <form id="buttonNodeData">
                         <div class="row">
                             <div class="form-group col-md-4 col-md-offset-1">
                                 <div class="form-group__text">
@@ -276,20 +276,18 @@
                                     <label for="buttonTitle">Title:</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4 col-md-offset-1">
+                            <div class="form-group col-md-3 col-md-offset-1">
                                 <div class="form-group__text">
-                                    <input type="text" id="buttonDescription" name="buttonDescription" class="form-control" />
-                                    <label for="buttonDescription">Description:</label>
+                                    <input type="text" id="buttonIcon" name="buttonIcon" class="form-control" />
+                                    <label for="buttonIcon">Icon Selector Will go here</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4 col-md-offset-1">
+                            <div class="form-group col-md-9 col-md-offset-1">
                                 <div class="form-group__text">
-                                    <input type="text" id="buttonIcon" name="buttonIcon" class="form-control" />
-                                    <label for="buttonIcon">Icon Selector Will go here</label>
+                                    <input type="text" id="buttonDescription" name="buttonDescription" class="form-control" />
+                                    <label for="buttonDescription">Description:</label>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +300,7 @@
                         <div class="row">
                             <div class="col-md-9">&nbsp;</div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary pull-right" onclick="saveData(event, true)">Save</button>
+                                <button type="button" class="btn btn-primary pull-right" onclick="saveButtonData(event, true)">Save</button>
                             </div>
                             <div class="col-md-2">&nbsp;</div>
                         </div>
@@ -381,6 +379,9 @@
         $buttonTree = $('#buttonTree'),
         $titleField = $('#title'),
         $pathField = $('#path'),
+        $buttonTitleField = $('#buttonTitle'),
+        $buttonDescription = $('#buttonDescription'),
+        $buttonIcon = $('#buttonIcon'),
         $nodeData = $('#nodeData'),
         $autopathField = $('#autopath'),
         data = {},
@@ -412,6 +413,7 @@
         }
 
         data.courseData.children = JSON.parse($courseTree.tree('toJson'));
+        data.courseData.buttons = JSON.parse($buttonTree.tree('toJson'));
 
         $.post('/update-course', data)
             .fail(function(er) {
@@ -423,37 +425,37 @@
     };
 
     var saveButtonData = function(e, edited) {
-//        var
-//                currentTitle = $titleField.val(),
-//                currentPath = $pathField.val(),
-//                currentData = CKEDITOR.instances['editor'].getData(),
-//                currentNode = $courseTree.tree('getNodeById', currentNodeId)
-//        ;
-//
-//        if (edited) {
-//            // Prevent the default form submission.
-//            e.preventDefault();
-//
-//            $courseTree.tree(
-//                    'updateNode',
-//                    currentNode,
-//                    {
-//                        name: currentTitle,
-//                        path: currentPath,
-//                        data: currentData
-//                    }
-//            );
-//        }
-//
-//        data.courseData.children = JSON.parse($courseTree.tree('toJson'));
-//
-//        $.post('/update-course', data)
-//                .fail(function(er) {
-//                    console.log('Failed');
-//                    console.log(er);
-//                })
-//        ;
-        console.log('button data saved.');
+        var
+            currentTitle = $buttonTitleField.val(),
+            currentDescription = $buttonDescription.val(),
+            currentData = CKEDITOR.instances['buttonEditor'].getData(),
+            currentNode = $buttonTree.tree('getNodeById', currentNodeId)
+        ;
+
+        if (edited) {
+            // Prevent the default form submission.
+            e.preventDefault();
+
+            $buttonTree.tree(
+                'updateNode',
+                currentNode,
+                {
+                    name: currentTitle,
+                    description: currentDescription,
+                    data: currentData
+                }
+            );
+        }
+
+        data.courseData.children = JSON.parse($courseTree.tree('toJson'));
+        data.courseData.buttons = JSON.parse($buttonTree.tree('toJson'));
+
+        $.post('/update-course', data)
+            .fail(function(er) {
+                console.log('Failed');
+                console.log(er);
+            })
+        ;
     };
 
     var saveCourseData = function(e) {
@@ -660,6 +662,34 @@
             contextMenuApi.disable(rootNode.name, ['delete']);
             buttonContextMenu.disable(buttonRoot.name, ['delete']);
 
+            $buttonTree.on('tree.select', function(event) {
+                if (event.node) {
+                    var node = event.node;
+
+                    currentNodeId = node.id;
+                    $buttonTitleField.val(node.name);
+                    $buttonDescription.val(node.description);
+                    $buttonIcon.val(node.icon);
+                    CKEDITOR.instances['buttonEditor'].setData(node.data);
+                    $nodeData.show();
+
+                }
+                else {
+                    currentNodeId = 0;
+                    $buttonTitleField.val('');
+                    CKEDITOR.instances['buttonEditor'].setData('');
+                    $nodeData.hide();
+                }
+            });
+
+            $buttonTree.on('tree.move', function(event) {
+                // For whatever reason this needs to be fired manually
+                // before the internal tree is ready to be saved.
+                event.move_info.do_move();
+
+                saveButtonData(false);
+            });
+
             $courseTree.on('tree.select', function(event) {
                 if (event.node) {
                     var node = event.node;
@@ -769,9 +799,10 @@
         });
 
         // Select the first node in our tree (and open the proper edit field in doing so.
+        // Break the function out and generalize it later.
         $courseTree.on('tree.init', function() {
             var
-                $firstItem = $('.jqtree-tree li').first(),
+                $firstItem = $('#course .jqtree-tree li').first(),
                 firstNode = $courseTree.tree('getNodeByHtmlElement', $firstItem[0])
             ;
 
@@ -782,6 +813,40 @@
             }
 
             setTimeout(selectFirstNode(), 600);
+        });
+
+        $buttonTree.on('tree.init', function() {
+            var
+                    $firstItem = $('#buttons .jqtree-tree li').first(),
+                    firstNode = $buttonTree.tree('getNodeByHtmlElement', $firstItem[0])
+            ;
+
+            function selectFirstNode() {
+                return function () {
+                    $buttonTree.tree('selectNode', firstNode);
+                };
+            }
+
+            setTimeout(selectFirstNode(), 600);
+        });
+
+        // The bootstrap event shown.bs.tab is not functioning for some
+        // reason, so we'll need to use click for now.
+        $('a[data-toggle="tab"]').on('click', function (e) {
+            var
+                $buttonsMenu = $('#buttonData'),
+                $structureMenu = $('#structureData'),
+                isButtonTab = e.target === $('#buttons-tab')[0]
+            ;
+
+            if (isButtonTab) {
+                $buttonsMenu.removeClass('hidden');
+                $structureMenu.addClass('hidden');
+            }
+            else {
+                $buttonsMenu.addClass('hidden');
+                $structureMenu.removeClass('hidden');
+            }
         });
     });
 

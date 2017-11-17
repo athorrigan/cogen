@@ -564,7 +564,8 @@ div.panel-body > h4 {
     font-weight: 400;
 }
 
-form#nodeData button.btn.btn-primary.pull-right {
+form#nodeData button.btn.btn-primary.pull-right,
+form#buttonNodeData button.btn.btn-primary.pull-right {
     margin-top: 1em;
 }
 
