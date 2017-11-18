@@ -565,7 +565,16 @@
             $buttonTree.tree({
                 data: data.courseData.buttons,
                 dragAndDrop: true,
-                autoOpen: false
+                autoOpen: false,
+                // Don't allow dragging into other nodes.
+                onCanMoveTo: function(moved_node, target_node, position) {
+                    if (position === 'before' || position === 'after') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
             });
 
             // Collapse tree since the autoOpen parameter is currently broken and the tree is always expanded
