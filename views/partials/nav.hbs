@@ -14,34 +14,15 @@
             </div>
         </div>
         <div class="header-toolbar">
-            <a class="btn btn--small btn--icon"
-               title="Physical Infrastructure Layout"
-               data-toggle="modal"
-               data-target="#physical_infrastructure"
+            {{#each buttons}}
+                <a class="btn btn--small btn--icon"
+                   title="{{description}}"
+                   data-toggle="modal"
+                   data-target="#{{selector}}"
                 >
-                <span class="icon-devices"></span>
-            </a>
-            <a class="btn btn--small btn--icon"
-               title="Virtual Infrastructure Layout"
-               data-toggle="modal"
-               data-target="#virtual_infrastructure"
-            >
-                <span class="icon-cloud"></span>
-            </a>
-            <a class="btn btn--small btn--icon"
-               title="Connection Information"
-               data-toggle="modal"
-               data-target="#connection_info"
-            >
-                <span class="icon-ethernet"></span>
-            </a>
-            <a class="btn btn--small btn--icon"
-               title="Session Info"
-               data-toggle="modal"
-               data-target="#session_info"
-            >
-                <span class="icon-info"></span>
-            </a>
+                    <span class="icon-{{icon}}"></span>
+                </a>
+            {{/each}}
             <a class="btn btn--small btn--icon"
                title="Download PDF"
                href="/pdf"

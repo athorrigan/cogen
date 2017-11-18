@@ -170,7 +170,7 @@ app.get('/courses/:title', (req, res, next) => {
 // Individual course section pages.
 app.get('/courses/:title/:section', (req, res, next) => {
     let course = courseApi.getCourse(req.params.title);
-    let userData, contentString, courseTemplate, showSidebar;
+    let userData, contentString, courseTemplate, showSidebar, templatedButtons;
 
     // Assign defaults if the session student variables haven't been set prior to hitting this page.
     userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
@@ -182,6 +182,12 @@ app.get('/courses/:title/:section', (req, res, next) => {
     else {
         showSidebar = req.session.showSidebar;
     }
+
+    templatedButtons = _.map(course.courseData.buttons, (button) => {
+        let dataTemplate = Handlebars.compile(button.data);
+        button.data = dataTemplate(userData);
+        return button;
+    });
 
     // If the section parameter is included then we're on an individual
     // section page...
@@ -251,7 +257,10 @@ app.get('/courses/:title/:section', (req, res, next) => {
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
 
         // And the raw version for the title
-        rawCourseTitle: course.courseTitle
+        rawCourseTitle: course.courseTitle,
+
+        // The buttons and the modal dialog HTML that belongs to them
+        buttons: templatedButtons
     });
 });
 
