@@ -687,3 +687,34 @@ div.leading-data > ul.nav-tabs > li > a {
     width: 100px;
     font-size: 1.4em;
 }
+
+ul.icon-set li {
+    background-color: #7f7f86;
+    border: 1px solid #444;
+}
+    ul.icon-set li:hover {
+        -webkit-box-shadow: inset 0 0 20px #1f2322;
+        -moz-box-shadow: inset 0 0 20px #1f2322;
+        box-shadow: inset 0 0 20px #1f2322;
+        cursor: pointer;
+    }
+
+ul.icon-set li.selected {
+    -webkit-box-shadow: inset 0 0 30px #1f2322;
+    -moz-box-shadow: inset 0 0 30px #1f2322;
+    box-shadow: inset 0 0 30px #1f2322;
+}
+
+ul.icon-set li.list-group-item:last-child,
+ul.icon-set li.list-group-item:first-child {
+    border-radius: 0px;
+}
+
+ul.icon-set li > div.icon-item > i {
+    color: #fff;
+    font-size: 2em;
+}
+
+#current-selected-icon {
+    margin-right: 1em;
+}

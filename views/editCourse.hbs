@@ -276,11 +276,15 @@
                                     <label for="buttonTitle">Title:</label>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3 col-md-offset-1">
-                                <div class="form-group__text">
-                                    <input type="text" id="buttonIcon" name="buttonIcon" class="form-control" />
-                                    <label for="buttonIcon">Icon Selector Will go here</label>
-                                </div>
+                            <div class="col-md-4 col-md-offset-1">
+                                <input type="hidden" id="buttonIcon" name="buttonIcon"/>
+                                <a class="btn"
+                                   title="Icon Selection"
+                                   data-toggle="modal"
+                                   data-target="#icon-select"
+                                >
+                                    <span id="current-selected-icon"></span> Select Icon
+                                </a>
                             </div>
                         </div>
                         <div class="row">
@@ -387,6 +391,7 @@
         $buttonNodeData = $('#buttonNodeData'),
         $buttonSelector = $('#buttonSelector'),
         $autopathField = $('#autopath'),
+        $currentSelectedIcon = $('#current-selected-icon'),
         data = {},
         currentNodeId = 0,
         autopath = $autopathField.prop('checked')
@@ -432,6 +437,7 @@
             currentTitle = $buttonTitleField.val(),
             currentDescription = $buttonDescription.val(),
             currentSelector = $buttonSelector.val(),
+            currentIcon = $buttonIcon.val(),
             currentData = CKEDITOR.instances['buttonEditor'].getData(),
             currentNode = $buttonTree.tree('getNodeById', currentNodeId)
         ;
@@ -447,6 +453,7 @@
                     name: currentTitle,
                     description: currentDescription,
                     selector: currentSelector,
+                    icon: currentIcon,
                     data: currentData
                 }
             );
@@ -680,9 +687,13 @@
                     $buttonDescription.val(node.description);
                     $buttonIcon.val(node.icon);
                     $buttonSelector.val(node.selector);
+                    $currentSelectedIcon.removeClass();
+                    $currentSelectedIcon.addClass('icon-' + node.icon);
                     CKEDITOR.instances['buttonEditor'].setData(node.data);
                     $buttonNodeData.show();
 
+                    $('.icon-set li.selected').removeClass('selected');
+                    $('#' + node.icon + '-icon-button').addClass('selected');
                 }
                 else {
                     currentNodeId = 0;
@@ -698,6 +709,19 @@
                 event.move_info.do_move();
 
                 saveButtonData(false);
+            });
+
+            $('.icon-set li').on('click', function(e) {
+               var
+                   iconButtonId = $(this).attr('id'),
+                   icon = iconButtonId.substring(0, iconButtonId.indexOf('-icon-button'));
+               ;
+
+               $('.icon-set li.selected').removeClass('selected');
+               $(this).addClass('selected');
+               $buttonIcon.val(icon);
+               $currentSelectedIcon.removeClass();
+               $currentSelectedIcon.addClass('icon-' + icon);
             });
 
             $courseTree.on('tree.select', function(event) {
@@ -885,6 +909,462 @@
                                     {{#each courseVars}}
                                         <li class="list-group-item col-md-6">{{this}}</li>
                                     {{/each}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default dismiss"
+                            data-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="icon-select" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span>&times;</span>
+                    </button>
+                    <h3 class="modal-title">
+                        Select an Icon for this Button
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-image">
+                        <div class="col-md-12">
+                            <div class="panel-body">
+                                <ul class="icon-set list-group col-md-12">
+                                    <li id="info-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-info"></i>
+                                        </div>
+                                    </li>
+                                    <li id="ethernet-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-ethernet"></i>
+                                        </div>
+                                    </li>
+                                    <li id="cloud-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-cloud"></i>
+                                        </div>
+                                    </li>
+                                    <li id="devices-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-devices"></i>
+                                        </div>
+                                    </li>
+                                    <li id="acessibility-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-acessibility"></i>
+                                        </div>
+                                    </li>
+                                    <li id="analysis-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-analysis"></i>
+                                        </div>
+                                    </li>
+                                    <li id="application-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-application"></i>
+                                        </div>
+                                    </li>
+                                    <li id="at-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-at"></i>
+                                        </div>
+                                    </li>
+                                    <li id="aux-camera-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-aux-camera"></i>
+                                        </div>
+                                    </li>
+                                    <li id="bluetooth-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-bluetooth"></i>
+                                        </div>
+                                    </li>
+                                    <li id="bug-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-bug"></i>
+                                        </div>
+                                    </li>
+                                    <li id="briefcase-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-briefcase"></i>
+                                        </div>
+                                    </li>
+                                    <li id="bookmark-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-bookmark"></i>
+                                        </div>
+                                    </li>
+                                    <li id="calendar-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-calendar"></i>
+                                        </div>
+                                    </li>
+                                    <li id="calendar-meetings-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-calendar-meetings"></i>
+                                        </div>
+                                    </li>
+                                    <li id="calendar-weekly-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-calendar-weekly"></i>
+                                        </div>
+                                    </li>
+                                    <li id="browser-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-browser"></i>
+                                        </div>
+                                    </li>
+                                    <li id="camera-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-camera"></i>
+                                        </div>
+                                    </li>
+                                    <li id="cog-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-cog"></i>
+                                        </div>
+                                    </li>
+                                    <li id="communities-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-communities"></i>
+                                        </div>
+                                    </li>
+                                    <li id="contact-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-contact"></i>
+                                        </div>
+                                    </li>
+                                    <li id="diagnostics-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-diagnostics"></i>
+                                        </div>
+                                    </li>
+                                    <li id="data-usage-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-data-usage"></i>
+                                        </div>
+                                    </li>
+                                    <li id="desk-phone-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-desk-phone"></i>
+                                        </div>
+                                    </li>
+                                    <li id="directory-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-directory"></i>
+                                        </div>
+                                    </li>
+                                    <li id="display-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-display"></i>
+                                        </div>
+                                    </li>
+                                    <li id="document-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-document"></i>
+                                        </div>
+                                    </li>
+                                    <li id="download-contain-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-download-contain"></i>
+                                        </div>
+                                    </li>
+                                    <li id="draw-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-draw"></i>
+                                        </div>
+                                    </li>
+                                    <li id="email-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-email"></i>
+                                        </div>
+                                    </li>
+                                    <li id="emoticons-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-emoticons"></i>
+                                        </div>
+                                    </li>
+                                    <li id="exclamation-circle-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-exclamation-circle"></i>
+                                        </div>
+                                    </li>
+                                    <li id="exclamation-triangle-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-exclamation-triangle"></i>
+                                        </div>
+                                    </li>
+                                    <li id="endpoint-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-endpoint"></i>
+                                        </div>
+                                    </li>
+                                    <li id="extension-mobility-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-extension-mobility"></i>
+                                        </div>
+                                    </li>
+                                    <li id="eye-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-eye"></i>
+                                        </div>
+                                    </li>
+                                    <li id="feedback-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-feedback"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-code-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-code-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-excel-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-excel-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-image-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-image-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-powerpoint-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-powerpoint-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-word-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-word-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-video-o-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file-video-o"></i>
+                                        </div>
+                                    </li>
+                                    <li id="folder-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-folder"></i>
+                                        </div>
+                                    </li>
+                                    <li id="file-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-file"></i>
+                                        </div>
+                                    </li>
+                                    <li id="google-analytics-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-google-analytics"></i>
+                                        </div>
+                                    </li>
+                                    <li id="gpu-graphicscard-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-gpu-graphicscard"></i>
+                                        </div>
+                                    </li>
+                                    <li id="hunt-group-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-hunt-group"></i>
+                                        </div>
+                                    </li>
+                                    <li id="info-circle-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-info-circle"></i>
+                                        </div>
+                                    </li>
+                                    <li id="hue-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-hue"></i>
+                                        </div>
+                                    </li>
+                                    <li id="instant-meeting-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-instant-meeting"></i>
+                                        </div>
+                                    </li>
+                                    <li id="image-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-image"></i>
+                                        </div>
+                                    </li>
+                                    <li id="intercom-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-intercom"></i>
+                                        </div>
+                                    </li>
+                                    <li id="keywords-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-keywords"></i>
+                                        </div>
+                                    </li>
+                                    <li id="link-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-link"></i>
+                                        </div>
+                                    </li>
+                                    <li id="language-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-language"></i>
+                                        </div>
+                                    </li>
+                                    <li id="laser-pointer-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-laser-pointer"></i>
+                                        </div>
+                                    </li>
+                                    <li id="layers-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-layers"></i>
+                                        </div>
+                                    </li>
+                                    <li id="layout-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-layout"></i>
+                                        </div>
+                                    </li>
+                                    <li id="lightbulb-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-lightbulb"></i>
+                                        </div>
+                                    </li>
+                                    <li id="list-menu-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-list-menu"></i>
+                                        </div>
+                                    </li>
+                                    <li id="list-view-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-list-view"></i>
+                                        </div>
+                                    </li>
+                                    <li id="location-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-location"></i>
+                                        </div>
+                                    </li>
+                                    <li id="lock-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-lock"></i>
+                                        </div>
+                                    </li>
+                                    <li id="manage-cable-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-manage-cable"></i>
+                                        </div>
+                                    </li>
+                                    <li id="meeting-room-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-meeting-room"></i>
+                                        </div>
+                                    </li>
+                                    <li id="mobile-phone-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-mobile-phone"></i>
+                                        </div>
+                                    </li>
+                                    <li id="more-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-more"></i>
+                                        </div>
+                                    </li>
+                                    <li id="microphone-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-microphone"></i>
+                                        </div>
+                                    </li>
+                                    <li id="music-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-music"></i>
+                                        </div>
+                                    </li>
+                                    <li id="notes-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-notes"></i>
+                                        </div>
+                                    </li>
+                                    <li id="pin-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-pin"></i>
+                                        </div>
+                                    </li>
+                                    <li id="pencil-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-pencil"></i>
+                                        </div>
+                                    </li>
+                                    <li id="pc-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-pc"></i>
+                                        </div>
+                                    </li>
+                                    <li id="poll-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-poll"></i>
+                                        </div>
+                                    </li>
+                                    <li id="proximity-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-proximity"></i>
+                                        </div>
+                                    </li>
+                                    <li id="participant-list-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-participant-list"></i>
+                                        </div>
+                                    </li>
+                                    <li id="power-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-power"></i>
+                                        </div>
+                                    </li>
+                                    <li id="signal-4-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-signal-4"></i>
+                                        </div>
+                                    </li>
+                                    <li id="spark-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-spark"></i>
+                                        </div>
+                                    </li>
+                                    <li id="storage-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-storage"></i>
+                                        </div>
+                                    </li>
+                                    <li id="subscribe-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-subscribe"></i>
+                                        </div>
+                                    </li>
+                                    <li id="wifi-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-wifi"></i>
+                                        </div>
+                                    </li>
+                                    <li id="usb-icon-button" class="list-group-item col-md-1">
+                                        <div class="icon-item">
+                                            <i class="icon-usb"></i>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
