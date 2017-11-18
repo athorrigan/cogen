@@ -290,6 +290,7 @@
                                     <label for="buttonDescription">Description:</label>
                                 </div>
                             </div>
+                            <input type="hidden" id="buttonSelector" name="buttonSelector"/>
                         </div>
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1">
@@ -384,6 +385,7 @@
         $buttonIcon = $('#buttonIcon'),
         $nodeData = $('#nodeData'),
         $buttonNodeData = $('#buttonNodeData'),
+        $buttonSelector = $('#buttonSelector'),
         $autopathField = $('#autopath'),
         data = {},
         currentNodeId = 0,
@@ -429,6 +431,7 @@
         var
             currentTitle = $buttonTitleField.val(),
             currentDescription = $buttonDescription.val(),
+            currentSelector = $buttonSelector.val(),
             currentData = CKEDITOR.instances['buttonEditor'].getData(),
             currentNode = $buttonTree.tree('getNodeById', currentNodeId)
         ;
@@ -443,6 +446,7 @@
                 {
                     name: currentTitle,
                     description: currentDescription,
+                    selector: currentSelector,
                     data: currentData
                 }
             );
@@ -529,6 +533,10 @@
             if (autopath === true) {
                 $pathField.val($titleField.val().toLowerCase().replace(/[^A-za-z0-9_ ]|\^/g, '').replace(/\s+|_/g, '-'));
             }
+        });
+
+        $buttonTitleField.keyup(function() {
+            $buttonSelector.val($buttonTitleField.val().toLowerCase().replace(/[^A-za-z0-9_ ]|\^/g, '').replace(/\s+|_/g, '-'));
         });
 
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
@@ -671,6 +679,7 @@
                     $buttonTitleField.val(node.name);
                     $buttonDescription.val(node.description);
                     $buttonIcon.val(node.icon);
+                    $buttonSelector.val(node.selector);
                     CKEDITOR.instances['buttonEditor'].setData(node.data);
                     $buttonNodeData.show();
 
