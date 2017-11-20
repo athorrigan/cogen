@@ -447,42 +447,44 @@ app.get('/sidebar/:showSidebar', (req, res) => {
 });
 
 // Link to compile and serve the pdf of the course
-app.get('/pdf', (req, res) => {
+app.get('/pdf/:title', (req, res) => {
     const
-       // External library for converting html to pdf
-       htmlPdf = require('html-pdf'),
-       // The configuration object for our pdf file. Right now
-       // we're just setting the format.
-       pdfConfig = {
-           format: 'Letter',
-           border: {
-               top: '0.5in',
-               right: '0.25in',
-               left: '0.25in',
-               bottom: '0.5in'
-           },
-           base: 'http://localhost:8040/uploads'
-       }
+        // External library for converting html to pdf
+        htmlPdf = require('html-pdf'),
+        // The configuration object for our pdf file. Right now
+        // we're just setting the format.
+        pdfConfig = {
+            format: 'Letter',
+            border: {
+                top: '0.5in',
+                right: '0.25in',
+                left: '0.25in',
+                bottom: '0.5in'
+            },
+            base: 'http://localhost:8040/uploads'
+        },
+        title = req.params.title
     ;
 
     let
-        course = courseApi.getCourse(req.params.id),
+        course = courseApi.getCourse(title),
         userData
     ;
 
+
     // Assign defaults if the session student variables haven't been set prior to hitting this page.
-    userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
+    userData = Object.assign({}, courseApi.getStudentDefaults(title), req.session.studentVars);
 
     let htmlString = courseApi.generatePdfString(course.courseData.children, userData);
 
     // Store the output file in the uploads directory.
-    htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/ltrcld-2121.pdf', function(err, handler) {
+    htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/' + title + '.pdf', function(err, handler) {
         if (err) {
             return console.log(err);
         }
         else {
             // Serve the generated file to the user.
-            return res.download('public/uploads/ltrcld-2121.pdf');
+            return res.download('public/uploads/' + title + '.pdf');
         }
     });
 });
