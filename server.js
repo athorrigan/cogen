@@ -448,8 +448,6 @@ app.get('/sidebar/:showSidebar', (req, res) => {
 
 // Link to compile and serve the pdf of the course
 app.get('/pdf/:title', (req, res) => {
-    console.log(req.get('host'));
-
     const
         // External library for converting html to pdf
         htmlPdf = require('html-pdf'),
@@ -463,8 +461,7 @@ app.get('/pdf/:title', (req, res) => {
                 left: '0.25in',
                 bottom: '0.5in'
             },
-            base: 'https://svs-incubation.cisco.com/uploads',
-            timeout: '60000'
+            base: 'http://localhost:80/uploads'
         },
         title = req.params.title
     ;
