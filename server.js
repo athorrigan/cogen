@@ -448,6 +448,7 @@ app.get('/sidebar/:showSidebar', (req, res) => {
 
 // Link to compile and serve the pdf of the course
 app.get('/pdf/:title', (req, res) => {
+    console.log(server.address().port);
     const
         // External library for converting html to pdf
         htmlPdf = require('html-pdf'),
