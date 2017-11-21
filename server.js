@@ -461,7 +461,7 @@ app.get('/pdf/:title', (req, res) => {
                 left: '0.25in',
                 bottom: '0.5in'
             },
-            base: 'http://localhost:8040/uploads'
+            base: 'http://' + req.get('host') + '/uploads'
         },
         title = req.params.title
     ;
