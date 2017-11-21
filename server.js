@@ -463,7 +463,7 @@ app.get('/pdf/:title', (req, res) => {
                 left: '0.25in',
                 bottom: '0.5in'
             },
-            base: 'http://svs-incubation.cisco.com/uploads',
+            base: 'https://svs-incubation.cisco.com/uploads',
             timeout: '60000'
         },
         title = req.params.title
