@@ -394,6 +394,7 @@
         $currentSelectedIcon = $('#current-selected-icon'),
         data = {},
         currentNodeId = 0,
+        currentButtonId = 0,
         autopath = $autopathField.prop('checked')
     ;
 
@@ -439,7 +440,7 @@
             currentSelector = $buttonSelector.val(),
             currentIcon = $buttonIcon.val(),
             currentData = CKEDITOR.instances['buttonEditor'].getData(),
-            currentNode = $buttonTree.tree('getNodeById', currentNodeId)
+            currentNode = $buttonTree.tree('getNodeById', currentButtonId)
         ;
 
         if (edited) {
@@ -691,7 +692,7 @@
                 if (event.node) {
                     var node = event.node;
 
-                    currentNodeId = node.id;
+                    currentButtonId = node.id;
                     $buttonTitleField.val(node.name);
                     $buttonDescription.val(node.description);
                     $buttonIcon.val(node.icon);
@@ -705,7 +706,7 @@
                     $('#' + node.icon + '-icon-button').addClass('selected');
                 }
                 else {
-                    currentNodeId = 0;
+                    currentButtonId = 0;
                     $buttonTitleField.val('');
                     CKEDITOR.instances['buttonEditor'].setData('');
                     $buttonNodeData.hide();
