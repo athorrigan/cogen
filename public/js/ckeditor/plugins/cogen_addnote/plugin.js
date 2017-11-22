@@ -8,14 +8,24 @@ CKEDITOR.plugins.add('cogen_addnote', {
                     $selectedElement = $(editor.getSelection().getStartElement().$)
                 ;
 
-                if($selectedElement.hasClass('note')) {
-                    $selectedElement.removeClass('note');
-                }
-                else {
-                    var replacement = new CKEDITOR.dom.element('div');
-                    replacement.setAttributes({class: 'note'});
-                    replacement.setText(selected);
-                    editor.insertElement(replacement);
+                if (selected !== '') {
+                    if($selectedElement.hasClass('note')) {
+                        $selectedElement.removeClass('note');
+                    }
+                    else if($selectedElement.hasClass('important-note')) {
+                        $selectedElement.removeClass('important-note');
+                        $selectedElement.addClass('note');
+                    }
+                    else if($selectedElement.hasClass('warning-note')) {
+                        $selectedElement.removeClass('warning-note');
+                        $selectedElement.addClass('note');
+                    }
+                    else {
+                        var replacement = new CKEDITOR.dom.element('div');
+                        replacement.setAttributes({class: 'note'});
+                        replacement.setText(selected);
+                        editor.insertElement(replacement);
+                    }
                 }
             }
         });

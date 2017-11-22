@@ -8,14 +8,24 @@ CKEDITOR.plugins.add('cogen_addwarning', {
                     $selectedElement = $(editor.getSelection().getStartElement().$)
                 ;
 
-                if($selectedElement.hasClass('warning-note')) {
-                    $selectedElement.removeClass('warning-note');
-                }
-                else {
-                    var replacement = new CKEDITOR.dom.element('div');
-                    replacement.setAttributes({class: 'warning-note'});
-                    replacement.setText(selected);
-                    editor.insertElement(replacement);
+                if (selected !== '') {
+                    if($selectedElement.hasClass('warning-note')) {
+                        $selectedElement.removeClass('warning-note');
+                    }
+                    else if($selectedElement.hasClass('important-note')) {
+                        $selectedElement.removeClass('important-note');
+                        $selectedElement.addClass('warning-note');
+                    }
+                    else if($selectedElement.hasClass('note')) {
+                        $selectedElement.removeClass('note');
+                        $selectedElement.addClass('warning-note');
+                    }
+                    else {
+                        var replacement = new CKEDITOR.dom.element('div');
+                        replacement.setAttributes({class: 'warning-note'});
+                        replacement.setText(selected);
+                        editor.insertElement(replacement);
+                    }
                 }
             }
         });
