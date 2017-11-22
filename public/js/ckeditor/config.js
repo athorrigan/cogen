@@ -12,6 +12,9 @@ CKEDITOR.editorConfig = function( config ) {
     // config.extraAllowedContent = 'img[alt,!src]';
     config.allowedContent = true;
 
+    // Add additional stylesheets.
+    config.contentsCss = ['/css/styles.css'];
+
 	// The toolbar groups arrangement, optimized for a single toolbar row.
 	config.toolbarGroups = [
 		{ name: 'document',	   groups: [ 'Source', 'mode', 'document', 'doctools' ] },
