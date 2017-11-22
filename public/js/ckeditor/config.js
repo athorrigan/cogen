@@ -41,4 +41,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = 'link:advanced';
+
+	// Use Atlantic UI colors on color editor by default.
+    config.colorButton_colors = '39393b,58585b,9e9ea2,ffffff,e8ebf1,049fd9,64bbe3,2b5592,005073,abc233,626469,7f7f86,b6b9bb,c6c7ca,dfdfdf,f2f2f2,64bbe3,14a792,6cc04a,ffcc00,ff7300,cf2030';
 };
