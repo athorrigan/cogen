@@ -27,13 +27,13 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'insert' },
 		{ name: 'styles' },
 		{ name: 'notations' },
-		// { name: 'colors' },
+		{ name: 'colors' },
 		{ name: 'tools' },
 		{ name: 'others' }
 		// { name: 'about' }
 	];
 
-	config.extraPlugins = 'cogen_addwarning,cogen_addimportant,cogen_addnote,sourcedialog,toolbar,notification,notificationaggregator,filetools,uploadwidget,uploadimage,widgetselection,lineutils,widget,codesnippet,prism,clipboard,menu,contextmenu,dialog,dialogui,table,tabletools,panel,button,floatpanel,listblock,richcombo,format';
+	config.extraPlugins = 'colordialog,colorbutton,cogen_addwarning,cogen_addimportant,cogen_addnote,sourcedialog,toolbar,notification,notificationaggregator,filetools,uploadwidget,uploadimage,widgetselection,lineutils,widget,codesnippet,prism,clipboard,menu,contextmenu,dialog,dialogui,table,tabletools,panelbutton,panel,button,floatpanel,listblock,richcombo,format';
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
