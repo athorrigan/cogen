@@ -33,7 +33,7 @@ CKEDITOR.plugins.add('cogen_addnote', {
         editor.ui.addButton('Note', {
             label: 'Create Note Section',
             command: 'replaceWithNote',
-            toolbar: 'notations'
+            toolbar: 'notations,2'
         });
     }
 });

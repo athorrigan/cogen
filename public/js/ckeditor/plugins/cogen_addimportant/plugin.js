@@ -33,7 +33,7 @@ CKEDITOR.plugins.add('cogen_addimportant', {
         editor.ui.addButton('Important', {
             label: 'Create Important Section',
             command: 'replaceWithImportant',
-            toolbar: 'notations'
+            toolbar: 'notations,1'
         });
     }
 });

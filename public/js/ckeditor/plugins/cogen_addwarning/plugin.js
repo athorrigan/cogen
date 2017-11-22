@@ -33,7 +33,7 @@ CKEDITOR.plugins.add('cogen_addwarning', {
         editor.ui.addButton('Warning', {
             label: 'Create Warning Section',
             command: 'replaceWithWarning',
-            toolbar: 'notations'
+            toolbar: 'notations,0'
         });
     }
 });
