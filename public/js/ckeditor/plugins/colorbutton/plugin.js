@@ -184,7 +184,7 @@ CKEDITOR.plugins.add( 'colorbutton', {
 							element = walker.next();
 						}
 
-						selectColor( panelBlock, finalColor );
+						// selectColor( panelBlock, finalColor );
 					}
 
 					return automaticColor;
@@ -313,7 +313,10 @@ CKEDITOR.plugins.add( 'colorbutton', {
 		 * @param {String} color
 		 */
 		function selectColor( block, color ) {
+			console.log(block);
 			var items = block._.getItems();
+
+			console.log(items);
 
 			for ( var i = 0; i < items.count(); i++ ) {
 				var item = items.getItem( i );
