@@ -461,7 +461,8 @@ app.get('/pdf/:title', (req, res) => {
                 left: '0.25in',
                 bottom: '0.5in'
             },
-            base: 'http://localhost:' + server.address().port + '/uploads'
+            base: 'http://localhost:' + server.address().port + '/uploads',
+            timeout: 120000
         },
         title = req.params.title
     ;
