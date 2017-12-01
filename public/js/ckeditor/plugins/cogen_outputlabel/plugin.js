@@ -9,20 +9,14 @@ CKEDITOR.plugins.add('cogen_outputlabel', {
                 ;
 
                 if (selected !== '') {
-                    if($selectedElement.hasClass('warning-note')) {
-                        $selectedElement.removeClass('warning-note');
-                    }
-                    else if($selectedElement.hasClass('important-note')) {
-                        $selectedElement.removeClass('important-note');
-                        $selectedElement.addClass('warning-note');
-                    }
-                    else if($selectedElement.hasClass('note')) {
-                        $selectedElement.removeClass('note');
-                        $selectedElement.addClass('warning-note');
+                    if($selectedElement.hasClass('output-label')) {
+                        var replacement = new CKEDITOR.dom.element('p');
+                        replacement.setText(selected);
+                        editor.insertElement(replacement);
                     }
                     else {
-                        var replacement = new CKEDITOR.dom.element('div');
-                        replacement.setAttributes({class: 'warning-note'});
+                        var replacement = new CKEDITOR.dom.element('p');
+                        replacement.setAttributes({class: 'output-label'});
                         replacement.setText(selected);
                         editor.insertElement(replacement);
                     }
@@ -30,7 +24,7 @@ CKEDITOR.plugins.add('cogen_outputlabel', {
             }
         });
 
-        editor.ui.addButton('Warning', {
+        editor.ui.addButton('Outputlabel', {
             label: 'Create Output Label',
             command: 'replaceWithOutputLabel',
             toolbar: 'others,0'
