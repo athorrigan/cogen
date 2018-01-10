@@ -2,3 +2,4 @@
 node_modules
 data
 /public/uploads
+/public/js/ckeditor/.DS_STORE

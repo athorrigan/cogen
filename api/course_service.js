@@ -172,7 +172,7 @@ let course_service = {
         // If the past search didn't find the relevant data, we
         // then search each child element for the course data.
         // We use some because we want to short circuit once we
-        // find out data rather than carrying through the entire
+        // find our data rather than carrying through the entire
         // loop.
         dataObjects.some(function(obj) {
             // If a child object has more children and we still
