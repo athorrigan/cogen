@@ -163,7 +163,8 @@ app.get('/courses/:title', (req, res, next) => {
         courseSlug: course.courseSlug,
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
         // Raw version for the title
-        rawCourseTitle: course.courseTitle
+        rawCourseTitle: course.courseTitle,
+        userNomenclature: course.userNomenclature
     });
 });
 
@@ -281,6 +282,7 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
         courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
         // And the raw version for the title
         rawCourseTitle: course.courseTitle,
+        userNomenclature: course.userNomenclature,
         courseVars: courseVariables.sort(),
         editPage: true
     });

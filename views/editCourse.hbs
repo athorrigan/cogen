@@ -169,7 +169,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group full-title">
+                        <div class="form-group col-md-4">
+                            <div class="form-group__text">
+                                <input type="text" id="userNomenclature" name="userNomenclature" class="form-control" />
+                                <label for="userNomenclature">User Nomenclature:</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
                             <div class="form-group__text">
                                 <input type="text" id="fullTitle" name="fullTitle" class="form-control" />
                                 <label for="fullTitle">Full Title:</label>
@@ -479,6 +485,7 @@
         data.courseSlug = $('#courseSlug').val();
         data.courseName = $('#courseName').val();
         data.splashInstructions = $('#splashInstructions').val();
+        data.userNomenclature = $('#userNomenclature').val();
         data.splashTitle = $('#fullTitle').val();
 
         $.post('/update-course', data)
@@ -555,6 +562,7 @@
             $('#courseSlug').val(data.courseSlug);
             $('#courseName').val(data.courseName);
             $('#splashInstructions').val(data.splashInstructions);
+            $('#userNomenclature').val(data.userNomenclature);
             $('#fullTitle').val(data.splashTitle);
 
             $courseTree.tree({

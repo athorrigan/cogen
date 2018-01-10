@@ -20,9 +20,9 @@
                         <div class="form-group">
                             <div class="form-group__text select">
                                 <select id="student_select">
-                                    <option value="0" selected>Select a Student</option>
+                                    <option value="0" selected>Select a {{userNomenclature}}</option>
                                     {{#each users}}
-                                        <option value="{{this}}">Student {{this}}</option>
+                                        <option value="{{this}}">{{../userNomenclature}} {{this}}</option>
                                     {{/each}}
                                 </select>
                             </div>
