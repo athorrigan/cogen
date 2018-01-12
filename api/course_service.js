@@ -120,6 +120,7 @@ let course_service = {
     getStudents: (courseTitle) => {
         // Read in the CSV file.
         let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
+
         // Transform the CSV data into JSON
         let jsonData = Baby.parse(csvData, {header: true}).data;
 

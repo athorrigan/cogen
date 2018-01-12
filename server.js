@@ -350,6 +350,28 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
 
     // Read in the CSV file.
     let csvData = fs.readFileSync(tmp_path).toString();
+
+    csvData = csvData.replace(/[\n\r]/g, '\n');
+
+    let prepend;
+
+    csvData = csvData.split('\n');
+
+    // Fix for bizarre first property/column issue.
+    for (let i = 0; i < csvData.length; i++) {
+        if (i === 0) {
+            prepend = "null,";
+        }
+        else {
+            prepend = "0,";
+        }
+
+        csvData[i] = prepend + csvData[i];
+        csvData[i] = csvData[i].replace(/\s/g, '');
+    }
+
+    csvData = csvData.join('\n');
+
     // Transform the CSV data into JSON
     let jsonData = Baby.parse(csvData, {header: true}).data;
 
@@ -370,7 +392,9 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
             success: true
         };
 
-        res.json(response);
+        fs.writeFile(targetPath, csvData, () => {
+            res.json(response);
+        });
     });
 
     src.on('error', function(err) {
@@ -391,9 +415,6 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
 app.get('/training-login/:title/:id', (req, res) => {
     // Get the variables applicable to the selected student.
     let userData = courseApi.getUserVars(req.params.title, req.params.id);
-
-    // Fix weird Student data issue.
-    userData.Student = 'student' + userData.number;
 
     // Set the session's user object to carry these variables.
     req.session.studentVars = userData;
