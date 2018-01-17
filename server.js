@@ -351,11 +351,9 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
     // Read in the CSV file.
     let csvData = fs.readFileSync(tmp_path).toString();
 
-    csvData = csvData.replace(/[\n\r]/g, '\n');
-
     let prepend;
 
-    csvData = csvData.split('\n');
+    csvData = csvData.split(/[\r\n]+/);
 
     // Fix for bizarre first property/column issue.
     for (let i = 0; i < csvData.length; i++) {
