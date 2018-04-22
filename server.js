@@ -35,6 +35,10 @@ const
     _ = require('underscore'),
     // Connect-Flash allows us to use session stores to pass messages between pages.
     flash = require('connect-flash'),
+    // Add mongoose for MongoDB support
+    mongoose = require('mongoose'),
+    // Encryption mechanism for our passwords
+    bcrypt = require('bcrypt'),
     // Our API for handling course data.
     courseApi = require('./api/course_service.js')
 ;
@@ -142,6 +146,78 @@ let isAuthenticated = () => {
         }
     };
 };
+
+/** DB setup **/
+const SALT_WORK_FACTOR = 10;
+
+// Connect to Mongo.
+let options = {
+    user: 'cogen_admin',
+    pass: "I'm a cogen administrator."
+};
+let mongoDB = 'mongodb://127.0.0.1/cogen';
+
+mongoose.connect(mongoDB, options);
+
+// Use the global Promise library for Mongoose.
+mongoose.Promise = global.Promise;
+
+let db = mongoose.connection;
+
+// Lets us know if we failed to connect.
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+let Schema = mongoose.Schema;
+
+let userSchema = new Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+userSchema.pre('save', function(next) {
+    let user = this;
+
+    // If password hasn't been modified, we punt it because we don't want to hash it again.
+    if (!user.isModified('password')) {
+        return next();
+    }
+
+    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+        if (err) {
+            return next(err);
+        }
+
+        bcrypt.hash(user.password, salt, (err, hash) => {
+            if (err) {
+                return next(err);
+            }
+
+            user.password = hash;
+            next();
+        });
+    });
+});
+
+let User = mongoose.model('User', userSchema);
+
+let testUser = new User({
+    username: 'testUser',
+    password: 'password123'
+});
+
+testUser.save((err) => {
+    if (err) {
+        throw err;
+    }
+
+    console.log('saved');
+});
 
 /** Routes **/
 
