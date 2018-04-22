@@ -206,18 +206,34 @@ userSchema.pre('save', function(next) {
 
 let User = mongoose.model('User', userSchema);
 
-let testUser = new User({
-    username: 'testUser',
-    password: 'password123'
-});
+// let testUser = new User({
+//     username: 'Admin',
+//     password: 'x1xThis password should be long enough I would think.x2x'
+// });
+//
+// testUser.save((err) => {
+//     if (err) {
+//         throw err;
+//     }
+//
+//     console.log('saved');
+// });
 
-testUser.save((err) => {
-    if (err) {
-        throw err;
-    }
+User.findOne({username: 'Admin'})
+    .exec((err, user) => {
+        console.dir(user.username);
+        console.dir(user.password);
 
-    console.log('saved');
-});
+        bcrypt.compare(
+            'x1xThis password should be long enough I would think.x2x',
+            user.password,
+            (err, isMatch) => {
+                console.log(isMatch);
+            }
+        )
+    })
+;
+
 
 /** Routes **/
 
