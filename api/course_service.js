@@ -3,6 +3,8 @@
 const
     // Node's builtin filesystem interaction library.
     fs = require('fs'),
+    // Need to use the process library to get environmental vars
+    process = require('process'),
     // CSV parsing library
     Baby = require('babyparse'),
     // Library for globbing multiple files matching a pattern.
@@ -13,11 +15,21 @@ const
     mongoose = require('mongoose'),
     // Encryption library used to encrypt user passwords
     bcrypt = require('bcrypt'),
+    // MongoDB user model.
     User = require('../models/user_model')
 ;
 
+if (typeof process.env.COGEN_PW === 'undefined' || typeof process.env.COGEN_USER === 'undefined') {
+    console.log('Need to set up environmental variables for database credentials.');
+    process.exit(1);
+}
+
 let
-    conn = mongoose.connection
+    conn = mongoose.connection,
+    options = {
+        user: process.env.COGEN_USER,
+        pass: process.env.COGEN_PW
+    }
 ;
 
 //--- Callbacks --- //
@@ -156,10 +168,6 @@ let course_service = {
      *  a callback invocation using the "done" callback.
      */
     findUser: (username, cb) => {
-        let options = {
-            user: 'cogen_admin',
-            pass: "I'm a cogen administrator."
-        };
         let mongoDB = 'mongodb://127.0.0.1/cogen';
 
         mongoose.connect(mongoDB, options);
@@ -186,10 +194,6 @@ let course_service = {
      */
     saveUser: (user, cb) => {
         // Connect to Mongo.
-        let options = {
-            user: 'cogen_admin',
-            pass: "I'm a cogen administrator."
-        };
         let mongoDB = 'mongodb://127.0.0.1/cogen';
         mongoose.connect(mongoDB, options);
 
