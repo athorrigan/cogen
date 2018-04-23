@@ -12,7 +12,12 @@ const
     // Mongoose library for interactions with MongoDB
     mongoose = require('mongoose'),
     // Encryption library used to encrypt user passwords
-    bcrypt = require('bcrypt')
+    bcrypt = require('bcrypt'),
+    User = require('../models/user_model')
+;
+
+let
+    conn = mongoose.connection
 ;
 
 //--- Callbacks --- //
@@ -151,16 +156,27 @@ let course_service = {
      *  a callback invocation using the "done" callback.
      */
     findUser: (username, cb) => {
-        // This will eventually pull from a db and support multiple users.
-        let user = JSON.parse(fs.readFileSync('data/users/user.json', 'utf8'));
+        let options = {
+            user: 'cogen_admin',
+            pass: "I'm a cogen administrator."
+        };
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
 
-        // In the end product, make sure all passwords are encrypted. This works for now, but it's not ideal.
-        if (username === user.username) {
-            return cb(null, user);
-        }
-        else {
-            return cb(null);
-        }
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        User.findOne({username: username})
+            .exec((err, userObject) => {
+                if (userObject) {
+                    cb(err, userObject);
+                }
+                else {
+                    cb(err);
+                }
+            })
+        ;
     },
     /**
      * Saves a user to the database.
@@ -180,19 +196,10 @@ let course_service = {
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
 
-        let db = mongoose.connection;
-
-        // Lets us know if we failed to connect.
-        db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-        let User = require('../models/user_model');
-
         user.save((err, userObject) => {
             User.findOne({username: user.username})
-                .exec((err, user) => {
-                    cb(err, user);
-
-                    mongoose.disconnect();
+                .exec((err, userObject) => {
+                    cb(err, userObject);
                 })
             ;
         });

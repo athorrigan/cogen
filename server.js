@@ -126,11 +126,18 @@ passport.use('login', new LocalStrategy(
                 return done(null, false, req.flash('message', 'User not found.'));
             }
 
-            if (password !== user.password) {
-                return done(null, false, req.flash('message', 'Invalid password.'));
-            }
-
-            return done(null, user);
+            bcrypt.compare(
+                password,
+                user.password,
+                (err, isMatch) => {
+                    if (!isMatch) {
+                        return done(null, false, req.flash('message', 'Invalid password.'));
+                    }
+                    else {
+                        return done(null, user);
+                    }
+                }
+            );
         });
     }
 ));
@@ -146,43 +153,6 @@ let isAuthenticated = () => {
         }
     };
 };
-
-/** DB setup **/
-const SALT_WORK_FACTOR = 10;
-
-// Connect to Mongo.
-let options = {
-    user: 'cogen_admin',
-    pass: "I'm a cogen administrator."
-};
-let mongoDB = 'mongodb://127.0.0.1/cogen';
-
-mongoose.connect(mongoDB, options);
-
-// Use the global Promise library for Mongoose.
-mongoose.Promise = global.Promise;
-
-let db = mongoose.connection;
-
-// Lets us know if we failed to connect.
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-let User = require('./models/user_model');
-
-User.findOne({username: 'Admin'})
-    .exec((err, user) => {
-
-        bcrypt.compare(
-            'x1xThis password should be long enough I would think.x2x',
-            user.password,
-            (err, isMatch) => {
-                console.log(isMatch);
-            }
-        );
-
-        mongoose.disconnect();
-    })
-;
 
 
 /** Routes **/
