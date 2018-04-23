@@ -8,8 +8,21 @@ const
     // Library for globbing multiple files matching a pattern.
     glob = require('glob-fs'),
     // Functional programming library
-    _ = require('underscore')
+    _ = require('underscore'),
+    // Mongoose library for interactions with MongoDB
+    mongoose = require('mongoose'),
+    // Encryption library used to encrypt user passwords
+    bcrypt = require('bcrypt')
 ;
+
+//--- Callbacks --- //
+/**
+ * This callback deals with Mongoose user objects.
+ *
+ * @callback userCallback
+ * @param {Object} err An error object thrown in the calling function.
+ * @param {User} user A mongoose representation of a User object.
+ */
 
 /**
  * Utility service to handle the interface with our course data.
@@ -130,11 +143,12 @@ let course_service = {
         return _.pluck(jsonData, 'number');
     },
     /**
-     * Checks if credentials are valid and returns a user object if the credentials are valid
+     * Acquires a user object from the database.
      *
      * @param {string} username The username of the user.
-     * @param {string} password The password of the user.
-     * @returns {Object|boolean} Either the user object or false.
+     * @param {Function} cb A callback function to call after completion.
+     * @returns {userCallback} The callback function is invoked which should also return
+     *  a callback invocation using the "done" callback.
      */
     findUser: (username, cb) => {
         // This will eventually pull from a db and support multiple users.
@@ -147,6 +161,41 @@ let course_service = {
         else {
             return cb(null);
         }
+    },
+    /**
+     * Saves a user to the database.
+     *
+     * @param {User} user A Mongoose modeled User object.
+     * @param {userCallback} cb A callback function to call after completion.
+     */
+    saveUser: (user, cb) => {
+        // Connect to Mongo.
+        let options = {
+            user: 'cogen_admin',
+            pass: "I'm a cogen administrator."
+        };
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        let db = mongoose.connection;
+
+        // Lets us know if we failed to connect.
+        db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+        let User = require('../models/user_model');
+
+        user.save((err, userObject) => {
+            User.findOne({username: user.username})
+                .exec((err, user) => {
+                    cb(err, user);
+
+                    mongoose.disconnect();
+                })
+            ;
+        });
     },
     /**
      * Fetches data related to an individual course based on its ID.

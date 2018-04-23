@@ -169,23 +169,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 let User = require('./models/user_model');
 
-// let testUser = new User({
-//     username: 'Admin',
-//     password: 'x1xThis password should be long enough I would think.x2x'
-// });
-//
-// testUser.save((err) => {
-//     if (err) {
-//         throw err;
-//     }
-//
-//     console.log('saved');
-// });
-
 User.findOne({username: 'Admin'})
     .exec((err, user) => {
-        console.dir(user.username);
-        console.dir(user.password);
 
         bcrypt.compare(
             'x1xThis password should be long enough I would think.x2x',
@@ -193,7 +178,9 @@ User.findOne({username: 'Admin'})
             (err, isMatch) => {
                 console.log(isMatch);
             }
-        )
+        );
+
+        mongoose.disconnect();
     })
 ;
 
