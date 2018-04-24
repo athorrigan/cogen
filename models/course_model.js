@@ -68,7 +68,9 @@ let courseSchema = new Schema({
     userNomenclature: {
         type: String,
         required: true
-    }
+    },
+    pages: [pageSchema],
+    buttons: [buttonSchema]
 });
 
 
