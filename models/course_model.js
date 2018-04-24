@@ -3,13 +3,69 @@ let
     Schema = mongoose.Schema
 ;
 
-// Mongoose schema for User objects.
-let courseSchema = new Schema({
-    username: {
+let pageSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    password: {
+    path: {
+        type: String,
+        required: true
+    },
+    data: {
+        type: String,
+        required: false,
+        default: ''
+    }
+});
+
+let buttonSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    selector: {
+        type: String,
+        required: false
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    icon: {
+        type: String,
+        required: true
+    },
+    data: {
+        type: String,
+        required: false,
+        default: ''
+    }
+});
+
+// Mongoose schema for User objects.
+let courseSchema = new Schema({
+    courseTitle: {
+        type: String,
+        required: true
+    },
+    courseBrief: {
+        type: String,
+        required: false
+    },
+    courseName: {
+        type: String,
+        required: true
+    },
+    splashTitle: {
+        type: String,
+        required: true
+    },
+    splashInstructions: {
+        type: String,
+        required: true
+    },
+    userNomenclature: {
         type: String,
         required: true
     }
