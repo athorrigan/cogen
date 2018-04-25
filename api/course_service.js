@@ -16,7 +16,8 @@ const
     // Encryption library used to encrypt user passwords
     bcrypt = require('bcrypt'),
     // MongoDB user model.
-    User = require('../models/user_model')
+    User = require('../models/user_model'),
+    Course = require('../models/course_model')
 ;
 
 if (typeof process.env.COGEN_PW === 'undefined' || typeof process.env.COGEN_USER === 'undefined') {
@@ -25,7 +26,6 @@ if (typeof process.env.COGEN_PW === 'undefined' || typeof process.env.COGEN_USER
 }
 
 let
-    conn = mongoose.connection,
     options = {
         user: process.env.COGEN_USER,
         pass: process.env.COGEN_PW
@@ -405,17 +405,20 @@ let course_service = {
      * @param {Object} courseData The entire contents of the course JSON.
      * @returns {string} The status of the file save operation.
      */
-    saveCourse: (courseData) => {
-        let courseTitle = courseData.courseTitle;
+    saveCourse: (courseData, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
 
-        fs.writeFile('data/courses/' + courseTitle.toLowerCase().replace(/\s+/g,'_') + '.json', JSON.stringify(courseData), function(err) {
-            if (err) {
-                return 'Failed to write file.';
-            }
-            else {
-                return 'File saved.'
-            }
-        });
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        Course.update({courseTitle: courseData.courseTitle}, courseData)
+            .exec((err, requestStatus) => {
+                console.log(requestStatus);
+
+                cb(err, requestStatus);
+            })
+        ;
     }
 };
 

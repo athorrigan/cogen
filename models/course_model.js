@@ -47,11 +47,12 @@ let buttonSchema = new Schema({
 let courseSchema = new Schema({
     courseTitle: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    courseBrief: {
+    courseSlug: {
         type: String,
-        required: false
+        required: true
     },
     courseName: {
         type: String,

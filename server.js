@@ -154,6 +154,155 @@ let isAuthenticated = () => {
     };
 };
 
+// Connect to Mongo.
+let
+    options = {
+        user: process.env.COGEN_USER,
+        pass: process.env.COGEN_PW
+    }
+;
+let mongoDB = 'mongodb://127.0.0.1/cogen';
+mongoose.connect(mongoDB, options);
+
+// Use the global Promise library for Mongoose.
+mongoose.Promise = global.Promise;
+
+let Course = require('./models/course_model');
+
+// let numTest = new Course({
+//     "courseTitle": "Num Test",
+//     "courseSlug": "Test all the things!",
+//     "courseName": "LTRDCN-3088",
+//     "splashTitle": "Welcome to LTRDCN-3077 <br> Deploying a Cisco Data Center",
+//     "splashInstructions": "Select a Student from the dropdown above to continue",
+//     "userNomenclature": "Student",
+//     "pages": [
+//         {
+//             "name": "APPENDIX",
+//             "path": "appendix",
+//             "data": "<h2><span style=\"color:#005073;\"><span style=\"background-color:#dfdfdf;\">These</span></span> <span style=\"color:#049fd9;\">are</span> the <span style=\"color:#e74c3c;\"><span style=\"background-color:#95a5a6;\">Appendix attachments for LTRDCT-3077 </span></span><span style=\"font-family:Comic Sans MS,cursive;\"><span style=\"color:#14a792;\">a</span><span style=\"font-size:28px;\"><span style=\"color:#14a792;\">nd</span> </span></span><span style=\"color:#cf2030;\"><span style=\"font-family:Georgia,serif;\"><span style=\"font-size:28px;\">such</span></span></span><span style=\"font-family:Comic Sans MS,cursive;\">.</span></h2><p><span style=\"color:#27ae60;\">{{Client-Name}}</span></p><div class=\"important-note\">Important Text</div><div><div><div class=\"important-note\">Important</div></div></div><div><div class=\"warning-note\">Warning</div></div><div><div class=\"note\">Note</div><p><a class=\"fancy-image\" href=\"http://localhost:8040/uploads/63c88d8b-b20b-7961-af23-b39b5615ca64.jpg\"><img src=\"http://localhost:8040/uploads/63c88d8b-b20b-7961-af23-b39b5615ca64.jpg\" /></a></p></div><div class=\"warning-note\">testing</div><p class=\"output-label\">Label for thing below:</p><pre><code class=\"language-vim\">$ ls -lash</code></pre><p><br />&nbsp;</p><div class=\"warning-note\">Make sure notices are still working.</div><p>&nbsp;</p>"
+//         },
+//         {
+//             "name": "This is just a test",
+//             "data": "<p>testing this out</p><p>&nbsp;</p><p>testing</p><p>&nbsp;</p><p>The current date and time is: <em>Tue Nov 21 2017 15:35:32 GMT-0500 (EST)</em></p>",
+//             "path": "this-is-just-a-test"
+//         },
+//         {
+//             "name": "Test this out",
+//             "data": "<p>This is a test.</p><p>&nbsp;</p><pre><code class=\"language-vim\">$ ls -lash\n\n&lt;html&gt;\n  &lt;head&gt;\n&lt;title&gt;LTRCLD2121 - Virtualize, Orchestrate and Automate Your DMZ Extranet, Internet, and Public Cloud Connections with Secure Agile Exchange!&lt;/title&gt;\n&lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Congratulations! This message indicates your service chain was successfully deployed and configured.&lt;/h1&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>&nbsp;</p>",
+//             "path": "test-this-out"
+//         },
+//         {
+//             "name": "Another!",
+//             "data": "<div><div class=\"note\">Note and stuff</div><div class=\"important-note\">Important note</div></div><div class=\"warning-note\">​​​​​​​Warning Note!</div><p>&nbsp;</p>",
+//             "path": "another"
+//         },
+//         {
+//             "name": "Play with stuff",
+//             "data": "<pre><code class=\"language-markup\">&lt;html&gt;\n  &lt;head&gt;\n&lt;title&gt;LTRCLD2121 - Virtualize, Orchestrate and Automate Your DMZ Extranet, Internet, and Public Cloud Connections with Secure Agile Exchange!&lt;/title&gt;\n&lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Congratulations! This message indicates your service chain was successfully deployed and configured.&lt;/h1&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>&nbsp;</p>",
+//             "path": "play-with-stuff"
+//         }
+//     ],
+//     "buttons": [
+//         {
+//             "name": "Information",
+//             "selector": "information",
+//             "description": "Information",
+//             "icon": "info",
+//             "data": "<h1>Course Info&nbsp;{{Client-TemplateName}}</h1><p>&nbsp;</p><p><img src=\"/uploads/5bee857a-db4e-9720-53ff-50661ce2fbca.png\" /></p>"
+//         },
+//         {
+//             "name": "Contacts",
+//             "data": "<ol><li>Cory Withers</li><li>Bob Gunderson</li><li>Isabel Whalen</li></ol><p>&nbsp;</p><p><img src=\"/uploads/c266c9ee-a224-2277-9796-c81677c8cf67.jpg\" /></p>",
+//             "description": "Contact Information",
+//             "selector": "contacts",
+//             "icon": "layers"
+//         }
+//     ]
+// });
+//
+// numTest.save((err, course) => {
+//     console.log(course);
+//
+//     // Course.findOne({_id: course._id})
+//     //     .exec((err, courseObject) => {
+//     //         console.log(courseObject)
+//     //     })
+//     // ;
+// });
+
+// Course.findOne({_id: '5adf3cc5197eed6d653589a4'})
+//     .exec((err, courseObject) => {
+//         console.log(courseObject.buttons);
+//
+//         courseObject.buttons[0].name = "Information";
+//
+//         courseObject.save((err, course) => {
+//
+//             Course.findOne({_id: course._id})
+//                 .exec((err, courseObject) => {
+//                     console.log(courseObject)
+//                 })
+//             ;
+//         });
+//     })
+// ;
+
+// let numTest = {
+//     "courseTitle": "Num Test",
+//     "courseSlug": "Test all the things!",
+//     "courseName": "LTRDCN-3088",
+//     "splashTitle": "Welcome to LTRDCN-3077 <br> Deploying a Cisco Data Center",
+//     "splashInstructions": "Select a Student from the dropdown above to continue",
+//     "userNomenclature": "Student",
+//     "pages": [
+//         {
+//             "name": "APPENDIX",
+//             "path": "appendix",
+//             "data": "<h2><span style=\"color:#005073;\"><span style=\"background-color:#dfdfdf;\">These</span></span> <span style=\"color:#049fd9;\">are</span> the <span style=\"color:#e74c3c;\"><span style=\"background-color:#95a5a6;\">Appendix attachments for LTRDCT-3077 </span></span><span style=\"font-family:Comic Sans MS,cursive;\"><span style=\"color:#14a792;\">a</span><span style=\"font-size:28px;\"><span style=\"color:#14a792;\">nd</span> </span></span><span style=\"color:#cf2030;\"><span style=\"font-family:Georgia,serif;\"><span style=\"font-size:28px;\">such</span></span></span><span style=\"font-family:Comic Sans MS,cursive;\">.</span></h2><p><span style=\"color:#27ae60;\">{{Client-Name}}</span></p><div class=\"important-note\">Important Text</div><div><div><div class=\"important-note\">Important</div></div></div><div><div class=\"warning-note\">Warning</div></div><div><div class=\"note\">Note</div><p><a class=\"fancy-image\" href=\"http://localhost:8040/uploads/63c88d8b-b20b-7961-af23-b39b5615ca64.jpg\"><img src=\"http://localhost:8040/uploads/63c88d8b-b20b-7961-af23-b39b5615ca64.jpg\" /></a></p></div><div class=\"warning-note\">testing</div><p class=\"output-label\">Label for thing below:</p><pre><code class=\"language-vim\">$ ls -lash</code></pre><p><br />&nbsp;</p><div class=\"warning-note\">Make sure notices are still working.</div><p>&nbsp;</p>"
+//         },
+//         {
+//             "name": "This is just a test",
+//             "data": "<p>testing this out</p><p>&nbsp;</p><p>testing</p><p>&nbsp;</p><p>The current date and time is: <em>Tue Nov 21 2017 15:35:32 GMT-0500 (EST)</em></p>",
+//             "path": "this-is-just-a-test"
+//         },
+//         {
+//             "name": "Test this out",
+//             "data": "<p>This is a test.</p><p>&nbsp;</p><pre><code class=\"language-vim\">$ ls -lash\n\n&lt;html&gt;\n  &lt;head&gt;\n&lt;title&gt;LTRCLD2121 - Virtualize, Orchestrate and Automate Your DMZ Extranet, Internet, and Public Cloud Connections with Secure Agile Exchange!&lt;/title&gt;\n&lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Congratulations! This message indicates your service chain was successfully deployed and configured.&lt;/h1&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>&nbsp;</p>",
+//             "path": "test-this-out"
+//         },
+//         {
+//             "name": "Another!",
+//             "data": "<div><div class=\"note\">Note and stuff</div><div class=\"important-note\">Important note</div></div><div class=\"warning-note\">​​​​​​​Warning Note!</div><p>&nbsp;</p>",
+//             "path": "another"
+//         },
+//         {
+//             "name": "Play with stuff",
+//             "data": "<pre><code class=\"language-markup\">&lt;html&gt;\n  &lt;head&gt;\n&lt;title&gt;LTRCLD2121 - Virtualize, Orchestrate and Automate Your DMZ Extranet, Internet, and Public Cloud Connections with Secure Agile Exchange!&lt;/title&gt;\n&lt;/head&gt;\n  &lt;body&gt;\n    &lt;h1&gt;Congratulations! This message indicates your service chain was successfully deployed and configured.&lt;/h1&gt;\n  &lt;/body&gt;\n&lt;/html&gt;</code></pre><p>&nbsp;</p>",
+//             "path": "play-with-stuff"
+//         }
+//     ],
+//     "buttons": [
+//         {
+//             "name": "Information",
+//             "selector": "information",
+//             "description": "Information",
+//             "icon": "info",
+//             "data": "<h1>Course Info&nbsp;{{Client-TemplateName}}</h1><p>&nbsp;</p><p><img src=\"/uploads/5bee857a-db4e-9720-53ff-50661ce2fbca.png\" /></p>"
+//         },
+//         {
+//             "name": "Contacts",
+//             "data": "<ol><li>Cory Withers</li><li>Bob Gunderson</li><li>Isabel Whalen</li></ol><p>&nbsp;</p><p><img src=\"/uploads/c266c9ee-a224-2277-9796-c81677c8cf67.jpg\" /></p>",
+//             "description": "Contact Information",
+//             "selector": "contacts",
+//             "icon": "layers"
+//         }
+//     ]
+// };
+//
+// courseApi.saveCourse(numTest, (err, status) => {
+//     console.log(status);
+// });
 
 /** Routes **/
 
@@ -307,9 +456,18 @@ app.get('/get-course/:title', (req, res) => {
 
 // Update a specific course
 app.post('/update-course', isAuthenticated(), (req, res) => {
-    courseApi.saveCourse(req.body);
-    res.json({
-        success: true
+    courseApi.saveCourse(req.body, (err, status) => {
+        if (err) {
+            res.json({
+               success: false,
+               message: err
+            });
+        }
+        else {
+            res.json({
+                success: true
+            })
+        }
     });
 });
 
