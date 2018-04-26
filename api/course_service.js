@@ -84,13 +84,13 @@ let course_service = {
 
                 courses.forEach((tempCourse) => {
                     var course = {};
-
+                    
                     course.courseTitle = tempCourse.courseTitle;
                     course.courseName = tempCourse.courseName;
                     course.courseBrief = tempCourse.courseBrief;
                     course.courseSlug = tempCourse.courseSlug;
                     course.splashTitle = tempCourse.splashTitle;
-                    course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(' ','-');
+                    course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(/\s+/gi,'-');
                     courseList.push(course);
                 });
 
