@@ -64,31 +64,39 @@ let course_service = {
      *
      * @returns {Object[]} An array of Objects, each containing some information about the course.
      */
-    getCourses: () => {
-        // Need to initialize the glob instance every run or else we capture the file list within a closure.
-        let globInstance = glob({gitignore: false});
+    getCourses: (cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
 
-        let
-            files = globInstance.readdirSync('data/courses/*json', {}),
-            courseList = []
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        Course.find({}).select({
+                "courseTitle": 1,
+                "courseName": 1,
+                "courseBrief": 1,
+                "courseSlug": 1,
+                "splashTitle": 1,
+                "_id": 0
+            })
+            .exec((err, courses) => {
+                let courseList = [];
+
+                courses.forEach((tempCourse) => {
+                    var course = {};
+
+                    course.courseTitle = tempCourse.courseTitle;
+                    course.courseName = tempCourse.courseName;
+                    course.courseBrief = tempCourse.courseBrief;
+                    course.courseSlug = tempCourse.courseSlug;
+                    course.splashTitle = tempCourse.splashTitle;
+                    course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(' ','-');
+                    courseList.push(course);
+                });
+
+                cb(err, courseList);
+            })
         ;
-
-        files.forEach((fileName) => {
-            let
-                tempCourse = JSON.parse(fs.readFileSync(fileName, 'utf8')),
-                course = {}
-            ;
-
-            course.courseTitle = tempCourse.courseTitle;
-            course.courseName = tempCourse.courseName;
-            course.courseBrief = tempCourse.courseBrief;
-            course.courseSlug = tempCourse.courseSlug;
-            course.splashTitle = tempCourse.splashTitle;
-            course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(' ','-');
-            courseList.push(course);
-        });
-
-        return courseList;
     },
     /**
      * This fetches the individual variables linked to a specific user for
@@ -414,8 +422,6 @@ let course_service = {
 
         Course.update({courseTitle: courseData.courseTitle}, courseData)
             .exec((err, requestStatus) => {
-                console.log(requestStatus);
-
                 cb(err, requestStatus);
             })
         ;
