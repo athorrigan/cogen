@@ -42,6 +42,22 @@ let
  */
 
 /**
+ * This callback deals with Mongoose course objects.
+ *
+ * @callback userCallback
+ * @param {Object} err An error object thrown in the calling function.
+ * @param {Course} course A mongoose representation of a Course object.
+ */
+
+/**
+ * This callback deals with Mongoose course objects in a plural context.
+ *
+ * @callback userCallback
+ * @param {Object} err An error object thrown in the calling function.
+ * @param {Course[]} courses A mongoose representation of an array of Course objects.
+ */
+
+/**
  * Utility service to handle the interface with our course data.
  *
  * @module course_service
@@ -51,18 +67,28 @@ let course_service = {
      * Fetches relevant course data.
      *
      * @param {string} courseId Identification string for the course.
-     * @returns {Object} JS Object representing course data.
+     * @param {courseCallback} A callback function that will operate on the course data.
      */
-    getCourse: (courseTitle) => {
-        // Read a the file in from the hard drive for now, and then
-        // parse the JSON into a native JS object.
-        return JSON.parse(fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '.json', 'utf8'));
+    getCourse: (courseTitle, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
 
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        Course.findOne({
+                courseTitle: courseTitle
+            })
+            .exec((err, course) => {
+
+                cb(err, course);
+            })
+        ;
     },
     /**
      * Fetches basic course data for each course.
      *
-     * @returns {Object[]} An array of Objects, each containing some information about the course.
+     * @param {coursesCallback} A callback function that will operate on the courses data.
      */
     getCourses: (cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
@@ -84,7 +110,7 @@ let course_service = {
 
                 courses.forEach((tempCourse) => {
                     var course = {};
-                    
+
                     course.courseTitle = tempCourse.courseTitle;
                     course.courseName = tempCourse.courseName;
                     course.courseBrief = tempCourse.courseBrief;

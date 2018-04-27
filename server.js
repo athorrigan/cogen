@@ -154,6 +154,12 @@ let isAuthenticated = () => {
     };
 };
 
+courseApi.getCourse("Wisp CLEUR18 Viptela", (err, course) => {
+    course.buttons.forEach((button) => {
+        console.log(button);
+    });
+});
+
 /** Routes **/
 
 // Course specific splash pages
