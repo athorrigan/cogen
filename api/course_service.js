@@ -69,17 +69,23 @@ let course_service = {
      * @param {string} courseId Identification string for the course.
      * @param {courseCallback} A callback function that will operate on the course data.
      */
-    getCourse: (courseTitle, cb) => {
+    getCourse: (coursePath, cb) => {
+        console.log(coursePath);
+
         let mongoDB = 'mongodb://127.0.0.1/cogen';
         mongoose.connect(mongoDB, options);
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
 
+        // Create a course path in schema instead. Use a save function to verify
+        // that it's autofilled accordingly.
+        // Also need to make sure the CSVs are named accordingly since that's manual still.
         Course.findOne({
-                courseTitle: courseTitle
+                coursePath: coursePath
             })
             .exec((err, course) => {
+                console.log(course);
 
                 cb(err, course);
             })
@@ -116,7 +122,7 @@ let course_service = {
                     course.courseBrief = tempCourse.courseBrief;
                     course.courseSlug = tempCourse.courseSlug;
                     course.splashTitle = tempCourse.splashTitle;
-                    course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(/\s+/gi,'-');
+                    course.courseLink = '/edit-course/' + tempCourse.courseTitle.toLowerCase().replace(/\s+/g,'-');
                     courseList.push(course);
                 });
 
@@ -451,6 +457,33 @@ let course_service = {
                 cb(err, requestStatus);
             })
         ;
+    },
+    /**
+     * Creates a new course
+     *
+     * @param {Object} courseData A JSON representation of a course.
+     * @param {cb} courseCallback A callback to handle validation of the course we just created.
+     *
+     */
+    createCourse: (courseData, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        console.log(courseData.courseTitle);
+
+        Course.create(courseData, (err, course) => {
+            if (err) {
+                cb(err, null);
+            }
+            else {
+                Course.find({courseTitle: course.courseTitle}, (err, courseObject) => {
+                    cb(err, courseObject);
+                });
+            }
+        });
     }
 };
 

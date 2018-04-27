@@ -74,6 +74,13 @@ let courseSchema = new Schema({
         unique: true,
         index: true
     },
+    // A path where the course can be found.
+    coursePath: {
+        type: String,
+        required: false,
+        unique: true,
+        index: true
+    },
     // A brief summary of the course.
     courseSlug: {
         type: String,
@@ -107,5 +114,35 @@ let courseSchema = new Schema({
     buttons: [buttonSchema]
 });
 
+// We need to ensure that path is filled properly
+courseSchema.pre('save', function(next) {
+    let course = this;
+
+    if (!course.coursePath) {
+        course.coursePath = course.courseTitle.toLowerCase().replace(/\s+/g,'-');
+    }
+
+    next();
+
+    // // If password hasn't been modified, we punt it because we don't want to hash it again.
+    // if (!course.isModified('path')) {
+    //     return next();
+    // }
+    //
+    // bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //
+    //     bcrypt.hash(course.password, salt, (err, hash) => {
+    //         if (err) {
+    //             return next(err);
+    //         }
+    //
+    //         course.password = hash;
+    //         next();
+    //     });
+    // });
+});
 
 module.exports = mongoose.model('Course', courseSchema);
