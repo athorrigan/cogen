@@ -29,6 +29,15 @@ let pageSchema = new Schema({
     }
 });
 
+// Because of the nature of JS, we can't recursively add this schema because it has
+// no reference internally. So we add the recursive schema after the initial declaration.
+pageSchema.add({
+    pages: {
+        type: [pageSchema],
+        required: false
+    }
+});
+
 // Represents the buttons at the top of the course.
 let buttonSchema = new Schema({
     // The title given to the button.
@@ -123,26 +132,6 @@ courseSchema.pre('save', function(next) {
     }
 
     next();
-
-    // // If password hasn't been modified, we punt it because we don't want to hash it again.
-    // if (!course.isModified('path')) {
-    //     return next();
-    // }
-    //
-    // bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
-    //     if (err) {
-    //         return next(err);
-    //     }
-    //
-    //     bcrypt.hash(course.password, salt, (err, hash) => {
-    //         if (err) {
-    //             return next(err);
-    //         }
-    //
-    //         course.password = hash;
-    //         next();
-    //     });
-    // });
 });
 
 module.exports = mongoose.model('Course', courseSchema);

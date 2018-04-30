@@ -70,8 +70,6 @@ let course_service = {
      * @param {courseCallback} A callback function that will operate on the course data.
      */
     getCourse: (coursePath, cb) => {
-        console.log(coursePath);
-
         let mongoDB = 'mongodb://127.0.0.1/cogen';
         mongoose.connect(mongoDB, options);
 
@@ -85,8 +83,6 @@ let course_service = {
                 coursePath: coursePath
             })
             .exec((err, course) => {
-                console.log(course);
-
                 cb(err, course);
             })
         ;
@@ -471,8 +467,6 @@ let course_service = {
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
-
-        console.log(courseData.courseTitle);
 
         Course.create(courseData, (err, course) => {
             if (err) {
