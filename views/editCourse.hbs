@@ -557,8 +557,6 @@
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
-            console.log(data);
-
             // Set the values of the course detail fields.
             $('#courseTitle').val(data.courseTitle);
             $('#courseSlug').val(data.courseSlug);
