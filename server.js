@@ -154,7 +154,6 @@ let isAuthenticated = () => {
     };
 };
 
-
 /** Routes **/
 
 // Course specific splash pages
@@ -206,7 +205,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
         // section page...
         if (req.params.section !== '__start') {
             // Fetch the individual course section data (an HTML string).
-            let courseData = courseApi.fetchData(req.params.section, course.pages);
+            let courseData = courseApi.fetchData(req.params.section, course.children);
 
             // If the course was successfully found.
             if (typeof courseData !== "undefined") {
@@ -223,12 +222,12 @@ app.get('/courses/:title/:section', (req, res, next) => {
         }
         // ... Otherwise we redirect to the head of the course.
         else {
-            let firstSection = course.pages[0];
+            let firstSection = course.children[0];
 
             // If the first section is empty, then it's just a drawer,
             // and we need to load the first child instead.
             if (firstSection.data === '') {
-                courseTemplate = Handlebars.compile(firstSection.pages[0].data);
+                courseTemplate = Handlebars.compile(firstSection.children[0].data);
             }
             else {
                 // Load in the template for the first section's data. Run it through
@@ -246,7 +245,7 @@ app.get('/courses/:title/:section', (req, res, next) => {
         // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
         return res.render('courses', {
             // Passes an html string into the template that represents the sidebar menu
-            sidebarData: courseApi.generateMenuString(course.pages, req.params.title),
+            sidebarData: courseApi.generateMenuString(course.children, req.params.title),
 
             // String representation of the content to be loaded for this section
             content: contentString,
@@ -325,6 +324,7 @@ app.post('/update-course', isAuthenticated(), (req, res) => {
 });
 
 app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, res) => {
+    console.log('Getting here');
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         target_path = 'public/uploads/' + fileName,
@@ -517,7 +517,7 @@ app.get('/pdf/:title', (req, res) => {
         // Assign defaults if the session student variables haven't been set prior to hitting this page.
         let userData = Object.assign({}, courseApi.getStudentDefaults(title), req.session.studentVars);
 
-        let htmlString = courseApi.generatePdfString(course.courseData.children, userData);
+        let htmlString = courseApi.generatePdfString(course.children, userData);
 
         // Store the output file in the uploads directory.
         htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/' + title + '.pdf', function(err, handler) {

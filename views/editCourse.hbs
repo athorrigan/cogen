@@ -427,7 +427,7 @@
             );
         }
 
-        data.pages = JSON.parse($courseTree.tree('toJson'));
+        data.children = JSON.parse($courseTree.tree('toJson'));
         data.buttons = JSON.parse($buttonTree.tree('toJson'));
 
         $.post('/update-course', data)
@@ -466,7 +466,7 @@
             );
         }
 
-        data.pages = JSON.parse($courseTree.tree('toJson'));
+        data.children = JSON.parse($courseTree.tree('toJson'));
         data.buttons = JSON.parse($buttonTree.tree('toJson'));
 
         $.post('/update-course', data)
@@ -557,6 +557,8 @@
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
+            console.log(data);
+
             // Set the values of the course detail fields.
             $('#courseTitle').val(data.courseTitle);
             $('#courseSlug').val(data.courseSlug);
@@ -566,7 +568,7 @@
             $('#fullTitle').val(data.splashTitle);
 
             $courseTree.tree({
-                data: data.pages,
+                data: data.children,
                 dragAndDrop: true,
                 autoOpen: false
             });

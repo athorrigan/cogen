@@ -32,7 +32,7 @@ let pageSchema = new Schema({
 // Because of the nature of JS, we can't recursively add this schema because it has
 // no reference internally. So we add the recursive schema after the initial declaration.
 pageSchema.add({
-    pages: {
+    children: {
         type: [pageSchema],
         required: false
     }
@@ -118,7 +118,7 @@ let courseSchema = new Schema({
         required: true
     },
     // The array of pages that are related to this course.
-    pages: [pageSchema],
+    children: [pageSchema],
     // The array of buttons that are related to this course.
     buttons: [buttonSchema]
 });

@@ -275,7 +275,7 @@ let course_service = {
             // If a child object has more children and we still
             // haven't found what we're looking for, we recursively
             // sift through them as well.
-            if (obj.children) {
+            if (obj.children.length > 0) {
                 fetchedData = course_service.fetchData(path, obj.children);
                 if (fetchedData) {
                     // Array.some() short circuits when an iteration returns true.
@@ -298,7 +298,7 @@ let course_service = {
         let currentString = '';
 
         // If the fragment has children, we dig into those first...
-        if (jsonFragment.children) {
+        if (jsonFragment.children.length > 0) {
             // If there are children, then this menu item will be a drawer
             // That will display the sub elements beneath when it is selected.
 
@@ -419,7 +419,7 @@ let course_service = {
                 htmlString += courseTemplate(userData);
             }
 
-            if (section.children) {
+            if (section.children.length > 0) {
                 htmlString += course_service.generatePdfString(section.children, userData);
             }
 
