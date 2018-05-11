@@ -121,6 +121,7 @@ passport.use('login', new LocalStrategy(
                 return done(err);
             }
 
+            // Write this to a log later rather than output. Allowing user enumeration is technically insecure.
             if (!user) {
                 console.log('User not found.');
                 return done(null, false, req.flash('message', 'User not found.'));
