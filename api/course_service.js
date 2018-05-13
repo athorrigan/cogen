@@ -44,7 +44,7 @@ let
 /**
  * This callback deals with Mongoose course objects.
  *
- * @callback userCallback
+ * @callback courseCallback
  * @param {Object} err An error object thrown in the calling function.
  * @param {Course} course A mongoose representation of a Course object.
  */
@@ -52,9 +52,17 @@ let
 /**
  * This callback deals with Mongoose course objects in a plural context.
  *
- * @callback userCallback
+ * @callback coursesCallback
  * @param {Object} err An error object thrown in the calling function.
  * @param {Course[]} courses A mongoose representation of an array of Course objects.
+ */
+
+/**
+ * This callback deals with authentication-gated paths
+ *
+ * @callback privacyCallback
+ * @param {Object} err An error object thrown in the calling function.
+ * @param {Course} course Limited subset of course that just contains privacy information.
  */
 
 /**
@@ -123,6 +131,34 @@ let course_service = {
                 });
 
                 cb(err, courseList);
+            })
+        ;
+    },
+    /**
+     * Determines whether the course can only be viewed by an authenticated user.
+     *
+     * @param {string} courseId Identification string for the course.
+     * @param {privacyCallback} A callback function that will handle authentication if it's necessary.
+     */
+    getCoursePrivacy: (coursePath, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        // Create a course path in schema instead. Use a save function to verify
+        // that it's autofilled accordingly.
+        // Also need to make sure the CSVs are named accordingly since that's manual still.
+        Course.findOne({
+                coursePath: coursePath
+            })
+            .select({
+                "private": 1,
+                "_id": 0
+            })
+            .exec((err, course) => {
+                cb(err, course);
             })
         ;
     },

@@ -146,11 +146,40 @@ passport.use('login', new LocalStrategy(
 // Middleware used to guard a route.
 let isAuthenticated = () => {
     return (req, res, next) => {
-        if(req.isAuthenticated()) {
-            return next();
+        // If path has edit-course, it's always protected.
+        if (req.path.includes('edit-course')) {
+            if(req.isAuthenticated()) {
+                return next();
+            }
+            else {
+                res.redirect('/');
+            }
+        }
+        // If path has /courses/ it needs to be tested.
+        else if (req.path.includes('/courses/')) {
+            courseApi.getCoursePrivacy(req.params.title, (err, course) => {
+                if (course.private) {
+                    // Later add access list controls
+                    if(req.isAuthenticated()) {
+                        return next();
+                    }
+                    // Later add a flash message letting the user know that they weren't allowed to see the past page.
+                    else {
+                        res.redirect('/');
+                    }
+                }
+                else {
+                    return next();
+                }
+            });
         }
         else {
-            res.redirect('/');
+            if(req.isAuthenticated()) {
+                return next();
+            }
+            else {
+                res.redirect('/');
+            }
         }
     };
 };
@@ -158,7 +187,7 @@ let isAuthenticated = () => {
 /** Routes **/
 
 // Course specific splash pages
-app.get('/courses/:title', (req, res, next) => {
+app.get('/courses/:title', isAuthenticated(), (req, res, next) => {
     // Get course data
     courseApi.getCourse(req.params.title, (err, course) => {
         // Get a list of the users (array of strings).
@@ -181,7 +210,7 @@ app.get('/courses/:title', (req, res, next) => {
 });
 
 // Individual course section pages.
-app.get('/courses/:title/:section', (req, res, next) => {
+app.get('/courses/:title/:section', isAuthenticated(), (req, res, next) => {
     courseApi.getCourse(req.params.title, (err, course) => {
         let userData, contentString, courseTemplate, showSidebar, templatedButtons;
 
