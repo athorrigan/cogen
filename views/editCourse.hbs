@@ -155,7 +155,7 @@
                         </div>
                         <div class="col-md-1 inline-checkbox">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" id="private" value="" checked=""> <span id="private-label">Private</span>
+                                <input class="form-check-input" type="checkbox" id="private" value=""{{#if coursePrivate}} checked=""{{/if}}> <span id="private-label">Private</span>
                             </label>
                         </div>
                     </div>
@@ -496,6 +496,7 @@
         data.splashInstructions = $('#splashInstructions').val();
         data.userNomenclature = $('#userNomenclature').val();
         data.splashTitle = $('#fullTitle').val();
+        data.private = $('#private').prop('checked');
 
         $.post('/update-course', data)
             .done(function() {

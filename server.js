@@ -319,6 +319,7 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
             instructions: course.splashInstructions,
             courseName: course.courseName,
             courseSlug: course.courseSlug,
+            coursePrivate: course.private,
             courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
             // And the raw version for the title
             rawCourseTitle: course.courseTitle,
