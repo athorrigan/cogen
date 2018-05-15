@@ -281,6 +281,32 @@ let course_service = {
         });
     },
     /**
+     * Creates a new user in the database.
+     *
+     * @param {Object} userData The JSON representation of a user.
+     * @param {userCallback} cb A callback function to handle the creation of a user.
+     */
+    createUser: (userData, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        User.create(userData, (err, user) => {
+            if (err) {
+                cb(err, null);
+            }
+            else {
+                User.findOne({username: user.username})
+                    .exec((err, user) => {
+                        cb(err, user);
+                    })
+                ;
+            }
+        });
+    },
+    /**
      * Fetches data related to an individual course based on its ID.
      *
      * @param {string} path String representation of a course's path.
