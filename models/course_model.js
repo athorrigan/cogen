@@ -91,8 +91,7 @@ let courseSchema = new Schema({
     },
     // A brief summary of the course.
     courseSlug: {
-        type: String,
-        required: true
+        type: String
     },
     // A fancy name usually concocted from a bunch of Ciscoesque acronyms (IE: LTRDCN-3077)
     courseName: {
