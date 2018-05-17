@@ -52,8 +52,7 @@ let buttonSchema = new Schema({
     },
     // A description of what this button represents.
     description: {
-        type: String,
-        required: true
+        type: String
     },
     // The icon that we're using to represent the button.
     icon: {
