@@ -118,7 +118,8 @@ let courseSchema = new Schema({
     // A field to mark whether or not this course is viewable without authentication.
     private: {
         type: Boolean,
-        default: false
+        default: false,
+        required: true
     },
     // The array of pages that are related to this course.
     children: [pageSchema],
