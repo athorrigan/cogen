@@ -242,7 +242,7 @@ pre[class*=language-] {
 }
 
 pre[class*=language-]::before {
-    content: 'IDE sae_lab - [~/Programming/sae/sae_lab]';
+    content: 'IDE cisco_lab - [~/Programming/cisco/cisco_lab]';
     padding: 5px 0;
     font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
     text-align: center;
@@ -281,7 +281,7 @@ code[class*=language-]::after {
 }
 
 pre.language-python::before {
-    content: 'Python IDE       sae_lab - [~/Programming/sae/sae_lab.py]';
+    content: 'Python IDE       cisco_lab - [~/Programming/cisco/cisco_lab.py]';
 }
 
 pre.language-bash,
@@ -300,7 +300,7 @@ pre.language-vim {
 
 pre.language-bash::before,
 pre.language-vim::before {
-    content: 'sae-csp-2 -- -bash 10x80';
+    content: 'Lab Device Output -- -bash 10x80';
     padding: 5px 0;
     font-family: "Helvetica Neue", "Lucida Grande", sans-serif;
     text-align: center;
