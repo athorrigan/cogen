@@ -153,7 +153,7 @@
                                 <label for="courseSlug">Slug:</label>
                             </div>
                         </div>
-                        <div class="col-md-2 inline-checkbox text-center">
+                        <div class="col-md-2 inline-checkbox text-left">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="checkbox" id="private" value=""{{#if coursePrivate}} checked=""{{/if}}> <span id="private-label">Private</span>
                             </label>
@@ -166,11 +166,16 @@
                                 <label for="courseName">Name:</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-5">
                             <div class="form-group__text">
                                 <input type="text" id="splashInstructions" name="splashInstructions" class="form-control" />
                                 <label for="splashInstructions">Instructions:</label>
                             </div>
+                        </div>
+                        <div class="col-md-2 inline-checkbox text-left">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" id="show-logo" value=""{{#if showLogo}} checked=""{{/if}}> <span id="show-logo-label">Show Logo?</span>
+                            </label>
                         </div>
                     </div>
                     <div class="row">
@@ -497,6 +502,7 @@
         data.userNomenclature = $('#userNomenclature').val();
         data.splashTitle = $('#fullTitle').val();
         data.private = $('#private').prop('checked');
+        data.showLogo = $('#show-logo').prop('checked');
 
         $.post('/update-course', data)
             .done(function() {

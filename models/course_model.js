@@ -121,6 +121,12 @@ let courseSchema = new Schema({
         default: false,
         required: true
     },
+    // A field to mark whether or not the course' logo appears at the top.
+    showLogo: {
+        type: Boolean,
+        default: true,
+        required: true
+    },
     // The array of pages that are related to this course.
     children: [pageSchema],
     // The array of buttons that are related to this course.

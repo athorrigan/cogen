@@ -201,6 +201,7 @@ app.get('/courses/:title', isAuthenticated(), (req, res, next) => {
             instructions: course.splashInstructions,
             courseName: course.courseName,
             courseSlug: course.courseSlug,
+            showLogo: course.showLogo,
             courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
             // Raw version for the title
             rawCourseTitle: course.courseTitle,
@@ -295,6 +296,9 @@ app.get('/courses/:title/:section', isAuthenticated(), (req, res, next) => {
             // Name of the course
             courseName: course.courseName,
 
+            // Whether or not to display the course logo
+            showLogo: course.showLogo,
+
             // Used for a URL, so we modify it first.
             courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
 
@@ -320,6 +324,7 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
             courseName: course.courseName,
             courseSlug: course.courseSlug,
             coursePrivate: course.private,
+            showLogo: course.showLogo,
             courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
             // And the raw version for the title
             rawCourseTitle: course.courseTitle,
