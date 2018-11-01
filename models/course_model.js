@@ -127,6 +127,14 @@ let courseSchema = new Schema({
         default: true,
         required: true
     },
+    // A field representing the student data variables linked to the course
+    studentData: {
+        // An empty object literal represents the "Mixed" type in Mongoose, this
+        // should allow for our data to be schemaless.
+        type: {},
+        default: {},
+        required: true
+    },
     // The array of pages that are related to this course.
     children: [pageSchema],
     // The array of buttons that are related to this course.

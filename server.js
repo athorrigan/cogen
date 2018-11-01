@@ -124,7 +124,7 @@ passport.use('login', new LocalStrategy(
             // Write this to a log later rather than output. Allowing user enumeration is technically insecure.
             if (!user) {
                 console.log('User not found.');
-                return done(null, false, req.flash('message', 'User not found.'));
+                return done(null, false, req.flash('message', 'Invalid credentials.'));
             }
 
             bcrypt.compare(
@@ -132,7 +132,8 @@ passport.use('login', new LocalStrategy(
                 user.password,
                 (err, isMatch) => {
                     if (!isMatch) {
-                        return done(null, false, req.flash('message', 'Invalid password.'));
+                        console.log('Bad Password');
+                        return done(null, false, req.flash('message', 'Invalid credentials.'));
                     }
                     else {
                         return done(null, user);
@@ -158,18 +159,23 @@ let isAuthenticated = () => {
         // If path has /courses/ it needs to be tested.
         else if (req.path.includes('/courses/')) {
             courseApi.getCoursePrivacy(req.params.title, (err, course) => {
-                if (course.private) {
-                    // Later add access list controls
-                    if(req.isAuthenticated()) {
-                        return next();
+                if (!err) {
+                    if (course.private) {
+                        // Later add access list controls
+                        if(req.isAuthenticated()) {
+                            return next();
+                        }
+                        // Later add a flash message letting the user know that they weren't allowed to see the past page.
+                        else {
+                            res.redirect('/');
+                        }
                     }
-                    // Later add a flash message letting the user know that they weren't allowed to see the past page.
                     else {
-                        res.redirect('/');
+                        return next();
                     }
                 }
                 else {
-                    return next();
+                    res.redirect('/error');
                 }
             });
         }
@@ -190,155 +196,175 @@ let isAuthenticated = () => {
 app.get('/courses/:title', isAuthenticated(), (req, res, next) => {
     // Get course data
     courseApi.getCourse(req.params.title, (err, course) => {
-        // Get a list of the users (array of strings).
-        let users = courseApi.getStudents(req.params.title);
+        if (!err) {
+            // Get a list of the users (array of strings).
+            let users = courseApi.getStudents(req.params.title);
 
-        // Render the splash page with the users populating a dropdown.
-        return res.render('splash', {
-            users: users,
-            landingPage: true,
-            title: course.splashTitle,
-            instructions: course.splashInstructions,
-            courseName: course.courseName,
-            courseSlug: course.courseSlug,
-            showLogo: course.showLogo,
-            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
-            // Raw version for the title
-            rawCourseTitle: course.courseTitle,
-            userNomenclature: course.userNomenclature
-        });
+            // Render the splash page with the users populating a dropdown.
+            return res.render('splash', {
+                users: users,
+                landingPage: true,
+                title: course.splashTitle,
+                instructions: course.splashInstructions,
+                courseName: course.courseName,
+                courseSlug: course.courseSlug,
+                showLogo: course.showLogo,
+                courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+                // Raw version for the title
+                rawCourseTitle: course.courseTitle,
+                userNomenclature: course.userNomenclature
+            });
+        }
+        else {
+            res.redirect('/error');
+        }
     });
 });
 
 // Individual course section pages.
 app.get('/courses/:title/:section', isAuthenticated(), (req, res, next) => {
     courseApi.getCourse(req.params.title, (err, course) => {
-        let userData, contentString, courseTemplate, showSidebar, templatedButtons;
+        if (!err) {
+            let userData, contentString, courseTemplate, showSidebar, templatedButtons;
 
-        // Assign defaults if the session student variables haven't been set prior to hitting this page.
-        userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
+            // Assign defaults if the session student variables haven't been set prior to hitting this page.
+            userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
 
-        // Determine whether sidebar should be shown, defaults to true.
-        if (typeof req.session.showSidebar === 'undefined') {
-            showSidebar = true;
-        }
-        else {
-            showSidebar = req.session.showSidebar;
-        }
+            // Determine whether sidebar should be shown, defaults to true.
+            if (typeof req.session.showSidebar === 'undefined') {
+                showSidebar = true;
+            }
+            else {
+                showSidebar = req.session.showSidebar;
+            }
 
-        templatedButtons = _.map(course.buttons, (button) => {
-            let dataTemplate = Handlebars.compile(button.data);
-            button.data = dataTemplate(userData);
-            return button;
-        });
+            templatedButtons = _.map(course.buttons, (button) => {
+                let dataTemplate = Handlebars.compile(button.data);
+                button.data = dataTemplate(userData);
+                return button;
+            });
 
-        // If the section parameter is included then we're on an individual
-        // section page...
-        if (req.params.section !== '__start') {
-            // Fetch the individual course section data (an HTML string).
-            let courseData = courseApi.fetchData(req.params.section, course.children);
+            // If the section parameter is included then we're on an individual
+            // section page...
+            if (req.params.section !== '__start') {
+                // Fetch the individual course section data (an HTML string).
+                let courseData = courseApi.fetchData(req.params.section, course.children);
 
-            // If the course was successfully found.
-            if (typeof courseData !== "undefined") {
-                // Create a template function with Handlebars based on that data.
-                courseTemplate = Handlebars.compile(courseData);
+                // If the course was successfully found.
+                if (typeof courseData !== "undefined") {
+                    // Create a template function with Handlebars based on that data.
+                    courseTemplate = Handlebars.compile(courseData);
 
-                // Compile the the course section html along with the userData variables.
+                    // Compile the the course section html along with the userData variables.
+                    contentString = courseTemplate(userData);
+                }
+                // If the course module doesn't exist, we 404 it.
+                else {
+                    return next();
+                }
+            }
+            // ... Otherwise we redirect to the head of the course.
+            else {
+                let firstSection = course.children[0];
+
+                // If the first section is empty, then it's just a drawer,
+                // and we need to load the first child instead.
+                if (firstSection.data === '') {
+                    courseTemplate = Handlebars.compile(firstSection.children[0].data);
+                }
+                else {
+                    // Load in the template for the first section's data. Run it through
+                    // Handlebars to create a template function.
+                    courseTemplate = Handlebars.compile(firstSection.data);
+
+                }
+                // Pass in the user data and then set the content to the compiled
+                // string generated by Handlebars.
                 contentString = courseTemplate(userData);
             }
-            // If the course module doesn't exist, we 404 it.
-            else {
-                return next();
-            }
+
+            // We load the views/courses.hbs template (which will inject itself into
+            // {{{section}}} block of the views/index.hbs template, which will then
+            // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
+            return res.render('courses', {
+                // Passes an html string into the template that represents the sidebar menu
+                sidebarData: courseApi.generateMenuString(course.children, req.params.title),
+
+                // String representation of the content to be loaded for this section
+                content: contentString,
+
+                // Let's the front end know that we're on a course page.
+                coursePage: true,
+
+                // Passes in the userData to the template to fill in where relevant.
+                userData: userData,
+
+                // Determine whether we should show sidebar or not.
+                sidebarShown: showSidebar,
+
+                // Title to be shown in title bar
+                courseSlug: course.courseSlug,
+
+                // Name of the course
+                courseName: course.courseName,
+
+                // Whether or not to display the course logo
+                showLogo: course.showLogo,
+
+                // Used for a URL, so we modify it first.
+                courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+
+                // And the raw version for the title
+                rawCourseTitle: course.courseTitle,
+
+                // The buttons and the modal dialog HTML that belongs to them
+                buttons: templatedButtons
+            });
         }
-        // ... Otherwise we redirect to the head of the course.
         else {
-            let firstSection = course.children[0];
-
-            // If the first section is empty, then it's just a drawer,
-            // and we need to load the first child instead.
-            if (firstSection.data === '') {
-                courseTemplate = Handlebars.compile(firstSection.children[0].data);
-            }
-            else {
-                // Load in the template for the first section's data. Run it through
-                // Handlebars to create a template function.
-                courseTemplate = Handlebars.compile(firstSection.data);
-
-            }
-            // Pass in the user data and then set the content to the compiled
-            // string generated by Handlebars.
-            contentString = courseTemplate(userData);
+            res.redirect('/error');
         }
-
-        // We load the views/courses.hbs template (which will inject itself into
-        // {{{section}}} block of the views/index.hbs template, which will then
-        // inject *itself* into the {{{body}}} section of views/layouts/main.hbs)
-        return res.render('courses', {
-            // Passes an html string into the template that represents the sidebar menu
-            sidebarData: courseApi.generateMenuString(course.children, req.params.title),
-
-            // String representation of the content to be loaded for this section
-            content: contentString,
-
-            // Let's the front end know that we're on a course page.
-            coursePage: true,
-
-            // Passes in the userData to the template to fill in where relevant.
-            userData: userData,
-
-            // Determine whether we should show sidebar or not.
-            sidebarShown: showSidebar,
-
-            // Title to be shown in title bar
-            courseSlug: course.courseSlug,
-
-            // Name of the course
-            courseName: course.courseName,
-
-            // Whether or not to display the course logo
-            showLogo: course.showLogo,
-
-            // Used for a URL, so we modify it first.
-            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
-
-            // And the raw version for the title
-            rawCourseTitle: course.courseTitle,
-
-            // The buttons and the modal dialog HTML that belongs to them
-            buttons: templatedButtons
-        });
     });
 });
 
 // Load the editing page for the given course
 app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     courseApi.getCourse(req.params.title, (err, course) => {
-        // Need to get a list of injectable variables
-        let courseVariables = courseApi.getVariableNames(req.params.title);
+        if (!err) {
+            // Need to get a list of injectable variables
+            let courseVariables = courseApi.getVariableNames(req.params.title);
 
-        // Render the splash page with the users populating a dropdown.
-        return res.render('editCourse', {
-            title: course.splashTitle,
-            instructions: course.splashInstructions,
-            courseName: course.courseName,
-            courseSlug: course.courseSlug,
-            coursePrivate: course.private,
-            showLogo: course.showLogo,
-            courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
-            // And the raw version for the title
-            rawCourseTitle: course.courseTitle,
-            userNomenclature: course.userNomenclature,
-            courseVars: courseVariables.sort(),
-            editPage: true
-        });
+            // Render the splash page with the users populating a dropdown.
+            return res.render('editCourse', {
+                title: course.splashTitle,
+                instructions: course.splashInstructions,
+                courseName: course.courseName,
+                courseSlug: course.courseSlug,
+                coursePrivate: course.private,
+                showLogo: course.showLogo,
+                courseTitle: course.courseTitle.toLowerCase().replace(/\s+|_/g, '-'),
+                // And the raw version for the title
+                rawCourseTitle: course.courseTitle,
+                userNomenclature: course.userNomenclature,
+                courseVars: courseVariables.sort(),
+                editPage: true
+            });
+        }
+        else {
+            res.redirect('/error');
+        }
     });
 });
 
 // Used for an Ajax response for the editor.
 app.get('/get-course/:title', (req, res) => {
     courseApi.getCourse(req.params.title, (err, course) => {
-        res.json(course);
+        if (!err) {
+            res.json(course);
+        }
+        else {
+            res.redirect('/error');
+        }
     });
 });
 
@@ -515,6 +541,9 @@ app.get('/profile/:user', isAuthenticated(), (req, res) => {
                courses: courses
             });
         }
+        else {
+            res.redirect('/error');
+        }
     });
 });
 
@@ -550,22 +579,40 @@ app.get('/pdf/:title', (req, res) => {
     ;
 
     courseApi.getCourse(title, (err, course) => {
-        // Assign defaults if the session student variables haven't been set prior to hitting this page.
-        let userData = Object.assign({}, courseApi.getStudentDefaults(title), req.session.studentVars);
+        if (!err) {
+            // Assign defaults if the session student variables haven't been set prior to hitting this page.
+            let userData = Object.assign({}, courseApi.getStudentDefaults(title), req.session.studentVars);
 
-        let htmlString = courseApi.generatePdfString(course.children, userData);
+            let htmlString = courseApi.generatePdfString(course.children, userData);
 
-        // Store the output file in the uploads directory.
-        htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/' + title + '.pdf', function(err, handler) {
-            if (err) {
-                return console.log(err);
-            }
-            else {
-                // Serve the generated file to the user.
-                return res.download('public/uploads/' + title + '.pdf');
-            }
-        });
+            // Store the output file in the uploads directory.
+            htmlPdf.create(htmlString, pdfConfig).toFile('public/uploads/' + title + '.pdf', function(err, handler) {
+                if (err) {
+                    return console.log(err);
+                }
+                else {
+                    // Serve the generated file to the user.
+                    return res.download('public/uploads/' + title + '.pdf');
+                }
+            });
+        }
+        else {
+            res.redirect('/error');
+        }
     });
+});
+
+// Internal error page.
+app.get('/error', (req, res) => {
+    if (res.headersSent) {
+        return next(err);
+    }
+    return res.status(500).send(
+        `
+            <strong>Internal server error</strong><br>
+            <a href="/">Go home?</a>
+        `
+    );
 });
 
 // This is the landing/splash page.
@@ -586,7 +633,12 @@ app.use((err, req, res, next) => {
     if (res.headersSent) {
         return next(err);
     }
-    return res.status(500).send('<strong>Something went wrong.</strong>');
+    return res.status(500).send(
+        `
+            <strong>Something went very wrong. :(</strong><br>
+            <a href="/">Go home?</a>
+        `
+    );
 });
 
 // Handle 404s.

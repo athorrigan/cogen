@@ -90,8 +90,12 @@ let course_service = {
         Course.findOne({
                 coursePath: coursePath
             })
-            .exec((err, course) => {
-                cb(err, course);
+            .then((course) => {
+                    cb(null, course);
+             })
+            .catch((err) => {
+                console.log("Couldn't find course.");
+                cb(err, null);
             })
         ;
     },
@@ -115,7 +119,7 @@ let course_service = {
                 "splashTitle": 1,
                 "_id": 0
             })
-            .exec((err, courses) => {
+            .then((courses) => {
                 let courseList = [];
 
                 courses.forEach((tempCourse) => {
@@ -130,7 +134,11 @@ let course_service = {
                     courseList.push(course);
                 });
 
-                cb(err, courseList);
+                cb(null, courseList);
+            })
+            .catch((err) => {
+                console.log('Error getting courses.');
+                cb(err, null);
             })
         ;
     },
@@ -157,8 +165,12 @@ let course_service = {
                 "private": 1,
                 "_id": 0
             })
-            .exec((err, course) => {
-                cb(err, course);
+            .then((course) => {
+                cb(null, course);
+            })
+            .catch((err) => {
+                console.log('Error getting course privacy.');
+                cb(err, null);
             })
         ;
     },
@@ -228,7 +240,7 @@ let course_service = {
 
         // Underscore's pluck() method returns an array of all of the values
         // from each JSON node that represent a specific field. In this case
-        // it pull the 'number' field from each student in the data set.
+        // it will pull the 'number' field from each student in the data set.
         return _.pluck(jsonData, 'number');
     },
     /**
@@ -248,13 +260,16 @@ let course_service = {
         mongoose.Promise = global.Promise;
 
         User.findOne({username: username})
-            .exec((err, userObject) => {
+            .then((userObject) => {
                 if (userObject) {
-                    cb(err, userObject);
+                    cb(null, userObject);
                 }
                 else {
-                    cb(err);
+                    cb(null, undefined);
                 }
+            })
+            .catch((err) => {
+                cb(err);
             })
         ;
     },
@@ -274,8 +289,11 @@ let course_service = {
 
         user.save((err, userObject) => {
             User.findOne({username: user.username})
-                .exec((err, userObject) => {
-                    cb(err, userObject);
+                .then((userObject) => {
+                    cb(null, userObject);
+                })
+                .catch((err) => {
+                    cb(err, null);
                 })
             ;
         });
@@ -299,8 +317,11 @@ let course_service = {
             }
             else {
                 User.findOne({username: user.username})
-                    .exec((err, user) => {
-                        cb(err, user);
+                    .then((user) => {
+                        cb(null, user);
+                    })
+                    .catch((err) => {
+                        cb(err, null);
                     })
                 ;
             }
@@ -511,8 +532,11 @@ let course_service = {
         mongoose.Promise = global.Promise;
 
         Course.update({courseTitle: courseData.courseTitle}, courseData)
-            .exec((err, requestStatus) => {
-                cb(err, requestStatus);
+            .then((requestStatus) => {
+                cb(null, requestStatus);
+            })
+            .catch((err) => {
+                cb(err, null);
             })
         ;
     },
