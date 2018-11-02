@@ -91,7 +91,7 @@ let course_service = {
                 coursePath: coursePath
             })
             .then((course) => {
-                    cb(null, course);
+                cb(null, course);
              })
             .catch((err) => {
                 console.log("Couldn't find course.");

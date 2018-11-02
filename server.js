@@ -31,6 +31,7 @@ const
     path = require('path'),
     // CSV parsing library
     Baby = require('babyparse'),
+    csv = require('fast-csv'),
     // Functional programming library
     _ = require('underscore'),
     // Connect-Flash allows us to use session stores to pass messages between pages.
@@ -386,7 +387,6 @@ app.post('/update-course', isAuthenticated(), (req, res) => {
 });
 
 app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, res) => {
-    console.log('Getting here');
     let
         fileName = guid.create() + path.extname(req.file.originalname),
         target_path = 'public/uploads/' + fileName,
@@ -436,60 +436,51 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
     // Read in the CSV file.
     let csvData = fs.readFileSync(tmp_path).toString();
 
-    let prepend;
+    let jsonData = [];
+    csv
+        .fromString(csvData, {headers: true})
+        .on('data', (data) => {
+            jsonData.push(data);
+        })
+        .on('end', () => {
+            // TODO: Remove debug
+            console.log(jsonData);
 
-    csvData = csvData.split(/[\r\n]+/);
+            // Update our current student variables if they're set.
+            if (req.session.studentVars) {
+                req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});
+            }
 
-    // Fix for bizarre first property/column issue.
-    for (let i = 0; i < csvData.length; i++) {
-        if (i === 0) {
-            prepend = "null,";
-        }
-        else {
-            prepend = "0,";
-        }
+            // Get the variables from the headers.
+            let jsonVars = _.keys(jsonData[0]);
 
-        csvData[i] = prepend + csvData[i];
-        csvData[i] = csvData[i].replace(/\s/g, '');
-    }
+            src.on('end', function() {
+                let response = {
+                    uploaded: 1,
+                    fileName: fileName,
+                    url: '/uploads/' + fileName,
+                    vars: jsonVars,
+                    success: true
+                };
 
-    csvData = csvData.join('\n');
+                // TODO: Eliminate the file write after we switch to DB.
+                fs.writeFile(targetPath, csvData, () => {
+                    res.json(response);
+                });
+            });
 
-    // Transform the CSV data into JSON
-    let jsonData = Baby.parse(csvData, {header: true}).data;
+            src.on('error', function(err) {
+                let response = {
+                    uploaded: 0,
+                    error: 'The file could not be saved'
+                };
 
-    // Update our current student variables if they're set.
-    if (req.session.studentVars) {
-        req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});
-    }
+                res.send(response);
+            });
 
-    // Get the variables from the headers.
-    let jsonVars = _.keys(jsonData[0]);
-
-    src.on('end', function() {
-        let response = {
-            uploaded: 1,
-            fileName: fileName,
-            url: '/uploads/' + fileName,
-            vars: jsonVars,
-            success: true
-        };
-
-        fs.writeFile(targetPath, csvData, () => {
-            res.json(response);
-        });
-    });
-
-    src.on('error', function(err) {
-        let response = {
-            uploaded: 0,
-            error: 'The file could not be saved'
-        };
-
-        res.send(response);
-    });
-
-    fs.unlinkSync(tmp_path);
+            fs.unlinkSync(tmp_path);
+        })
+    ;
 });
 
 // When the user selects a student to login as, they pop this endpoint

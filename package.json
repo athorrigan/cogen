@@ -15,6 +15,7 @@
     "express-fileupload": "^0.3.0",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
+    "fast-csv": "^2.4.1",
     "glob-fs": "^0.1.7",
     "guid": "^0.0.12",
     "handlebars": "^4.0.6",
