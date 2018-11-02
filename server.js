@@ -446,6 +446,22 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
             // TODO: Remove debug
             console.log(jsonData);
 
+            courseApi.saveStudentVars(req.params.title, jsonData, (err, requestData) => {
+                if (!err) {
+                    console.log('Saved successfully.');
+                }
+                else {
+                    let response = {
+                        uploaded: 0,
+                        error: 'The variables were not compatible.'
+                    };
+
+                    console.log('Error saving student data to DB.');
+
+                    res.send(response);
+                }
+            });
+
             // Update our current student variables if they're set.
             if (req.session.studentVars) {
                 req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});

@@ -74,8 +74,8 @@ let course_service = {
     /**
      * Fetches relevant course data.
      *
-     * @param {string} courseId Identification string for the course.
-     * @param {courseCallback} A callback function that will operate on the course data.
+     * @param {string} coursePath courseId Identification string for the course.
+     * @param {courseCallback} cb A callback function that will operate on the course data.
      */
     getCourse: (coursePath, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
@@ -102,7 +102,7 @@ let course_service = {
     /**
      * Fetches basic course data for each course.
      *
-     * @param {coursesCallback} A callback function that will operate on the courses data.
+     * @param {coursesCallback} cb A callback function that will operate on the courses data.
      */
     getCourses: (cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
@@ -145,8 +145,8 @@ let course_service = {
     /**
      * Determines whether the course can only be viewed by an authenticated user.
      *
-     * @param {string} courseId Identification string for the course.
-     * @param {privacyCallback} A callback function that will handle authentication if it's necessary.
+     * @param {string} coursePath Path of the course used for identification.
+     * @param {privacyCallback} cb A callback function that will handle authentication if it's necessary.
      */
     getCoursePrivacy: (coursePath, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
@@ -519,10 +519,10 @@ let course_service = {
         return htmlString;
     },
     /**
-     * Saves course data to the appropriate file.
+     * Saves course data to the appropriate document in MongoDB.
      *
      * @param {Object} courseData The entire contents of the course JSON.
-     * @returns {string} The status of the file save operation.
+     * @param {courseCallback} cb A callback function that will operate on the courses data.
      */
     saveCourse: (courseData, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
@@ -541,10 +541,33 @@ let course_service = {
         ;
     },
     /**
+     * Saves student data to the course data to appropriate MongoDB field.
+     *
+     * @param {string} coursePath The path of the course, used for lookup.
+     * @param {Object} studentData The student data associated with the course.
+     * @param {courseCallback} cb A callback function that will operate on the courses data.
+     */
+    saveStudentVars: (coursePath, studentData, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        Course.update({coursePath: coursePath}, {studentData: studentData})
+            .then((requestStatus) => {
+                cb(null, requestStatus);
+            })
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
+    },
+    /**
      * Creates a new course
      *
      * @param {Object} courseData A JSON representation of a course.
-     * @param {cb} courseCallback A callback to handle validation of the course we just created.
+     * @param {courseCallback} cb A callback to handle validation of the course we just created.
      *
      */
     createCourse: (courseData, cb) => {
