@@ -498,18 +498,23 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
 // which sets up the user session before letting the front page
 // know that it's safe to redirect.
 app.get('/training-login/:title/:id', (req, res) => {
-    // Get the variables applicable to the selected student.
-    let userData = courseApi.getUserVars(req.params.title, req.params.id);
+    courseApi.getStudentVariables(req.params.title, (err, studentData) => {
+        if (!err) {
+            // Set the session's user object to carry these variables.
+            req.session.studentVars = _.findWhere(studentData, { number: req.params.id});
 
-    // Set the session's user object to carry these variables.
-    req.session.studentVars = userData;
+            // Default the user session to showing the menu bars
+            req.session.showSidebar = true;
 
-    // Default the user session to showing the menu bars
-    req.session.showSidebar = true;
-
-    // Let the calling code know that the session has been set up.
-    return res.json({
-        response: 'Success'
+            // Let the calling code know that the session has been set up.
+            return res.json({
+                response: 'Success'
+            });
+        }
+        else {
+            console.log('No student data found');
+            res.redirect('/error');
+        }
     });
 });
 

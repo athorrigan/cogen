@@ -115,8 +115,8 @@ let course_service = {
             .select({
                 "studentData": 1
             })
-            .then((studentData) => {
-                cb(null, studentData);
+            .then((courseData) => {
+                cb(null, courseData.studentData);
             })
             .catch((err) => {
                 console.log("Couldn't find variables.");
@@ -198,24 +198,6 @@ let course_service = {
                 cb(err, null);
             })
         ;
-    },
-    /**
-     * This fetches the individual variables linked to a specific user for
-     * this lab.
-     *
-     * @param {string} courseTitle The title of the course linked to the data.
-     * @param {string} studentId The user id that the variables are linked to.
-     * @returns {Object} An object containing variables for this user.
-     */
-    getUserVars: (courseTitle, studentId) => {
-        // Read in the CSV file
-        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
-        // Convert the CSV data into JSON
-        let jsonData = Baby.parse(csvData, {header: true}).data;
-
-        // Pull out and return a subset of the JSON that represents
-        // variables linked to this user.
-        return _.findWhere(jsonData, { number: studentId});
     },
     /**
      * This sets default student variable values for a template when no session has been started.
