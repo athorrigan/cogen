@@ -197,12 +197,12 @@ app.get('/courses/:title', isAuthenticated(), (req, res, next) => {
     // Get course data
     courseApi.getCourse(req.params.title, (err, course) => {
         if (!err) {
-            // Get a list of the users (array of strings).
-            let users = courseApi.getStudents(req.params.title);
-
             // Render the splash page with the users populating a dropdown.
             return res.render('splash', {
-                users: users,
+                // Underscore's pluck() method returns an array of all of the values
+                // from each JSON node that represent a specific field. In this case
+                // it will pull the 'number' field from each student in the data set.
+                users: _.pluck(course.studentData, 'number'),
                 landingPage: true,
                 title: course.splashTitle,
                 instructions: course.splashInstructions,
@@ -445,10 +445,7 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
         .on('end', () => {
 
             courseApi.saveStudentVars(req.params.title, jsonData, (err, requestData) => {
-                if (!err) {
-                    console.log('Saved successfully.');
-                }
-                else {
+                if (err) {
                     let response = {
                         uploaded: 0,
                         error: 'The variables were not compatible.'

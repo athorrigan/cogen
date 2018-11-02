@@ -237,23 +237,6 @@ let course_service = {
         return modifiedData;
     },
     /**
-     * Get a list of users that we currently have data for
-     *
-     * @returns {string[]} A list of student numbers.
-     */
-    getStudents: (courseTitle) => {
-        // Read in the CSV file.
-        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
-
-        // Transform the CSV data into JSON
-        let jsonData = Baby.parse(csvData, {header: true}).data;
-
-        // Underscore's pluck() method returns an array of all of the values
-        // from each JSON node that represent a specific field. In this case
-        // it will pull the 'number' field from each student in the data set.
-        return _.pluck(jsonData, 'number');
-    },
-    /**
      * Acquires a user object from the database.
      *
      * @param {string} username The username of the user.
