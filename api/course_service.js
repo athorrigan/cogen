@@ -75,7 +75,11 @@ let course_service = {
      */
     getCourse: (coursePath, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -101,7 +105,11 @@ let course_service = {
      */
     getStudentVariables: (coursePath, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -129,7 +137,11 @@ let course_service = {
      */
     getCourses: (cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -173,7 +185,11 @@ let course_service = {
      */
     getCoursePrivacy: (coursePath, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -208,7 +224,11 @@ let course_service = {
     findUser: (username, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
 
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -236,7 +256,11 @@ let course_service = {
     saveUser: (user, cb) => {
         // Connect to Mongo.
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -260,7 +284,11 @@ let course_service = {
      */
     createUser: (userData, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -480,7 +508,11 @@ let course_service = {
      */
     saveCourse: (courseData, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -503,7 +535,11 @@ let course_service = {
      */
     saveStudentVars: (coursePath, studentData, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
@@ -526,7 +562,11 @@ let course_service = {
      */
     createCourse: (courseData, cb) => {
         let mongoDB = 'mongodb://127.0.0.1/cogen';
-        mongoose.connect(mongoDB, options);
+        mongoose.connect(mongoDB, options)
+            .catch((err) => {
+                cb(err, null);
+            })
+        ;
 
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;

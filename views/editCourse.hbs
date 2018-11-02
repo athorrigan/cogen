@@ -573,6 +573,15 @@
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
+            // TODO: Remove debug
+            var
+                default_child = data.children[0].data,
+                default_button = data.buttons[0].data
+            ;
+
+            CKEDITOR.instances['buttonEditor'].setData(default_button);
+            CKEDITOR.instances['editor'].setData(default_child);
+
             // Set the values of the course detail fields.
             $('#courseTitle').val(data.courseTitle);
             $('#courseSlug').val(data.courseSlug);
