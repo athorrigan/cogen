@@ -227,8 +227,12 @@ app.get('/courses/:title/:section', isAuthenticated(), (req, res, next) => {
         if (!err) {
             let userData, contentString, courseTemplate, showSidebar, templatedButtons;
 
+            let studentDefaults = _.mapObject(course.studentData[0], (val, key) => {
+                return '{{' + key + '}}';
+            });
+
             // Assign defaults if the session student variables haven't been set prior to hitting this page.
-            userData = Object.assign({}, courseApi.getStudentDefaults(req.params.title), req.session.studentVars);
+            userData = Object.assign({}, studentDefaults, req.session.studentVars);
 
             // Determine whether sidebar should be shown, defaults to true.
             if (typeof req.session.showSidebar === 'undefined') {
@@ -474,7 +478,7 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
                     success: true
                 };
 
-                // TODO: Eliminate the file write after we switch to DB.
+                // TODO: Eventually figure out the proper way to eliminate this write.
                 fs.writeFile(targetPath, csvData, () => {
                     res.json(response);
                 });
@@ -587,8 +591,12 @@ app.get('/pdf/:title', (req, res) => {
 
     courseApi.getCourse(title, (err, course) => {
         if (!err) {
+            let studentDefaults = _.mapObject(course.studentData[0], (val, key) => {
+                return '{{' + key + '}}';
+            });
+
             // Assign defaults if the session student variables haven't been set prior to hitting this page.
-            let userData = Object.assign({}, courseApi.getStudentDefaults(title), req.session.studentVars);
+            let userData = Object.assign({}, studentDefaults, req.session.studentVars);
 
             let htmlString = courseApi.generatePdfString(course.children, userData);
 
