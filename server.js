@@ -343,6 +343,9 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
                 // And the raw version for the title
                 rawCourseTitle: course.courseTitle,
                 userNomenclature: course.userNomenclature,
+                // We're pulling the first row of student data and peeling off the
+                // former CSV headers that have become JSON keys here. This creates
+                // the list of course variables for each student.
                 courseVars: _.keys(course.studentData[0]).sort(),
                 editPage: true
             });
