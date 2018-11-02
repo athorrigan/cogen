@@ -5,8 +5,6 @@ const
     fs = require('fs'),
     // Need to use the process library to get environmental vars
     process = require('process'),
-    // CSV parsing library
-    Baby = require('babyparse'),
     // Library for globbing multiple files matching a pattern.
     glob = require('glob-fs'),
     // Functional programming library
