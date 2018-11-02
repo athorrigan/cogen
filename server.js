@@ -30,7 +30,6 @@ const
     // Finally need the path library for uploads
     path = require('path'),
     // CSV parsing library
-    Baby = require('babyparse'),
     csv = require('fast-csv'),
     // Functional programming library
     _ = require('underscore'),
@@ -332,9 +331,6 @@ app.get('/courses/:title/:section', isAuthenticated(), (req, res, next) => {
 app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     courseApi.getCourse(req.params.title, (err, course) => {
         if (!err) {
-            // Need to get a list of injectable variables
-            let courseVariables = courseApi.getVariableNames(req.params.title);
-
             // Render the splash page with the users populating a dropdown.
             return res.render('editCourse', {
                 title: course.splashTitle,
@@ -347,7 +343,7 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
                 // And the raw version for the title
                 rawCourseTitle: course.courseTitle,
                 userNomenclature: course.userNomenclature,
-                courseVars: courseVariables.sort(),
+                courseVars: _.keys(course.studentData[0]).sort(),
                 editPage: true
             });
         }
@@ -437,14 +433,13 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
     let csvData = fs.readFileSync(tmp_path).toString();
 
     let jsonData = [];
+
     csv
         .fromString(csvData, {headers: true})
         .on('data', (data) => {
             jsonData.push(data);
         })
         .on('end', () => {
-            // TODO: Remove debug
-            console.log(jsonData);
 
             courseApi.saveStudentVars(req.params.title, jsonData, (err, requestData) => {
                 if (!err) {

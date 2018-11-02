@@ -13,8 +13,6 @@ const
     _ = require('underscore'),
     // Mongoose library for interactions with MongoDB
     mongoose = require('mongoose'),
-    // Encryption library used to encrypt user passwords
-    bcrypt = require('bcrypt'),
     // MongoDB user model.
     User = require('../models/user_model'),
     Course = require('../models/course_model')
@@ -84,8 +82,6 @@ let course_service = {
         // Use the global Promise library for Mongoose.
         mongoose.Promise = global.Promise;
 
-        // Create a course path in schema instead. Use a save function to verify
-        // that it's autofilled accordingly.
         // Also need to make sure the CSVs are named accordingly since that's manual still.
         Course.findOne({
                 coursePath: coursePath
@@ -95,6 +91,35 @@ let course_service = {
              })
             .catch((err) => {
                 console.log("Couldn't find course.");
+                cb(err, null);
+            })
+        ;
+    },
+    /**
+     * Fetches relevant course data.
+     *
+     * @param {string} coursePath courseId Identification string for the course.
+     * @param {courseCallback} cb A callback function that will operate on the course data.
+     */
+    getStudentVariables: (coursePath, cb) => {
+        let mongoDB = 'mongodb://127.0.0.1/cogen';
+        mongoose.connect(mongoDB, options);
+
+        // Use the global Promise library for Mongoose.
+        mongoose.Promise = global.Promise;
+
+        Course.findOne(
+            {
+                coursePath: coursePath
+            })
+            .select({
+                "studentData": 1
+            })
+            .then((studentData) => {
+                cb(null, studentData);
+            })
+            .catch((err) => {
+                console.log("Couldn't find variables.");
                 cb(err, null);
             })
         ;
@@ -210,21 +235,6 @@ let course_service = {
         });
 
         return modifiedData;
-    },
-    /**
-     *
-     * @param {string} courseTitle The title of the course linked to the data.
-     * @returns {string[]} A list of variable names.
-     */
-    getVariableNames: (courseTitle) => {
-        // Read in the CSV file
-        let csvData = fs.readFileSync('data/courses/' + courseTitle.replace(/-/g,'_') + '_variables.csv').toString();
-
-        // Transform the CSV data into JSON
-        let jsonData = Baby.parse(csvData, {header: true}).data;
-
-        // Use lodash to return just the keys of the first object.
-        return _.keys(jsonData[0]);
     },
     /**
      * Get a list of users that we currently have data for
