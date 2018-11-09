@@ -17,7 +17,7 @@ courseApi.createCourse(
                 "name": "Welcome",
                 "path": "welcome",
                 "id": "552441622311",
-                "data": "",
+                "data": "Welcome!",
                 "is_open": "false",
                 "children": []
             }
