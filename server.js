@@ -691,7 +691,13 @@ app.use((err, req, res, next) => {
 
 // Handle 404s.
 app.use(function (req, res, next) {
-    return res.status(404).send('Sorry cannot find that! <a href="/">Return to home</a>.');
+    try {
+        return res.status(404).send('Sorry cannot find that! <a href="/">Return to home</a>.');
+    }
+    catch(error) {
+        console.log('Problem getting 404 page');
+        res.redirect('/error');
+    }
 });
 
 
