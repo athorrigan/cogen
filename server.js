@@ -696,7 +696,6 @@ app.use(function (req, res, next) {
     }
     catch(error) {
         console.log('Problem getting 404 page');
-        res.redirect('/error');
     }
 });
 
