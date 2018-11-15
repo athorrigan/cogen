@@ -501,6 +501,7 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
                     fileName: fileName,
                     url: '/uploads/' + fileName,
                     vars: jsonVars,
+                    jsonData: jsonData,
                     success: true
                 };
 

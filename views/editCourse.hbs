@@ -573,7 +573,6 @@
         $.getJSON('/get-course/{{courseTitle}}', function(courseInfo) {
             data = courseInfo;
 
-            // TODO: Remove debug
             var
                 default_child = data.children[0].data,
                 default_button = data.buttons[0].data
@@ -858,6 +857,12 @@
             },
             callbacks: {
                 onComplete: function(id, name, responseJSON, xhr) {
+                    // Ensure that the local version of the studentData is up to date with
+                    // the CSV we just imported.
+                    if (responseJSON.jsonData) {
+                        data.studentData = responseJSON.jsonData;
+                    }
+
                     var variableElementString = '';
 
                     $('#uploadUpdate').html('Variables updated.');
