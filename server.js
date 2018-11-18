@@ -38,7 +38,7 @@ const
     // Add mongoose for MongoDB support
     mongoose = require('mongoose'),
     // Encryption mechanism for our passwords
-    bcrypt = require('bcrypt'),
+    bcrypt = require('bcryptjs'),
     // Our API for handling course data.
     courseApi = require('./api/course_service.js')
 ;
