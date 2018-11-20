@@ -775,7 +775,6 @@
                     $pathField.val(node.path);
                     CKEDITOR.instances['editor'].setData(node.data);
                     $nodeData.show();
-                    // TODO: Address load time issue here.
                 }
                 else {
                     currentNodeId = 0;
@@ -870,6 +869,8 @@
                     setTimeout(function() {
                         $('#uploadUpdate').html('');
                     }, 3000);
+
+                    console.log(responseJSON);
 
                     responseJSON.vars.sort().forEach(function(row) {
                         variableElementString += '<li class="list-group-item col-md-6">' + row + '</li> ';
