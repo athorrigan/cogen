@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let app = express();
 
-let upload = multer({ dest: path.join(__dirname, '/public/uploads/') });
+let upload = multer({ dest: './public/uploads/' });
 
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
@@ -454,12 +454,7 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
 app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (req, res) => {
     let
         fileName = guid.create() + path.extname(req.file.originalname),
-        targetPath = 'data/courses/' + req.params.title.replace(/-/g, '_') + '_variables.csv'
-    ;
-
-    fs.closeSync(fs.openSync('public/uploads/' + fileName, 'w'));
-
-    let
+        targetPath = 'data/courses/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
         tmp_path = req.file.path,
         src = fs.createReadStream(tmp_path),
         dest = fs.createWriteStream(targetPath)
