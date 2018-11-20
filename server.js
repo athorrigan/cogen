@@ -418,36 +418,29 @@ app.post('/update-course', isAuthenticated(), (req, res) => {
 app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, res) => {
     let
         fileName = guid.create() + path.extname(req.file.originalname),
-        target_path = 'public/uploads/' + fileName,
-        tmp_path = req.file.path,
-        src = fs.createReadStream(tmp_path),
-        dest = fs.createWriteStream(target_path)
+        target_path = 'public/uploads/' + fileName
     ;
 
-    src.pipe(dest);
+    fs.writeFile(target_path, req.file.buffer, function(err) {
+        if(err) {
+            let response = {
+                uploaded: 0,
+                error: {
+                    message: 'The file could not be saved'
+                }
+            };
 
-    src.on('end', function() {
+            res.json(response);
+        }
+
         let response = {
             uploaded: 1,
             fileName: fileName,
             url: '/uploads/' + fileName
         };
 
-        res.json(response);
-    });
-
-    src.on('error', function(err) {
-        let response = {
-            uploaded: 0,
-            error: {
-                message: 'The file could not be saved'
-            }
-        };
-
         res.send(response);
     });
-
-    fs.unlinkSync(tmp_path);
 
 });
 
@@ -497,7 +490,14 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
     }
     catch (error) {
         console.log('Problem retrieving imported file data.');
-        res.redirect('/error');
+        let response = {
+            uploaded: 0,
+            error: {
+                message: 'The file could not be saved'
+            }
+        };
+
+        res.json(response);
     }
 });
 
