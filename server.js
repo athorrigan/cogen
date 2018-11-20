@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let app = express();
 
-let upload = multer({ dest: 'public/uploads/' });
+let upload = multer({ dest: path.join(__dirname, '/public/uploads/') });
 
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
@@ -512,6 +512,7 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
             });
 
             src.on('error', function(err) {
+                // TODO: Remove debug code.
                 console.log(err);
                 let response = {
                     uploaded: 0,
