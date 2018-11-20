@@ -871,6 +871,8 @@
                         $('#uploadUpdate').html('');
                     }, 3000);
 
+                    console.log(responseJSON);
+
                     responseJSON.vars.sort().forEach(function(row) {
                         variableElementString += '<li class="list-group-item col-md-6">' + row + '</li> ';
                     });
