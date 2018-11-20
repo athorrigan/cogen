@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let app = express();
 
-let upload = multer({ dest: './public/uploads/' });
+let upload = multer({ storage: multer.memoryStorage() });
 
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
@@ -452,82 +452,53 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
 });
 
 app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (req, res) => {
-    let
-        fileName = guid.create() + path.extname(req.file.originalname),
-        targetPath = 'data/courses/' + req.params.title.replace(/-/g, '_') + '_variables.csv',
-        tmp_path = req.file.path,
-        src = fs.createReadStream(tmp_path),
-        dest = fs.createWriteStream(targetPath)
-    ;
-
-    // TODO: Remove debug code
-    console.log(tmp_path);
-
-    src.pipe(dest);
-
-    // Read in the CSV file.
-    let csvData = fs.readFileSync(tmp_path).toString();
-
     let jsonData = [];
 
-    csv
-        .fromString(csvData, {headers: true})
-        .on('data', (data) => {
-            jsonData.push(data);
-        })
-        .on('end', () => {
+    try {
+        csv
+            .fromString(req.file.buffer.toString(), {headers: true})
+            .on('data', (data) => {
+                jsonData.push(data);
+            })
+            .on('end', () => {
 
-            courseApi.saveStudentVars(req.params.title, jsonData, (err, requestData) => {
-                if (err) {
-                    let response = {
-                        uploaded: 0,
-                        error: 'The variables were not compatible.'
-                    };
+                courseApi.saveStudentVars(req.params.title, jsonData, (err, requestData) => {
+                    if (err) {
+                        let response = {
+                            uploaded: 0,
+                            error: 'The variables were not compatible.'
+                        };
 
-                    console.log('Error saving student data to DB.');
+                        console.log('Error saving student data to DB.');
 
-                    res.send(response);
+                        res.send(response);
+                    }
+                });
+
+                // Update our current student variables if they're set.
+                if (req.session.studentVars) {
+                    req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});
                 }
-            });
 
-            // Update our current student variables if they're set.
-            if (req.session.studentVars) {
-                req.session.studentVars = _.findWhere(jsonData, { number: req.session.studentVars.number});
-            }
+                // Get the variables from the headers.
+                let jsonVars = _.keys(jsonData[0]);
 
-            // Get the variables from the headers.
-            let jsonVars = _.keys(jsonData[0]);
 
-            src.on('end', function() {
                 let response = {
                     uploaded: 1,
-                    fileName: fileName,
-                    url: '/uploads/' + fileName,
                     vars: jsonVars,
                     jsonData: jsonData,
                     success: true
                 };
 
-                // TODO: Eventually figure out the proper way to eliminate this write.
-                fs.writeFile(targetPath, csvData, () => {
-                    res.json(response);
-                });
-            });
-
-            src.on('error', function(err) {
-                // TODO: Remove debug code.
-                console.log(err);
-                let response = {
-                    uploaded: 0,
-                    error: 'The file could not be saved'
-                };
-
-                res.send(response);
-            });
-
-            fs.unlinkSync(tmp_path);
-        })
-    ;
+                res.json(response);
+            })
+        ;
+    }
+    catch (error) {
+        console.log('Problem retrieving imported file data.');
+        res.redirect('/error');
+    }
 });
 
 // When the user selects a student to login as, they pop this endpoint
