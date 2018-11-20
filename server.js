@@ -437,7 +437,6 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
     });
 
     src.on('error', function(err) {
-        console.log(err);
         let response = {
             uploaded: 0,
             error: {
@@ -513,6 +512,7 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
             });
 
             src.on('error', function(err) {
+                console.log(err);
                 let response = {
                     uploaded: 0,
                     error: 'The file could not be saved'
