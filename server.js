@@ -437,6 +437,7 @@ app.post('/upload_photo', [isAuthenticated(), upload.single('upload')], (req, re
     });
 
     src.on('error', function(err) {
+        console.log(err);
         let response = {
             uploaded: 0,
             error: {
