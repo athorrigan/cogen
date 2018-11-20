@@ -460,6 +460,9 @@ app.post('/upload-file/:title', [isAuthenticated(), upload.single('qqfile')], (r
         dest = fs.createWriteStream(targetPath)
     ;
 
+    // TODO: Remove debug code
+    console.log(tmp_path);
+
     src.pipe(dest);
 
     // Read in the CSV file.
