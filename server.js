@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let app = express();
 
-let upload = multer({ dest: path.join(__dirname, '/public/uploads/') });
+let upload = multer({ dest: '/tmp/' });
 
 // Pass the bodyParser middleware to our application. Idiomatic
 // CommonJS middleware uses a pattern where a function that
