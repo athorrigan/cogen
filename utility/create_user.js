@@ -5,7 +5,7 @@ const
 
 courseApi.createUser(
     {
-        username: 'cogen-admin',
+        username: 'Admin',
         password: 'C1sc0#123'
     },
     (err, user) => {
