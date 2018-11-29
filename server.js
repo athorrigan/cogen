@@ -386,6 +386,43 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     });
 });
 
+// Endpoint for course creation.
+app.post('/create-course', (req, res) => {
+    console.log(req.body.hasOwnProperty('courseTitle'));
+
+    // Make sure the body of the request at least vaguely resembles a course.
+    if (req.body.hasOwnProperty('courseTitle')) {
+        try {
+            courseApi.createCourse(
+                req.body,
+                (err, course) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                           success: false,
+                           message: err
+                        });
+                    }
+
+                    res.json({
+                        success: true,
+                        courseData: course
+                    });
+                }
+            );
+        }
+        catch (err) {
+            console.log("Error trying to create course.");
+            res.redirect('/error');
+        }
+
+    }
+    else {
+        console.log('Not a valid course object.');
+        res.redirect('/error');
+    }
+});
+
 // Used for an Ajax response for the editor.
 app.get('/get-course/:title', (req, res) => {
     courseApi.getCourse(req.params.title, (err, course) => {
