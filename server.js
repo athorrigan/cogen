@@ -386,12 +386,16 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     });
 });
 
-// Endpoint for course creation.
+// Endpoint for course creation (need to add security).
 app.post('/create-course', (req, res) => {
-    console.log(req.body.hasOwnProperty('courseTitle'));
-
-    // Make sure the body of the request at least vaguely resembles a course.
-    if (req.body.hasOwnProperty('courseTitle')) {
+    // Make sure the body has non empty params for our required fields:
+    if (
+        (req.body.hasOwnProperty('courseTitle') && req.body.courseTitle.length > 0) &&
+        (req.body.hasOwnProperty('courseName') && req.body.courseName.length > 0) &&
+        (req.body.hasOwnProperty('splashInstructions') && req.body.splashInstructions.length > 0) &&
+        (req.body.hasOwnProperty('userNomenclature') && req.body.userNomenclature.length > 0) &&
+        (req.body.hasOwnProperty('splashTitle') && req.body.splashTitle.length > 0)
+    ) {
         try {
             courseApi.createCourse(
                 req.body,

@@ -577,7 +577,7 @@ let course_service = {
             }
             else {
                 Course.find({courseTitle: course.courseTitle}, (err, courseObject) => {
-                    cb(err, courseObject);
+                    cb(err, courseObject[0]);
                 });
             }
         });

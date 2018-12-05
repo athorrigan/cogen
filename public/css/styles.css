@@ -718,3 +718,19 @@ ul.icon-set li > div.icon-item > i {
 #current-selected-icon {
     margin-right: 1em;
 }
+
+/** Form validation */
+div.form-group--error {
+    box-shadow: 0 -1px 0 0 #e2231a inset;
+}
+
+div.form-group--error .form-group__text input ~ label::after {
+    display: none;
+}
+
+.bg-danger {
+    font-weight: bold;
+    padding-top: .4em;
+    padding-bottom: .4em;
+    margin-top: .4em;
+}

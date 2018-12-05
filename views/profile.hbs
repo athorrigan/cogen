@@ -42,17 +42,194 @@
                     </h3>
                 </div>
                 <div class="modal-body">
-                    Stuff
+                    <div class="col-md-12 panel panel-default">
+                        <div class="col-md-12">
+                            <div class="content">
+                                <form id="courseData">
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <div class="form-group__text">
+                                                <input type="text" id="courseTitle" name="courseTitle" class="form-control input-state-required" />
+                                                <label for="courseTitle"><span>Title</span><span>*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="form-group__text">
+                                                <input type="text" id="courseSlug" name="courseSlug" class="form-control" />
+                                                <label for="courseSlug">Slug</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 inline-checkbox text-left">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" id="private" value=""{{#if coursePrivate}} checked=""{{/if}}> <span id="private-label">Private</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <div class="form-group__text">
+                                                <input type="text" id="courseName" name="courseName" class="form-control input-state-required" />
+                                                <label for="courseName">Name*</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="form-group__text">
+                                                <input type="text" id="splashInstructions" name="splashInstructions" class="form-control input-state-required" />
+                                                <label for="splashInstructions">Instructions*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 inline-checkbox text-left">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" id="show-logo" value=""{{#if showLogo}} checked=""{{/if}}> <span id="show-logo-label">Show Logo?</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <div class="form-group__text">
+                                                <input type="text" id="userNomenclature" name="userNomenclature" class="form-control input-state-required" value="student"/>
+                                                <label for="userNomenclature">User Nomenclature*</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-7">
+                                            <div class="form-group__text">
+                                                <input type="text" id="fullTitle" name="fullTitle" class="form-control input-state-required" />
+                                                <label for="fullTitle">Full Title*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button"
-                            class="btn btn-default dismiss"
-                            data-dismiss="modal"
-                    >
-                        Close
-                    </button>
+                    <div class="col-md-8 text-center panel">
+                        <div id="form-errors"></div>
+                    </div>
+                    <div class="col-md-4 text-right panel">
+                        <button
+                                id="course-dismiss-button"
+                                type="button"
+                                class="btn btn-default dismiss"
+                                data-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button
+                                id="course-creation-button"
+                                type="button"
+                                class="btn btn-default">
+                            Create
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+    let $requiredFields = $('.input-state-required');
+
+    let formValidate = ($fields) => {
+        let isValid = true;
+
+        $fields.each((index, field) => {
+            let $field = $(field);
+
+            if ($field.val() === '') {
+                $field.closest('.form-group').addClass('form-group--error');
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    };
+
+    $('#course-creation-button').on('click', (e) => {
+        // Prevent the default form submission, since the button isn't in a form
+        // this probably isn't necessary but I don't have time to brain it atm.
+        e.preventDefault();
+
+        let
+            data = {}
+        ;
+
+        if (formValidate($requiredFields)) {
+            data.courseTitle = $('#courseTitle').val();
+            data.courseSlug = $('#courseSlug').val();
+            data.courseName = $('#courseName').val();
+            data.splashInstructions = $('#splashInstructions').val();
+            data.userNomenclature = $('#userNomenclature').val();
+            data.splashTitle = $('#fullTitle').val();
+            data.private = $('#private').prop('checked');
+            data.showLogo = $('#show-logo').prop('checked');
+            // Need to put in some default data for our data structure.
+            data.coursePath = data.courseTitle.toLowerCase().replace(/\s+/g,'-');
+            data.children = [
+                {
+                    "name": "Welcome",
+                    "path": "welcome",
+                    "id": Math.floor((Math.random() * 1000000) + 1).toString(),
+                    "data": "Welcome!",
+                    "is_open": "false",
+                    "children": []
+                }
+            ];
+            data.buttons = [
+                {
+                    "name": "Session Information",
+                    "id": Math.floor((Math.random() * 1000000) + 1).toString(),
+                    "data": "",
+                    "description": "Session Information",
+                    "selector": "session-information",
+                    "icon": "info"
+                }
+            ];
+            data.studentData = {};
+
+            $.post('/create-course', data)
+                    .done((data) => {
+                        window.location = '/edit-course/' + data.courseData.coursePath;
+                    })
+                    .fail((er) => {
+                        console.log('Failed');
+                        console.log(er);
+                    })
+            ;
+        }
+        else {
+            e.target.blur();
+            $('#form-errors')
+                    .addClass('bg-danger')
+                    .text('Please fill in all required fields.')
+            ;
+        }
+    });
+
+    $('#course-dismiss-button').on('click', (e) => {
+        // Prevent the default form submission
+        e.preventDefault();
+
+        $('#form-errors')
+                .removeClass('bg-danger')
+                .text('')
+        ;
+
+        $requiredFields.closest('.form-group').removeClass('form-group--error');
+    });
+
+    $requiredFields.on('input', (e) => {
+        // When we have input text in the title field, remove the error after the first
+        // character is entered.
+        if ($(e.target).val().length == 1) {
+            $(e.target).closest('.form-group').removeClass('form-group--error');
+
+            $('#form-errors')
+                    .removeClass('bg-danger')
+                    .text('')
+            ;
+        }
+    });
+</script>
