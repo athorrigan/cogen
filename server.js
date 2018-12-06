@@ -387,7 +387,7 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
 });
 
 // Endpoint for course creation (need to add security).
-app.post('/create-course', (req, res) => {
+app.post('/create-course', isAuthenticated(), (req, res) => {
     // Make sure the body has non empty params for our required fields:
     if (
         (req.body.hasOwnProperty('courseTitle') && req.body.courseTitle.length > 0) &&
