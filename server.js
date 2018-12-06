@@ -386,6 +386,47 @@ app.get('/edit-course/:title', isAuthenticated(), (req, res) => {
     });
 });
 
+// Endpoint for course creation (need to add security).
+app.post('/create-course', isAuthenticated(), (req, res) => {
+    // Make sure the body has non empty params for our required fields:
+    if (
+        (req.body.hasOwnProperty('courseTitle') && req.body.courseTitle.length > 0) &&
+        (req.body.hasOwnProperty('courseName') && req.body.courseName.length > 0) &&
+        (req.body.hasOwnProperty('splashInstructions') && req.body.splashInstructions.length > 0) &&
+        (req.body.hasOwnProperty('userNomenclature') && req.body.userNomenclature.length > 0) &&
+        (req.body.hasOwnProperty('splashTitle') && req.body.splashTitle.length > 0)
+    ) {
+        try {
+            courseApi.createCourse(
+                req.body,
+                (err, course) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                           success: false,
+                           message: err
+                        });
+                    }
+
+                    res.json({
+                        success: true,
+                        courseData: course
+                    });
+                }
+            );
+        }
+        catch (err) {
+            console.log("Error trying to create course.");
+            res.redirect('/error');
+        }
+
+    }
+    else {
+        console.log('Not a valid course object.');
+        res.redirect('/error');
+    }
+});
+
 // Used for an Ajax response for the editor.
 app.get('/get-course/:title', (req, res) => {
     courseApi.getCourse(req.params.title, (err, course) => {
